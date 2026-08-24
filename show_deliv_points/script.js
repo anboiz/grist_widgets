@@ -24,6 +24,7 @@ class ObjectModel {
 
   // Met à jour depuis Grist
   updateFromGrist(gristData) {
+    console.log(gristData)
     if (gristData) {
       this.data.id = gristData.id || generateUUID();
       this.data.reference = gristData.reference || "";
