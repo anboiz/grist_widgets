@@ -121,9 +121,15 @@ class ObjectController {
 document.addEventListener("DOMContentLoaded", () => {
   const model = new ObjectModel();
   // Récupérer les données de Grist
-  const gristData = window.options?.record || {};
+  //const gristData = window.options?.record || {};
+
   model.updateFromGrist(gristData);
 
   const view = new ObjectView();
   new ObjectController(model, view);
 });
+
+grist.onRecord(function(record) {
+    console.log(record);
+});
+
