@@ -1,50 +1,85 @@
-// ========== MODÈLE (Model) ==========
-class WidgetModel {
+// Générateur d'UUID v4
+function generateUUID() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
+}
+
+// ========== MODÈLE ==========
+class ObjectModel {
   constructor() {
     this.data = {
-      message: "Bonjour, ceci est un message par défaut.",
-      count: 0,
+      id: "", // UUID v4
+      reference: "",
+      manager: "",
+      isActive: false,
+      address: "",
     };
   }
 
-  // Méthode pour mettre à jour les données
-  updateMessage(newMessage) {
-    this.data.message = newMessage;
+  // Met à jour depuis Grist
+  updateFromGrist(gristData) {
+    if (gristData) {
+      this.data.id = gristData.id || generateUUID();
+      this.data.reference = gristData.reference || "";
+      this.data.manager = gristData.manager || "";
+      this.data.isActive = gristData.isActive || false;
+      this.data.address = gristData.address || "";
+    } else {
+      this.data.id = generateUUID();
+    }
   }
 
-  // Méthode pour incrémenter un compteur
-  incrementCount() {
-    this.data.count += 1;
+  // Met à jour un champ
+  updateField(field, value) {
+    this.data[field] = value;
   }
 
-  // Récupérer les données
+  // Récupère les données
   getData() {
     return this.data;
   }
 }
 
-// ========== VUE (View) ==========
-class WidgetView {
+// ========== VUE ==========
+class ObjectView {
   constructor() {
-    this.titleElement = document.getElementById("widget-title");
-    this.messageElement = document.getElementById("widget-message");
-    this.buttonElement = document.getElementById("widget-button");
+    this.idElement = document.getElementById("object-id");
+    this.referenceElement = document.getElementById("object-reference");
+    this.managerElement = document.getElementById("object-manager");
+    this.activeElement = document.getElementById("object-active");
+    this.addressElement = document.getElementById("object-address");
+    this.saveButton = document.getElementById("save-button");
   }
 
-  // Met à jour l'affichage
+  // Affiche les données
   render(data) {
-    this.messageElement.textContent = data.message;
-    this.titleElement.textContent = `Mon Widget (${data.count})`;
+    this.idElement.value = data.id;
+    this.referenceElement.value = data.reference;
+    this.managerElement.value = data.manager;
+    this.activeElement.checked = data.isActive;
+    this.addressElement.value = data.address;
   }
 
-  // Ajoute un écouteur d'événement au bouton
-  bindButtonClick(handler) {
-    this.buttonElement.addEventListener("click", handler);
+  // Lie les événements
+  bindSave(handler) {
+    this.saveButton.addEventListener("click", handler);
+  }
+
+  // Récupère les données du formulaire
+  getFormData() {
+    return {
+      id: this.idElement.value,
+      reference: this.referenceElement.value,
+      manager: this.managerElement.value,
+      isActive: this.activeElement.checked,
+      address: this.addressElement.value,
+    };
   }
 }
 
-// ========== CONTRÔLEUR (Controller) ==========
-class WidgetController {
+// ========== CONTRÔLEUR ==========
+class ObjectController {
   constructor(model, view) {
     this.model = model;
     this.view = view;
@@ -53,20 +88,36 @@ class WidgetController {
     this.view.render(this.model.getData());
 
     // Liaison des événements
-    this.view.bindButtonClick(() => this.handleButtonClick());
+    this.view.bindSave(() => this.handleSave());
   }
 
-  // Gère le clic sur le bouton
-  handleButtonClick() {
-    this.model.incrementCount();
-    this.model.updateMessage(`Vous avez cliqué ${this.model.getData().count} fois !`);
-    this.view.render(this.model.getData());
+  // Gère la sauvegarde
+  handleSave() {
+    const formData = this.view.getFormData();
+    this.model.updateFromGrist(formData);
+    this.sendDataToGrist(this.model.getData());
+    alert("Objet sauvegardé avec succès !");
+  }
+
+  // Envoie les données à Grist
+  sendDataToGrist(data) {
+    window.parent.postMessage(
+      {
+        type: "updateRecord",
+        data: data,
+      },
+      "*"
+    );
   }
 }
 
 // ========== INITIALISATION ==========
 document.addEventListener("DOMContentLoaded", () => {
-  const model = new WidgetModel();
-  const view = new WidgetView();
-  new WidgetController(model, view);
+  const model = new ObjectModel();
+  // Récupérer les données de Grist
+  const gristData = window.options?.record || {};
+  model.updateFromGrist(gristData);
+
+  const view = new ObjectView();
+  new ObjectController(model, view);
 });
