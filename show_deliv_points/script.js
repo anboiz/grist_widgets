@@ -1,5 +1,5 @@
 
-grist.ready({columns: ['Id', 'Reference'], requiredAccess: 'full'});
+grist.ready({columns: ['Reference','Gestionnaire'], requiredAccess: 'full'});
 
 // Générateur d'UUID v4
 function generateUUID() {
@@ -134,8 +134,9 @@ grist.onRecord(function(record, mappings) {
         console.log(`Using ${mappings.Id} and ${mappings.Reference} columns`);
 
         model.updateFromGrist({
-            'id':mapped.Id,
-            'reference':mapped.Reference
+            'id':record.id,
+            'reference':mapped.Reference,
+            'manager':mapped.Gestionnaire,
         })
         // Rafraîchir la vue après la mise à jour du modèle
         controller.render();        
