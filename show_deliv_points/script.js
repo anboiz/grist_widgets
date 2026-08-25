@@ -102,9 +102,11 @@ class ObjectController {
 
   // Gère la sauvegarde
   async handleSave() {
+    console.log("Saving ....")
     const formData = this.view.getFormData();
     this.model.updateFromGrist(formData);
     console.log(formData)
+    console.log(this.model.getData())
     await this.sendDataToGrist(this.model.getData());
   }
 
