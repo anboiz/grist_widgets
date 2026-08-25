@@ -39,7 +39,7 @@ class ObjectModel {
     return {
         id: this.data.id,
         fields: {
-            Id: this.data.reference,
+            Id2: this.data.reference,
             gestionnaire: this.data.manager, 
         }
     }
