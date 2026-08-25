@@ -133,3 +133,7 @@ grist.onRecord(function(record) {
     console.log(record);
 });
 
+grist.onRecords(function(records) {
+    console.log(records);
+});
+
