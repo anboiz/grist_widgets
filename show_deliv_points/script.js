@@ -1,8 +1,6 @@
 
 grist.ready({columns: ['Id', 'Reference'], requiredAccess: 'full'});
 
-
-
 // Générateur d'UUID v4
 function generateUUID() {
   return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
@@ -97,6 +95,10 @@ class ObjectController {
     // Liaison des événements
     this.view.bindSave(() => this.handleSave());
   }
+  // Met à jour la vue
+  render() {
+    this.view.render(this.model.getData());
+  }
 
   // Gère la sauvegarde
   handleSave() {
@@ -121,7 +123,7 @@ class ObjectController {
 // ========== INITIALISATION ==========
 const model = new ObjectModel();
 const view = new ObjectView();
-new ObjectController(model, view);
+const controller = new ObjectController(model, view);
 
 grist.onRecord(function(record, mappings) {
     const mapped = grist.mapColumnNames(record);
@@ -135,6 +137,8 @@ grist.onRecord(function(record, mappings) {
             'id':mapped.Id,
             'reference':mapped.Reference
         })
+        // Rafraîchir la vue après la mise à jour du modèle
+        controller.render();        
 
 
     } else {
@@ -144,19 +148,6 @@ grist.onRecord(function(record, mappings) {
     }
         
 });
-
-// document.addEventListener("DOMContentLoaded", () => {
-  
-//   // Récupérer les données de Grist
-//   //const gristData = window.options?.record || {};
-
-//   model.updateFromGrist(gristData);
-
-  
-  
-// });
-
-
 
 // grist.onRecords(function(records) {
 //     console.log(records);
