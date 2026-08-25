@@ -34,6 +34,7 @@ class ObjectModel {
     } else {
       this.data.id = generateUUID();
     }
+    console.log(this.data)
   }
 
   // Met à jour un champ
