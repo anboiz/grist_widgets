@@ -1,18 +1,12 @@
 
 grist.ready({columns: ['Reference','Gestionnaire'], requiredAccess: 'full'});
 
-// Générateur d'UUID v4
-function generateUUID() {
-  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-  );
-}
 
 // ========== MODÈLE ==========
 class ObjectModel {
   constructor() {
     this.data = {
-      id: "", // UUID v4
+      id: "",
       reference: "",
       manager: "",
       isActive: false,
@@ -24,7 +18,7 @@ class ObjectModel {
   updateFromGrist(gristData) {
     console.log(gristData)
     if (gristData) {
-      this.data.id = gristData.id || generateUUID();
+      this.data.id = gristData.id || "";
       this.data.reference = gristData.reference || "";
       this.data.manager = gristData.manager || "";
       this.data.isActive = gristData.isActive || false;
@@ -42,7 +36,10 @@ class ObjectModel {
 
   // Récupère les données
   getData() {
-    return this.data;
+    return {
+        id: this.data.id,
+        fields: this.data
+    }
   }
 }
 
@@ -101,22 +98,17 @@ class ObjectController {
   }
 
   // Gère la sauvegarde
-  handleSave() {
+  async handleSave() {
     const formData = this.view.getFormData();
     this.model.updateFromGrist(formData);
-    this.sendDataToGrist(this.model.getData());
-    alert("Objet sauvegardé avec succès !");
+    console.log(formData)
+    await this.sendDataToGrist(this.model.getData());
   }
 
   // Envoie les données à Grist
-  sendDataToGrist(data) {
-    window.parent.postMessage(
-      {
-        type: "updateRecord",
-        data: data,
-      },
-      "*"
-    );
+  async sendDataToGrist(data) {
+    await grist.selectedTable.update( data)
+    alert("Objet sauvegardé avec succès !");
   }
 }
 
