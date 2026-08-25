@@ -1,5 +1,5 @@
 
-grist.ready({ requiredAccess: 'read table'});
+grist.ready({columns: ['Link', 'Title'], requiredAccess: 'full'});
 
 
 
@@ -118,22 +118,39 @@ class ObjectController {
 }
 
 // ========== INITIALISATION ==========
-document.addEventListener("DOMContentLoaded", () => {
-  const model = new ObjectModel();
-  // Récupérer les données de Grist
-  //const gristData = window.options?.record || {};
+const model = new ObjectModel();
+const view = new ObjectView();
+new ObjectController(model, view);
 
-  model.updateFromGrist(gristData);
-
-  const view = new ObjectView();
-  new ObjectController(model, view);
+grist.onRecord(function(record, mappings) {
+    const mapped = grist.mapColumnNames(record);
+    // First check if all columns were mapped.
+    if (mapped) {
+        // document.getElementById('image').src = mapped.Link;
+        // document.getElementById('title').innerText = mapped.Title;
+        console.log(`Using ${mappings.Link} and ${mappings.Title} columns`);
+    } else {
+        // Helper returned a null value. It means that not all
+        // required columns were mapped.
+        console.error("Please map all columns");
+    }
+        model.updateFromGrist(record)
 });
 
-grist.onRecord(function(record) {
-    console.log(record);
-});
+// document.addEventListener("DOMContentLoaded", () => {
+  
+//   // Récupérer les données de Grist
+//   //const gristData = window.options?.record || {};
 
-grist.onRecords(function(records) {
-    console.log(records);
-});
+//   model.updateFromGrist(gristData);
+
+  
+  
+// });
+
+
+
+// grist.onRecords(function(records) {
+//     console.log(records);
+// });
 
