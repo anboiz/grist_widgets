@@ -38,7 +38,10 @@ class ObjectModel {
   getData() {
     return {
         id: this.data.id,
-        fields: this.data
+        fields: {
+            Id: this.data.reference,
+            gestionnaire: this.data.manager, 
+        }
     }
   }
 }
