@@ -1,5 +1,5 @@
 
-grist.ready({columns: ['Link', 'Title'], requiredAccess: 'full'});
+grist.ready({columns: ['Id', 'Reference'], requiredAccess: 'full'});
 
 
 
@@ -128,13 +128,20 @@ grist.onRecord(function(record, mappings) {
     if (mapped) {
         // document.getElementById('image').src = mapped.Link;
         // document.getElementById('title').innerText = mapped.Title;
-        console.log(`Using ${mappings.Link} and ${mappings.Title} columns`);
+        console.log(`Using ${mappings.Id} and ${mappings.Reference} columns`);
+
+        model.updateFromGrist({
+            'id':mapped.Id,
+            'reference':mapped.Reference
+        })
+
+
     } else {
         // Helper returned a null value. It means that not all
         // required columns were mapped.
         console.error("Please map all columns");
     }
-        model.updateFromGrist(record)
+        
 });
 
 // document.addEventListener("DOMContentLoaded", () => {
