@@ -28,8 +28,9 @@ grist.ready({columns: linksList, requiredAccess: 'full'});
 
 // ========== MODÈLE ==========
 class ObjectModel {
-  constructor() {
+  constructor(mapping) {
     this.data = defaultValues;
+    this.mapping = mapping
   }
 
   // Met à jour depuis Grist
@@ -148,8 +149,6 @@ grist.onRecord(function(record, mappings) {
     console.log("mappings")
     console.log(mappings)
     if (mapped) {
-
-        console.log(`Using ${mappings.Id} and ${mappings.Reference} columns`);
 
         model.updateFromGrist({
             'id':record.id,
