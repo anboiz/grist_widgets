@@ -76,9 +76,9 @@ class ObjectModel {
 class ObjectView {
   constructor() {
     this.rootElement = document.getElementById("object-form");
+    this.inputs = {};   
     
     this.createForm();
-    this.inputs = {};
     this.saveButton = document.getElementById("save-button");
   }
 
