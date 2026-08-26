@@ -74,7 +74,7 @@ class ObjectView {
   // Récupère les données du formulaire
   getFormData() {
     return {
-      id: this.idElement.value,
+      id: parseInt(this.idElement.value),
       reference: this.referenceElement.value,
       manager: this.managerElement.value,
       isActive: this.activeElement.checked,
