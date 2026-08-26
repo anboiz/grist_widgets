@@ -168,7 +168,7 @@ grist.onRecord(function(record, mappings) {
 
         console.log(appSideMapping)
         
-        for (const [key, value] of appSideMapping.entries(object)) {
+        for (const [key, value] of Object.entries(appSideMapping)) {
             console.log(key, value);
             dict[key] = mapped[value]
         }
