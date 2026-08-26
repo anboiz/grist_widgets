@@ -86,8 +86,9 @@ class ObjectView {
             console.log([key, value])
             if (value['hidden']) continue
 
-            const newDiv = this.rootElement.createElement("p");
+            const newDiv = document.createElement("p");
             newDiv.innerText = key;
+            this.rootElement.appendChild(newDiv)
             // }
         }    
   }
