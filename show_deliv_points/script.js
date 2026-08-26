@@ -12,7 +12,7 @@ const data = {
 // Extraire les valeurs de 'link' et filtrer les entrées sans 'link'
 const linksList = Object.values(data)
     .map(item => item.link)
-    .filter(link => ((link !== undefined) | (link !== 'id')));
+    .filter(link => ((link !== undefined) & (link !== 'id')));
 
 // Créer un nouveau dictionnaire avec {clé : default | ""}
 const defaultValues = Object.entries(data).reduce((acc, [key, value]) => {
