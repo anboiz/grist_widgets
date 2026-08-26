@@ -21,9 +21,8 @@ const defaultValues = Object.entries(data).reduce((acc, [key, value]) => {
 }, {});
 
 const appSideMapping = Object.entries(data)
-    .filter(link => (link !== undefined) & (link !== 'id'))
     .reduce((acc, [key, value]) => {
-        acc[key] = value.link;
+        if ((value.link !== undefined) & (value.link !== 'id')) acc[key] = value.link;
         return acc;
     }, {});
 
@@ -166,6 +165,8 @@ grist.onRecord(function(record, mappings) {
     if (mapped) {
 
         dict = {'id':record.id}
+
+        console.log(appSideMapping)
         
         for (const [key, value] of appSideMapping.entries(object)) {
             console.log(key, value);
