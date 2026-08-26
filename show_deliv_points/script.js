@@ -20,16 +20,28 @@ const defaultValues = Object.entries(data).reduce((acc, [key, value]) => {
     return acc;
 }, {});
 
+const appSideMapping = Object.entries(data)
+    .filter(link => (link !== undefined) & (link !== 'id'))
+    .reduce((acc, [key, value]) => {
+        acc[key] = value.link;
+        return acc;
+    }, {});
+
 console.log(linksList);
 console.log(defaultValues);
+console.log(appSideMapping);
 
 grist.ready({columns: linksList, requiredAccess: 'full'});
 
 
 // ========== MODÈLE ==========
 class ObjectModel {
-  constructor(mapping) {
+  constructor() {
     this.data = defaultValues;
+    this.mapping = {}
+  }
+
+  updateMapping(mapping) {
     this.mapping = mapping
   }
 
@@ -148,13 +160,18 @@ grist.onRecord(function(record, mappings) {
     console.log(mapped)
     console.log("mappings")
     console.log(mappings)
+
+    model.updateMapping(mappings)
     if (mapped) {
 
-        model.updateFromGrist({
-            'id':record.id,
-            'reference':mapped.Reference,
-            'manager':mapped.Gestionnaire,
-        })
+        dict = {'id':record.id}
+        
+        for (const [key, value] of appSideMapping.entries(object)) {
+            console.log(key, value);
+            dict[key] = mapped[value]
+        }
+
+        model.updateFromGrist(dict)
         // Rafraîchir la vue après la mise à jour du modèle
         controller.render();        
 
