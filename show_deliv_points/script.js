@@ -95,11 +95,11 @@ class ObjectView {
 
   // Affiche les données
   render(data) {
-    this.idElement.value = data.id;
-    this.referenceElement.value = data.reference;
-    this.managerElement.value = data.manager;
-    this.activeElement.checked = data.isActive;
-    this.addressElement.value = data.address;
+    // this.idElement.value = data.id;
+    // this.referenceElement.value = data.reference;
+    // this.managerElement.value = data.manager;
+    // this.activeElement.checked = data.isActive;
+    // this.addressElement.value = data.address;
   }
 
   // Lie les événements
