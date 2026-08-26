@@ -89,7 +89,11 @@ class ObjectView {
             if (value['hidden']) continue
 
             const newDiv = document.createElement("div");
-            newDiv.innerHTML = `<div class="mb-3" id="${value.elemt_id}">${value.name}</div>`;
+            newDiv.innerHTML = `
+                <div class="mb-3" id="${value.elemt_id}">
+                    <label class="form-label"><strong>${value.name}</strong></label>
+
+                </div>`;
             this.rootElement.appendChild(newDiv)
             // }
         }    
