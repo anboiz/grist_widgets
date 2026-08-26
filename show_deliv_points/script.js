@@ -1,17 +1,35 @@
+// Initialisation des variables
+// Déclaration 
+const data = {
+    id: {type: 'int', link:'id', hidden: true},
+    reference: {type: 'str', link:'Reference'},
+    fluide: {type: 'str', link:'Fluide'},
+    manager: {type: 'str', link:'Gestionnaire'},
+    adress: {type: 'str', link:'Adresse'},
+    isActive: {type: 'bool', default:true}  
+} 
 
-grist.ready({columns: ['Reference','Gestionnaire'], requiredAccess: 'full'});
+// Extraire les valeurs de 'link' et filtrer les entrées sans 'link'
+const linksList = Object.values(data)
+    .map(item => item.link)
+    .filter(link => ((link !== undefined) | (link !== 'id')));
+
+// Créer un nouveau dictionnaire avec {clé : default | ""}
+const defaultValues = Object.entries(data).reduce((acc, [key, value]) => {
+    acc[key] = value.default !== undefined ? value.default : "";
+    return acc;
+}, {});
+
+console.log(linksList);
+console.log(defaultValues);
+
+grist.ready({columns: linksList, requiredAccess: 'full'});
 
 
 // ========== MODÈLE ==========
 class ObjectModel {
   constructor() {
-    this.data = {
-      id: "",
-      reference: "",
-      manager: "",
-      isActive: false,
-      address: "",
-    };
+    this.data = defaultValues;
   }
 
   // Met à jour depuis Grist
@@ -125,9 +143,12 @@ const controller = new ObjectController(model, view);
 grist.onRecord(function(record, mappings) {
     const mapped = grist.mapColumnNames(record);
     // First check if all columns were mapped.
+    console.log("mapped")
+    console.log(mapped)
+    console.log("mappings")
+    console.log(mappings)
     if (mapped) {
-        // document.getElementById('image').src = mapped.Link;
-        // document.getElementById('title').innerText = mapped.Title;
+
         console.log(`Using ${mappings.Id} and ${mappings.Reference} columns`);
 
         model.updateFromGrist({
