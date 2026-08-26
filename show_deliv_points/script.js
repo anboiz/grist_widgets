@@ -42,6 +42,7 @@ class ObjectModel {
   }
 
   updateMapping(mapping) {
+    console.log(mapping)
     this.mapping = mapping
   }
 
@@ -170,6 +171,9 @@ grist.onRecord(function(record, mappings) {
             console.log(key, value);
             dict[key] = mapped[value]
         }
+
+        console.log("Dictionaire")
+        console.log(dict)
 
         model.updateFromGrist(dict)
         // Rafraîchir la vue après la mise à jour du modèle
