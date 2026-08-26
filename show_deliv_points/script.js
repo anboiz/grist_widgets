@@ -22,13 +22,13 @@ const defaultValues = Object.entries(data).reduce((acc, [key, value]) => {
 
 const appSideMapping = Object.entries(data)
     .reduce((acc, [key, value]) => {
-        if ((value.link !== undefined) & (value.link !== 'id')) acc[key] = value.link;
+        if  (value.link !== 'id') acc[key] = value.link;
         return acc;
     }, {});
 
-console.log(linksList);
-console.log(defaultValues);
-console.log(appSideMapping);
+// console.log(linksList);
+// console.log(defaultValues);
+// console.log(appSideMapping);
 
 grist.ready({columns: linksList, requiredAccess: 'full'});
 
@@ -47,13 +47,8 @@ class ObjectModel {
 
   // Met à jour depuis Grist
   updateFromGrist(gristData) {
-    console.log(gristData)
     if (gristData) {
-      this.data.id = gristData.id || "";
-      this.data.reference = gristData.reference || "";
-      this.data.manager = gristData.manager || "";
-      this.data.isActive = gristData.isActive || false;
-      this.data.address = gristData.address || "";
+      this.data = gristData
     } else {
       this.data.id = generateUUID();
     }
@@ -165,12 +160,9 @@ grist.onRecord(function(record, mappings) {
     if (mapped) {
 
         dict = {'id':record.id}
-
-        console.log(appSideMapping)
         
         for (const [key, value] of Object.entries(appSideMapping)) {
-            console.log(key, value);
-            dict[key] = mapped[value]
+            dict[key] = (value !== undefined) ? mapped[value] : defaultValues[value]
         }
 
         console.log("Dictionaire")
