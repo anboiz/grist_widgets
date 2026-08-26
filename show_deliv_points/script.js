@@ -28,7 +28,7 @@ const appSideMapping = Object.entries(data)
 
 // console.log(linksList);
 // console.log(defaultValues);
-// console.log(appSideMapping);
+console.log(appSideMapping);
 
 grist.ready({columns: linksList, requiredAccess: 'full'});
 
@@ -75,12 +75,19 @@ class ObjectModel {
 // ========== VUE ==========
 class ObjectView {
   constructor() {
-    this.idElement = document.getElementById("object-id");
-    this.referenceElement = document.getElementById("object-reference");
-    this.managerElement = document.getElementById("object-manager");
-    this.activeElement = document.getElementById("object-active");
-    this.addressElement = document.getElementById("object-address");
-    this.saveButton = document.getElementById("save-button");
+    this.rootElement = document.getElementById("object-form");
+    this.createForm();
+
+  }
+
+  createForm(){
+        for (const [key, value] of Object.entries(data)) {
+            dict[key] = (value !== undefined) ? mapped[value] : defaultValues[value]
+            console.log([key, value])
+            // if value['hidden'] {
+
+            // }
+        }    
   }
 
   // Affiche les données
