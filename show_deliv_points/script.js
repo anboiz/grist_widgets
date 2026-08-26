@@ -2,11 +2,11 @@
 // Déclaration 
 const data = {
     id: {type: 'int', link:'id', hidden: true},
-    reference: {type: 'str', link:'Reference',name:'Référence du gestionnaire de réseau',elemt_id:'objectauto-reference'},
+    reference: {type: 'str', link:'Reference',name:'Reference du gestionnaire de reseau',elemt_id:'objectauto-reference'},
     fluide: {type: 'str', link:'Fluide',name:'Fluide',elemt_id:'objectauto-fluide'},
-    manager: {type: 'str', link:'Gestionnaire',name:'Gestionnaire du réseau',elemt_id:'objectauto-manager'},
+    manager: {type: 'str', link:'Gestionnaire',name:'Gestionnaire du reseau',elemt_id:'objectauto-manager'},
     adress: {type: 'str', link:'Adresse',name:'Adresse postale',elemt_id:'objectauto-adress'},
-    isActive: {type: 'bool', default:true,name:'Actif ?',elemt_id:'objectauto-isActive'}, 
+    isActive: {type: 'bool', default:true,name:'Actif',elemt_id:'objectauto-isActive'}, 
 } 
 
 // Extraire les valeurs de 'link' et filtrer les entrées sans 'link'
@@ -76,9 +76,10 @@ class ObjectModel {
 class ObjectView {
   constructor() {
     this.rootElement = document.getElementById("object-form");
-    this.saveButton = document.getElementById("save-button");
+    
     this.createForm();
 
+    this.saveButton = document.getElementById("save-button");
   }
 
   createForm(){
@@ -88,7 +89,7 @@ class ObjectView {
             if (value['hidden']) continue
 
             const newDiv = document.createElement("div");
-            newDiv.innerHTML = `<div class="mb-3"><label class="form-label"><strong>${value.name}</strong></label><input type="text" class="form-control" id="${value.elemt_id}" readonly></div>`;
+            newDiv.innerText = `<div class="mb-3">${value.name} - ${value.elemt_id}</div>`;
             this.rootElement.appendChild(newDiv)
             // }
         }    
