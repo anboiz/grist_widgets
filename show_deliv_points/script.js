@@ -85,7 +85,8 @@ class ObjectView {
             // dict[key] = (value !== undefined) ? mapped[value] : defaultValues[value]
             console.log([key, value])
             // if value['hidden'] {
-
+            const newDiv = document.createElement("div");
+            newDiv.innerText = key;
             // }
         }    
   }
