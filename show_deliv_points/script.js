@@ -82,7 +82,7 @@ class ObjectView {
 
   createForm(){
         for (const [key, value] of Object.entries(data)) {
-            dict[key] = (value !== undefined) ? mapped[value] : defaultValues[value]
+            // dict[key] = (value !== undefined) ? mapped[value] : defaultValues[value]
             console.log([key, value])
             // if value['hidden'] {
 
