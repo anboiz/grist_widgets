@@ -2,11 +2,11 @@
 // Déclaration 
 const data = {
     id: {type: 'int', link:'id', hidden: true},
-    reference: {type: 'str', link:'Reference'},
-    fluide: {type: 'str', link:'Fluide'},
-    manager: {type: 'str', link:'Gestionnaire'},
-    adress: {type: 'str', link:'Adresse'},
-    isActive: {type: 'bool', default:true}  
+    reference: {type: 'str', link:'Reference',name:'Référence du gestionnaire de réseau',elemt_id:'objectauto-reference'},
+    fluide: {type: 'str', link:'Fluide',name:'Fluide',elemt_id:'objectauto-fluide'},
+    manager: {type: 'str', link:'Gestionnaire',name:'Gestionnaire du réseau',elemt_id:'objectauto-manager'},
+    adress: {type: 'str', link:'Adresse',name:'Adresse postale',elemt_id:'objectauto-adress'},
+    isActive: {type: 'bool', default:true,name:'Actif ?',elemt_id:'objectauto-isActive'}, 
 } 
 
 // Extraire les valeurs de 'link' et filtrer les entrées sans 'link'
@@ -87,8 +87,13 @@ class ObjectView {
             console.log([key, value])
             if (value['hidden']) continue
 
-            const newDiv = document.createElement("p");
-            newDiv.innerText = key;
+            const newDiv = document.createElement("div");
+            newDiv.innerHTML = `
+                <div class="mb-3">
+                    <label class="form-label"><strong>${value.name}</strong></label>
+                    <input type="text" class="form-control" id="${value.elemt_id}" readonly>
+                </div>
+            `;
             this.rootElement.appendChild(newDiv)
             // }
         }    
