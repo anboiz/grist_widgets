@@ -37,37 +37,38 @@
         <h5 class="card-title">Gestion des Objets</h5>
       </div>
       <div class="card-body" id="object-form">
+        <div id="object-form">
 
+            <!-- Référence fournisseur -->
+            <div class="mb-3">
+            <label class="form-label"><strong>Référence fournisseur</strong></label>
+            <input type="text" class="form-control" id="object-reference">
+            </div>
 
-        <!-- Référence fournisseur -->
-        <div class="mb-3">
-          <label class="form-label"><strong>Référence fournisseur</strong></label>
-          <input type="text" class="form-control" id="object-reference">
+            <!-- Gestionnaires des tuyaux (liste déroulante) -->
+            <div class="mb-3">
+            <label class="form-label"><strong>Gestionnaire des tuyaux</strong></label>
+            <select class="form-select" id="object-manager">
+                <option value="" selected>Sélectionnez un gestionnaire</option>
+                <option value="Gestionnaire 1">Gestionnaire 1</option>
+                <option value="Gestionnaire 2">Gestionnaire 2</option>
+                <option value="Gestionnaire 3">Gestionnaire 3</option>
+            </select>
+            </div>
+
+            <!-- Est actif (bouton bascule) -->
+            <div class="mb-3 form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="object-active">
+            <label class="form-check-label" for="object-active"><strong>Est actif</strong></label>
+            </div>
+
+            <!-- Adresse -->
+            <div class="mb-3">
+            <label class="form-label"><strong>Adresse</strong></label>
+            <textarea class="form-control" id="object-address" rows="2"></textarea>
+            </div>
+
         </div>
-
-        <!-- Gestionnaires des tuyaux (liste déroulante) -->
-        <div class="mb-3">
-          <label class="form-label"><strong>Gestionnaire des tuyaux</strong></label>
-          <select class="form-select" id="object-manager">
-            <option value="" selected>Sélectionnez un gestionnaire</option>
-            <option value="Gestionnaire 1">Gestionnaire 1</option>
-            <option value="Gestionnaire 2">Gestionnaire 2</option>
-            <option value="Gestionnaire 3">Gestionnaire 3</option>
-          </select>
-        </div>
-
-        <!-- Est actif (bouton bascule) -->
-        <div class="mb-3 form-check form-switch">
-          <input class="form-check-input" type="checkbox" id="object-active">
-          <label class="form-check-label" for="object-active"><strong>Est actif</strong></label>
-        </div>
-
-        <!-- Adresse -->
-        <div class="mb-3">
-          <label class="form-label"><strong>Adresse</strong></label>
-          <textarea class="form-control" id="object-address" rows="2"></textarea>
-        </div>
-
         <!-- Bouton de sauvegarde -->
         <button id="save-button" class="btn btn-primary">
           <i class="fas fa-save me-2"></i>Sauvegarder

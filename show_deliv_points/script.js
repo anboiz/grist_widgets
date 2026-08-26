@@ -78,7 +78,7 @@ class ObjectView {
     this.rootElement = document.getElementById("object-form");
     
     this.createForm();
-
+    this.inputs = {};
     this.saveButton = document.getElementById("save-button");
   }
 
@@ -92,11 +92,15 @@ class ObjectView {
             newDiv.innerHTML = `
                 <div class="mb-3" id="${value.elemt_id}">
                     <label class="form-label"><strong>${value.name}</strong></label>
-
+                    <input type="text" class="form-control" id="${value.elemt_id}-input">
                 </div>`;
             this.rootElement.appendChild(newDiv)
+
+            this.inputs[key] = document.getElementById(`${value.elemt_id}-input`);
+
             // }
-        }    
+        }
+        console.log(this.inputs)    
   }
 
   // Affiche les données
