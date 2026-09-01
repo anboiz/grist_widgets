@@ -143,7 +143,9 @@ class ObjectView {
     // this.activeElement.checked = data.isActive;
     // this.addressElement.value = data.address;
     for (const [key, value] of Object.entries(data)) {
-      if (value['hidden']) continue      
+      console.log(key)
+      if (value['hidden']) continue
+      console.log(this.inputs[key])      
       this.inputs[key].value = data[key]
     }    
   }
