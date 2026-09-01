@@ -1,5 +1,16 @@
 // Initialisation des variables
 // Déclaration 
+// structure :
+// key (nom de la variable dans le script) : {
+//    type: (str : type de variable) 'int'|'str'|'bool',
+//    link: (str : Nom de la variable dans Grist),
+//    name: (str : Nom affiché dans l'interface),
+//    element-id: (str : id de l'élément de saisie dans le formulaire),
+//    default: (Valuer par défaut),
+//    hidden: (bool : l'élément doit-il être affiché dans le formaulaire ?),
+//}
+//
+
 const data = {
     id: {type: 'int', link:'id', hidden: true},
     reference: {type: 'str', link:'Reference',name:'Reference du gestionnaire de reseau',elemt_id:'objectauto-reference'},
@@ -88,16 +99,33 @@ class ObjectView {
             console.log([key, value])
             if (value['hidden']) continue
 
+            div = document.getElementById(`${value.elemt_id}`)
+
+            console.log("Looking for " + value.elemt_id)
+            console.log(div)
+
             const newDiv = document.createElement("div");
-            newDiv.innerHTML = `
-                <div class="mb-3" id="${value.elemt_id}">
-                    <label class="form-label"><strong>${value.name}</strong></label>
-                    <input type="text" class="form-control" id="${value.elemt_id}-input">
-                </div>`;
-            this.rootElement.appendChild(newDiv)
 
+            newDiv.id(value.elemt_id)
+            newDiv.classList.add(mb-3)
+
+            if (value['type'] === 'str') {
+
+              newDiv.innerHTML = `
+                      <label class="form-label"><strong>${value.name}</strong></label>
+                      <input type="text" class="form-control" id="${value.elemt_id}-input">`;
+              this.rootElement.appendChild(newDiv)
+            } else if (value['type'] === 'bool') {
+              newDiv.innerHTML = `
+                      <label class="form-label"><strong>${value.name}</strong></label>
+                      <input type="checkbox" class="form-control" id="${value.elemt_id}-input">`;
+              this.rootElement.appendChild(newDiv)              
+            } else {
+              continue
+            }
+            
             this.inputs[key] = document.getElementById(`${value.elemt_id}-input`);
-
+            
             // }
         }
         console.log(this.inputs)    
