@@ -144,8 +144,8 @@ class ObjectView {
     // this.addressElement.value = data.address;
     for (const [key, value] of Object.entries(data)) {
       console.log(key)
-      console.log(not (!!this.inputs[key]))
-      if (not (!!this.inputs[key])) continue
+      console.log(!!this.inputs[key])
+      if (!(!!this.inputs[key])) continue
       console.log(this.inputs[key])      
       this.inputs[key].value = data[key]
     }    
