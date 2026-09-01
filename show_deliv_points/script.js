@@ -94,46 +94,45 @@ class ObjectView {
   }
 
   createForm(){
-        for (const [key, value] of Object.entries(data)) {
+    for (const [key, value] of Object.entries(data)) {
 
-            console.log([key, value])
-            if (value['hidden']) continue
+      console.log([key, value])
+      if (value['hidden']) continue
 
-            const div = !!document.getElementById(value.elemt_id)
+      const div = !!document.getElementById(value.elemt_id)
 
-            console.log("Looking for " + value.elemt_id)
-            
-            if (div) continue //Skip creation if element already exists
+      console.log("Looking for " + value.elemt_id)
+      
+      if (div) continue //Skip creation if element already exists
 
-            const newDiv = document.createElement("div");
+      const newDiv = document.createElement("div");
 
-            newDiv.id = value.elemt_id
-            newDiv.classList.add("mb-3")
+      newDiv.id = value.elemt_id
+      newDiv.classList.add("mb-3")
 
-            if (value['type'] === 'str') {
+      if (value['type'] === 'str') {
 
-              newDiv.innerHTML = `
-                      <label class="form-label"><strong>${value.name}</strong></label>
-                      <input type="text" class="form-control" id="${value.elemt_id}-input">`;
-              this.rootElement.appendChild(newDiv)
+        newDiv.innerHTML = `
+                <label class="form-label"><strong>${value.name}</strong></label>
+                <input type="text" class="form-control" id="${value.elemt_id}-input">`;
+        this.rootElement.appendChild(newDiv)
 
-            } else if (value['type'] === 'bool') {
-              newDiv.classList.add("form-check")
-              newDiv.classList.add("form-switch")
-               
-              newDiv.innerHTML = `
-                      <label class="form-label"><strong>${value.name}</strong></label>
-                      <input type="checkbox" class="form-check-input" id="${value.elemt_id}-input">`;
-              this.rootElement.appendChild(newDiv)              
-            } else {
-              continue
-            }
-            
-            this.inputs[key] = document.getElementById(`${value.elemt_id}-input`);
-            
-            // }
-        }
-        console.log(this.inputs)    
+      } else if (value['type'] === 'bool') {
+        newDiv.classList.add("form-check")
+        newDiv.classList.add("form-switch")
+          
+        newDiv.innerHTML = `
+                <label class="form-label"><strong>${value.name}</strong></label>
+                <input type="checkbox" class="form-check-input" id="${value.elemt_id}-input">`;
+        this.rootElement.appendChild(newDiv)              
+      } else {
+        continue
+      }
+      
+      this.inputs[key] = document.getElementById(`${value.elemt_id}-input`);
+      
+    }
+  console.log(this.inputs)    
   }
 
   // Affiche les données
@@ -143,6 +142,10 @@ class ObjectView {
     // this.managerElement.value = data.manager;
     // this.activeElement.checked = data.isActive;
     // this.addressElement.value = data.address;
+    for (const [key, value] of Object.entries(data)) {
+      if (value['hidden']) continue      
+      this.inputs[key].value = data[key]
+    }    
   }
 
   // Lie les événements
