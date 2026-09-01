@@ -66,19 +66,23 @@ class ObjectModel {
     console.log(this.data)
   }
 
-  // Met à jour un champ
-  updateField(field, value) {
-    this.data[field] = value;
-  }
+  // // Met à jour un champ
+  // updateField(field, value) {
+  //   this.data[field] = value;
+  // }
 
   // Récupère les données
   getData() {
+    var fields = {}
+
+    for (const [key, value] of Object.entries(data)) {
+      if (key === 'id') continue
+      fields[key] = this.data[key]
+    }
+
     return {
         id: this.data.id,
-        fields: {
-            Id2: this.data.reference,
-            gestionnaire: this.data.manager, 
-        }
+        fields: fields
     }
   }
 }
@@ -136,18 +140,19 @@ class ObjectView {
   }
 
   // Affiche les données
-  render(data) {
+  render(data_from_model) {
     // this.idElement.value = data.id;
     // this.referenceElement.value = data.reference;
     // this.managerElement.value = data.manager;
     // this.activeElement.checked = data.isActive;
     // this.addressElement.value = data.address;
+    console.log(data_from_model)
     for (const [key, value] of Object.entries(data)) {
       console.log(key)
       console.log(!!this.inputs[key])
       if (!(!!this.inputs[key])) continue
       console.log(this.inputs[key])      
-      this.inputs[key].value = data[key]
+      this.inputs[key].value = data_from_model.fields[key]
     }    
   }
 
