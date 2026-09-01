@@ -106,7 +106,7 @@ class ObjectView {
 
             const newDiv = document.createElement("div");
 
-            newDiv.id(value.elemt_id)
+            newDiv.id = value.elemt_id
             newDiv.classList.add(mb-3)
 
             if (value['type'] === 'str') {
