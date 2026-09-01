@@ -99,7 +99,7 @@ class ObjectView {
             console.log([key, value])
             if (value['hidden']) continue
 
-            div = document.getElementById(`${value.elemt_id}`)
+            const div = document.getElementById(value.elemt_id)
 
             console.log("Looking for " + value.elemt_id)
             console.log(div)
