@@ -17,7 +17,7 @@ const data = {
     fluide: {type: 'str', link:'Fluide',name:'Fluide',elemt_id:'objectauto-fluide'},
     manager: {type: 'str', link:'Gestionnaire',name:'Gestionnaire du reseau',elemt_id:'objectauto-manager'},
     adress: {type: 'str', link:'Adresse',name:'Adresse postale',elemt_id:'objectauto-adress'},
-    isActive: {type: 'bool', default:true,name:'Actif',elemt_id:'objectauto-isActive'}, 
+    isActive: {type: 'bool', default:true,name:'Est actif ?',elemt_id:'objectauto-isActive'}, 
 } 
 
 // Extraire les valeurs de 'link' et filtrer les entrées sans 'link'
@@ -95,14 +95,15 @@ class ObjectView {
 
   createForm(){
         for (const [key, value] of Object.entries(data)) {
-            // dict[key] = (value !== undefined) ? mapped[value] : defaultValues[value]
+
             console.log([key, value])
             if (value['hidden']) continue
 
-            const div = document.getElementById(value.elemt_id)
+            const div = !!document.getElementById(value.elemt_id)
 
             console.log("Looking for " + value.elemt_id)
-            console.log(div)
+            
+            if (div) continue //Skip creation if element already exists
 
             const newDiv = document.createElement("div");
 
@@ -115,6 +116,7 @@ class ObjectView {
                       <label class="form-label"><strong>${value.name}</strong></label>
                       <input type="text" class="form-control" id="${value.elemt_id}-input">`;
               this.rootElement.appendChild(newDiv)
+
             } else if (value['type'] === 'bool') {
               newDiv.classList.add("form-check")
               newDiv.classList.add("form-switch")
