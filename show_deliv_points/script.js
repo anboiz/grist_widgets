@@ -116,9 +116,12 @@ class ObjectView {
                       <input type="text" class="form-control" id="${value.elemt_id}-input">`;
               this.rootElement.appendChild(newDiv)
             } else if (value['type'] === 'bool') {
+              newDiv.classList.add("form-check")
+              newDiv.classList.add("form-switch")
+               
               newDiv.innerHTML = `
                       <label class="form-label"><strong>${value.name}</strong></label>
-                      <input type="checkbox" class="form-control" id="${value.elemt_id}-input">`;
+                      <input type="checkbox" class="form-check-input" id="${value.elemt_id}-input">`;
               this.rootElement.appendChild(newDiv)              
             } else {
               continue
