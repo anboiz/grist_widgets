@@ -88,7 +88,6 @@ class ObjectModel {
     for (const [key, value] of Object.entries(formData)) {
       // console.log(key)
       // console.log(!!this.inputs[key])
-      if (!(!!this.inputs[key])) continue
       // console.log(this.inputs[key])      
       this.data[key] = value
     } 
