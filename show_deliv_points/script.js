@@ -118,7 +118,7 @@ class ObjectModel {
 
     for (const [key, value] of Object.entries(this.mapping)) {
       if (key === 'id') continue
-      fields[value] = temp_dict.fields[value]
+      fields[value] = temp_dict.fields[key]
     }
 
     return {
