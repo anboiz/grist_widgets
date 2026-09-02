@@ -83,6 +83,17 @@ class ObjectModel {
     console.log(this.data)
   }
 
+    // Met à jour depuis le Formulaire
+  updateFromForm(formData) {
+    for (const [key, value] of Object.entries(formData)) {
+      // console.log(key)
+      // console.log(!!this.inputs[key])
+      if (!(!!this.inputs[key])) continue
+      // console.log(this.inputs[key])      
+      this.data[key] = value
+    } 
+    console.log(this.data)
+  }
 
   // Récupère les données
   getData() {
@@ -132,9 +143,7 @@ class ObjectView {
       if (!input){
         let styles = adjustFormStyle(value.type)
         if (!!styles) {
-          console.log(div.classList)
           styles.forEach(e => div.classList.add(e))
-          console.log(div.classList)
         }
         div.innerHTML = createFormField(value.name, value.elemt_id, value.type);
         input = document.getElementById(`${value.elemt_id}-input`);
@@ -172,8 +181,6 @@ class ObjectView {
   getFormData() {
     dict = {};
 
-    dict['id'] = this.data.id;
-
     for (const [key, value] of Object.entries(data)) {
       // console.log(key)
       // console.log(!!this.inputs[key])
@@ -208,7 +215,7 @@ class ObjectController {
   async handleSave() {
     console.log("Saving ....")
     const formData = this.view.getFormData();
-    this.model.updateFromGrist(formData);
+    this.model.updateFromForm(formData);
     console.log(formData)
     console.log(this.model.getData())
     await this.sendDataToGrist(this.model.getData());
