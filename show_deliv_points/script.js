@@ -62,6 +62,20 @@ const formFields = {
     name: 'Est actif ?',
     elementId: 'objectauto-isActive',
   },
+    coordinateX: {
+    type: DATA_TYPES.STR,
+    // link: 'CoordinateX',
+    name: 'Longitude (WGS84)',
+    elementId: 'objectauto-coordinate-x',
+
+  },
+  coordinateY: {
+    type: DATA_TYPES.STR,
+    // link: 'CoordinateY',
+    name: 'Latitude (WGS84)',
+    elementId: 'objectauto-coordinate-y',
+
+  },
 };
 
 /**
