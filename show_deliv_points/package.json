@@ -2,7 +2,7 @@
   "name": "@anboiz/widget-delivery",
   "description": "Project for testing Custom Widget in Grist.",
   "homePage": "https://github.com/anboiz/grist_widgets/show_deliv_points",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "grist": {
     "name": "Delivery points",
     "url": "https://anboiz.github.io/grist_widgets/show_deliv_points",
