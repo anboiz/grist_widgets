@@ -37,8 +37,6 @@ const appSideMapping = Object.entries(data)
         return acc;
     }, {});
 
-// console.log(linksList);
-// console.log(defaultValues);
 console.log(appSideMapping);
 
 grist.ready({columns: linksList, requiredAccess: 'full'});
@@ -56,13 +54,10 @@ function createFormField(name, elemt_id, type){
             <input type="text" class="form-control" id="${elemt_id}-input">`;
         
   } else if (type === 'bool') {
-        // newDiv.classList.add("form-check")
-        // newDiv.classList.add("form-switch")
-          
-        // newDiv.innerHTML = 
-        return `<label class="form-label"><strong>${name}</strong></label>
-                <input type="checkbox" class="form-check-input" id="${elemt_id}-input">`;
-        // this.rootElement.appendChild(newDiv)
+
+    return `<label class="form-label"><strong>${name}</strong></label>
+            <input type="checkbox" class="form-check-input" id="${elemt_id}-input">`;
+
   }
 }
 
@@ -88,10 +83,6 @@ class ObjectModel {
     console.log(this.data)
   }
 
-  // // Met à jour un champ
-  // updateField(field, value) {
-  //   this.data[field] = value;
-  // }
 
   // Récupère les données
   getData() {
@@ -139,7 +130,8 @@ class ObjectView {
 
       var input = document.getElementById(`${value.elemt_id}-input`)
       if (!input){
-        div.classList.add(adjustFormStyle(value.type));
+        styles = adjustFormStyle(value.type)
+        styles.forEach(div.classList.add)
         div.innerHTML = createFormField(value.name, value.elemt_id, value.type);
         input = document.getElementById(`${value.elemt_id}-input`);
       }      
@@ -159,10 +151,10 @@ class ObjectView {
     // this.addressElement.value = data.address;
     console.log(data_from_model)
     for (const [key, value] of Object.entries(data)) {
-      console.log(key)
-      console.log(!!this.inputs[key])
+      // console.log(key)
+      // console.log(!!this.inputs[key])
       if (!(!!this.inputs[key])) continue
-      console.log(this.inputs[key])      
+      // console.log(this.inputs[key])      
       this.inputs[key].value = data_from_model.fields[key]
     }    
   }
@@ -174,13 +166,20 @@ class ObjectView {
 
   // Récupère les données du formulaire
   getFormData() {
-    return {
-      id: parseInt(this.idElement.value),
-      reference: this.referenceElement.value,
-      manager: this.managerElement.value,
-      isActive: this.activeElement.checked,
-      address: this.addressElement.value,
-    };
+    dict = {};
+
+    dict['id'] = this.data.id;
+
+    for (const [key, value] of Object.entries(data)) {
+      // console.log(key)
+      // console.log(!!this.inputs[key])
+      if (!(!!this.inputs[key])) continue
+      // console.log(this.inputs[key])      
+      dict[key] = this.inputs[key].value ;
+    } 
+    console.log(dict);
+
+    return dict;
   }
 }
 
