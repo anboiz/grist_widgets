@@ -43,6 +43,28 @@ console.log(appSideMapping);
 
 grist.ready({columns: linksList, requiredAccess: 'full'});
 
+function adjustFormStyle(type) {
+    if (type === 'bool') {
+      return ["form-check", "form-switch"]
+    }
+}
+
+function createFormField(name, elemt_id, type){
+  if (type === 'str') {
+
+    return `<label class="form-label"><strong>${name}</strong></label>
+            <input type="text" class="form-control" id="${elemt_id}-input">`;
+        
+  } else if (type === 'bool') {
+        // newDiv.classList.add("form-check")
+        // newDiv.classList.add("form-switch")
+          
+        // newDiv.innerHTML = 
+        return `<label class="form-label"><strong>${value.name}</strong></label>
+                <input type="checkbox" class="form-check-input" id="${value.elemt_id}-input">`;
+        // this.rootElement.appendChild(newDiv)
+  }
+}
 
 // ========== MODÈLE ==========
 class ObjectModel {
@@ -103,37 +125,26 @@ class ObjectView {
       console.log([key, value])
       if (value['hidden']) continue
 
-      const div = !!document.getElementById(value.elemt_id)
+      var div = document.getElementById(value.elemt_id)
 
       console.log("Looking for " + value.elemt_id)
       
-      if (div) continue //Skip creation if element already exists
+      if (!div){
+        div = document.createElement("div");
 
-      const newDiv = document.createElement("div");
-
-      newDiv.id = value.elemt_id
-      newDiv.classList.add("mb-3")
-
-      if (value['type'] === 'str') {
-
-        newDiv.innerHTML = `
-                <label class="form-label"><strong>${value.name}</strong></label>
-                <input type="text" class="form-control" id="${value.elemt_id}-input">`;
-        this.rootElement.appendChild(newDiv)
-
-      } else if (value['type'] === 'bool') {
-        newDiv.classList.add("form-check")
-        newDiv.classList.add("form-switch")
-          
-        newDiv.innerHTML = `
-                <label class="form-label"><strong>${value.name}</strong></label>
-                <input type="checkbox" class="form-check-input" id="${value.elemt_id}-input">`;
-        this.rootElement.appendChild(newDiv)              
-      } else {
-        continue
+        div.id = value.elemt_id
+        div.classList.add("mb-3")
+        this.rootElement.appendChild(div)
       }
-      
-      this.inputs[key] = document.getElementById(`${value.elemt_id}-input`);
+
+      var input = document.getElementById(value.elemt_id`${value.elemt_id}-input`)
+      if (!input){
+        div.classList.add(adjustFormStyle(value.type));
+        div.innerHTML = createFormField(value.name, value.elemt_id, value.type);
+        input = document.getElementById(value.elemt_id`${value.elemt_id}-input`);
+      }      
+
+      this.inputs[key] = input;
       
     }
   console.log(this.inputs)    
