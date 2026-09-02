@@ -274,7 +274,12 @@ class ObjectView {
   render(data) {
     for (const [key, field] of Object.entries(formFields)) {
       if (!this.inputs[key]) continue;
-      this.inputs[key].value = data.fields[key];
+      if (field.type == DATA_TYPES.BOOL){
+        this.inputs[key].checked = data.fields[key];
+      } else {
+        this.inputs[key].value = data.fields[key];
+      }
+      
     }
   }
 
@@ -296,7 +301,11 @@ class ObjectView {
       console.log(key)
       console.log(this.inputs[key])
       if (!this.inputs[key]) continue;
-      formData[key] = this.inputs[key].value;
+      if (field.type == DATA_TYPES.BOOL){
+        formData[key] = this.inputs[key].checked;
+      } else {
+        formData[key] = this.inputs[key].value;
+      }
     }
     console.log('Données du formulaire')
     console.log(formData)
