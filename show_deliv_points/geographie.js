@@ -29,8 +29,10 @@ function addIgnOrthophotos() {
     type: 'raster',
     tiles: [
       // Requête WMTS pour les orthophotos
-      `${ignOrthoUrl}?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=HR.ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&FORMAT=image/jpeg&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}`
+      `${ignOrthoUrl}?style=normal\u0026format=image/png\u0026service=WMTS\u0026REQUEST=GETTILE\u0026LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2\u0026TILEMATRIXSET=PM\u0026TILEMATRIX={z}\u0026TILECOL={x}\u0026TILEROW={y}`
+    //   `${ignOrthoUrl}?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=HR.ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&FORMAT=image/jpeg&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}`
     ],
+    // "https://data.geopf.fr/wmts?style=normal\u0026format=image/png\u0026service=WMTS\u0026REQUEST=GETTILE\u0026LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2\u0026TILEMATRIXSET=PM\u0026TILEMATRIX={z}\u0026TILECOL={x}\u0026TILEROW={y}"
     tileSize: 256,
     attribution: '© <a href="https://www.ign.fr" target="_blank">IGN</a>',
   });
