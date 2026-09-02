@@ -254,7 +254,15 @@ grist.onRecord(function(record, mappings) {
     console.log("mappings")
     console.log(mappings)
 
-    model.updateMapping(mappings)
+    let mappingToGrist = {}
+
+    for (const [key, value] of Object.entries(appSideMapping)) {
+      if ((!!value.link) & (mappings[value.link])){
+        mappingToGrist[key] = mappings[value.link]
+      }
+    }
+
+    model.updateMapping(mappingToGrist)
     if (mapped) {
 
         dict = {'id':record.id}
