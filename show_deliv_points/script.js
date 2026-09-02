@@ -257,8 +257,8 @@ grist.onRecord(function(record, mappings) {
     let mappingToGrist = {}
 
     for (const [key, value] of Object.entries(appSideMapping)) {
-      if ((!!value.link) & (mappings[value.link])){
-        mappingToGrist[key] = mappings[value.link]
+      if ((mappings[value])){
+        mappingToGrist[key] = mappings[value]
       }
     }
 
