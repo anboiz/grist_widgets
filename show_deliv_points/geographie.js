@@ -24,7 +24,7 @@ let marker = null;
 function initMap() {
   map = new maplibregl.Map({
     container: 'map',
-    // Style vide, car nous allons ajouter manuellement les sources et couches
+    // Style minimal pour initialiser la carte
     style: {
       version: 8,
       sources: {},
@@ -37,8 +37,10 @@ function initMap() {
   // Ajoute les contrôles de navigation
   map.addControl(new maplibregl.NavigationControl(), 'top-right');
 
-  // Ajoute les orthophotos de l'IGN comme source de tuiles
-  addIgnOrthophotos();
+  // Attend que la carte soit complètement chargée avant d'ajouter les sources et couches
+  map.on('load', () => {
+    addIgnOrthophotos();
+  });
 
   // Écoute les changements sur les champs de coordonnées
   coordinateXInput.addEventListener('change', updateMarker);
@@ -58,10 +60,8 @@ function addIgnOrthophotos() {
     type: 'raster',
     tiles: [
       // Requête WMTS pour les orthophotos
-      `${ignOrthoUrl}?style=normal\u0026format=image/png\u0026service=WMTS\u0026REQUEST=GETTILE\u0026LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2\u0026TILEMATRIXSET=PM\u0026TILEMATRIX={z}\u0026TILECOL={x}\u0026TILEROW={y}`
-    //   `${ignOrthoUrl}?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=HR.ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&FORMAT=image/jpeg&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}`
+      `${ignOrthoUrl}?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=HR.ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&FORMAT=image/jpeg&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}`
     ],
-    // "https://data.geopf.fr/wmts?style=normal\u0026format=image/png\u0026service=WMTS\u0026REQUEST=GETTILE\u0026LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2\u0026TILEMATRIXSET=PM\u0026TILEMATRIX={z}\u0026TILECOL={x}\u0026TILEROW={y}"
     tileSize: 256,
     attribution: '© <a href="https://www.ign.fr" target="_blank">IGN</a>',
   });
@@ -75,6 +75,7 @@ function addIgnOrthophotos() {
     maxzoom: 19,
   });
 }
+
 
 /**
  * Met à jour la position du marqueur sur la carte en fonction des coordonnées.
