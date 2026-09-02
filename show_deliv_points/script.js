@@ -1,247 +1,340 @@
-// Initialisation des variables
-// Déclaration 
-// structure :
-// key (nom de la variable dans le script) : {
-//    type: (str : type de variable) 'int'|'str'|'bool',
-//    link: (str : Nom de la variable dans Grist),
-//    name: (str : Nom affiché dans l'interface),
-//    element-id: (str : id de l'élément de saisie dans le formulaire),
-//    default: (Valuer par défaut),
-//    hidden: (bool : l'élément doit-il être affiché dans le formaulaire ?),
-//}
-//
+/**
+ * @file Custom Grist Widget pour la mise à jour d'un enregistrement.
+ * @description Ce widget permet de modifier les données d'un enregistrement Grist via un formulaire.
+ */
 
-const data = {
-    id: {type: 'int', link:'id', hidden: true},
-    reference: {type: 'str', link:'Reference',name:'Reference du gestionnaire de reseau',elemt_id:'objectauto-reference'},
-    fluide: {type: 'str', link:'Fluide',name:'Fluide',elemt_id:'objectauto-fluide'},
-    manager: {type: 'str', link:'Gestionnaire',name:'Gestionnaire du reseau',elemt_id:'objectauto-manager'},
-    adress: {type: 'str', link:'Adresse',name:'Adresse postale',elemt_id:'objectauto-adress'},
-    isActive: {type: 'bool', default:true,name:'Est actif ?',elemt_id:'objectauto-isActive'}, 
-} 
+/**
+ * Types de données supportés par le widget.
+ * @readonly
+ * @enum {string}
+ */
+const DATA_TYPES = {
+  INT: 'int',
+  STR: 'str',
+  BOOL: 'bool',
+};
 
-// Extraire les valeurs de 'link' et filtrer les entrées sans 'link'
-const linksList = Object.values(data)
-    .map(item => item.link)
-    .filter(link => ((link !== undefined) & (link !== 'id')));
+/**
+ * Structure des données du formulaire.
+ * @typedef {Object} FormFieldConfig
+ * @property {string} type - Type de la variable (DATA_TYPES.INT, DATA_TYPES.STR, DATA_TYPES.BOOL).
+ * @property {string} link - Nom de la colonne dans Grist.
+ * @property {string} [name] - Nom affiché dans l'interface.
+ * @property {string} [elementId] - ID de l'élément de saisie dans le formulaire.
+ * @property {*} [default] - Valeur par défaut.
+ * @property {boolean} [hidden=false] - Indique si l'élément doit être masqué dans le formulaire.
+ */
 
-// Créer un nouveau dictionnaire avec {clé : default | ""}
-const defaultValues = Object.entries(data).reduce((acc, [key, value]) => {
-    acc[key] = value.default !== undefined ? value.default : "";
-    return acc;
-}, {});
+/**
+ * Configuration des champs du formulaire.
+ * @type {Object.<string, FormFieldConfig>}
+ */
+const formFields = {
+  id: { type: DATA_TYPES.INT, link: 'id', hidden: true },
+  reference: {
+    type: DATA_TYPES.STR,
+    link: 'Reference',
+    name: 'Référence du gestionnaire de réseau',
+    elementId: 'objectauto-reference',
+  },
+  fluide: {
+    type: DATA_TYPES.STR,
+    link: 'Fluide',
+    name: 'Fluide',
+    elementId: 'objectauto-fluide',
+  },
+  manager: {
+    type: DATA_TYPES.STR,
+    link: 'Gestionnaire',
+    name: 'Gestionnaire du réseau',
+    elementId: 'objectauto-manager',
+  },
+  address: {
+    type: DATA_TYPES.STR,
+    link: 'Adresse',
+    name: 'Adresse postale',
+    elementId: 'objectauto-address',
+  },
+  isActive: {
+    type: DATA_TYPES.BOOL,
+    default: true,
+    name: 'Est actif ?',
+    elementId: 'objectauto-isActive',
+  },
+};
 
-const appSideMapping = Object.entries(data)
-    .reduce((acc, [key, value]) => {
-        if  (value.link !== 'id') acc[key] = value.link;
-        return acc;
-    }, {});
-
-console.log(appSideMapping);
-
-grist.ready({columns: linksList, requiredAccess: 'full'});
-
-function adjustFormStyle(type) {
-    if (type === 'bool') {
-      return ["form-check", "form-switch"]
-    }
+/**
+ * Extrait les noms des colonnes Grist à partir de la configuration.
+ * @returns {string[]} Liste des noms de colonnes.
+ */
+function getGristColumns() {
+  return Object.values(formFields)
+    .map((field) => field.link)
+    .filter((link) => link !== undefined && link !== 'id');
 }
 
-function createFormField(name, elemt_id, type){
-  if (type === 'str') {
+/**
+ * Génère un dictionnaire des valeurs par défaut.
+ * @returns {Object.<string, *>} Dictionnaire des valeurs par défaut.
+ */
+function getDefaultValues() {
+  return Object.entries(formFields).reduce((acc, [key, field]) => {
+    acc[key] = field.default !== undefined ? field.default : '';
+    return acc;
+  }, {});
+}
 
-    return `<label class="form-label"><strong>${name}</strong></label>
-            <input type="text" class="form-control" id="${elemt_id}-input">`;
-        
-  } else if (type === 'bool') {
+/**
+ * Crée un mappage entre les clés du formulaire et les colonnes Grist.
+ * @returns {Object.<string, string>} Mappage des clés.
+ */
+function getAppSideMapping() {
+  return Object.entries(formFields).reduce((acc, [key, field]) => {
+    if (field.link !== 'id') {
+      acc[key] = field.link;
+    }
+    return acc;
+  }, {});
+}
 
-    return `<label class="form-label"><strong>${name}</strong></label>
-            <input type="checkbox" class="form-check-input" id="${elemt_id}-input">`;
+// Initialisation des données par défaut et du mappage
+const defaultValues = getDefaultValues();
+const appSideMapping = getAppSideMapping();
+const gristColumns = getGristColumns();
 
+// Initialisation de Grist
+grist.ready({
+  columns: gristColumns,
+  requiredAccess: 'full',
+});
+
+/**
+ * Ajoute des classes CSS spécifiques en fonction du type de champ.
+ * @param {string} type - Type de champ (DATA_TYPES).
+ * @returns {string[]} Liste des classes CSS à ajouter.
+ */
+function adjustFormStyle(type) {
+  if (type === DATA_TYPES.BOOL) {
+    return ['form-check', 'form-switch'];
   }
+  return [];
+}
+
+/**
+ * Génère le HTML pour un champ de formulaire.
+ * @param {string} name - Nom affiché du champ.
+ * @param {string} elementId - ID de l'élément.
+ * @param {string} type - Type de champ (DATA_TYPES).
+ * @returns {string} HTML du champ.
+ */
+function createFormField(name, elementId, type) {
+  if (type === DATA_TYPES.STR) {
+    return `
+      <label class="form-label"><strong>${name}</strong></label>
+      <input type="text" class="form-control" id="${elementId}-input">
+    `;
+  } else if (type === DATA_TYPES.BOOL) {
+    return `
+      <label class="form-label"><strong>${name}</strong></label>
+      <input type="checkbox" class="form-check-input" id="${elementId}-input">
+    `;
+  }
+  return '';
 }
 
 // ========== MODÈLE ==========
 class ObjectModel {
+  /**
+   * Modèle de données pour le widget.
+   */
   constructor() {
     this.data = defaultValues;
-    this.mapping = {}
+    this.mapping = {};
   }
 
+  /**
+   * Met à jour le mappage entre les clés du formulaire et Grist.
+   * @param {Object.<string, string>} mapping - Mappage à appliquer.
+   */
   updateMapping(mapping) {
-    console.log(mapping)
-    this.mapping = mapping
+    this.mapping = mapping;
   }
 
-  // Met à jour depuis Grist
+  /**
+   * Met à jour les données depuis Grist.
+   * @param {Object} gristData - Données provenant de Grist.
+   */
   updateFromGrist(gristData) {
     if (gristData) {
-      this.data = gristData
+      this.data = gristData;
     } else {
-      this.data.id = generateUUID();
+      this.data.id = this.generateUUID();
     }
-    console.log(this.data)
   }
 
-    // Met à jour depuis le Formulaire
+  /**
+   * Met à jour les données depuis le formulaire.
+   * @param {Object.<string, *>} formData - Données du formulaire.
+   */
   updateFromForm(formData) {
     for (const [key, value] of Object.entries(formData)) {
-      this.data[key] = value
-    } 
-    console.log(this.data)
+      this.data[key] = value;
+    }
   }
 
-  // Récupère les données
+  /**
+   * Récupère les données du modèle.
+   * @returns {Object} Données du modèle.
+   */
   getData() {
-    var fields = {}
-
-    for (const [key, value] of Object.entries(data)) {
-      if (key === 'id') continue
-      fields[key] = this.data[key]
+    const fields = {};
+    for (const [key, field] of Object.entries(formFields)) {
+      if (key === 'id') continue;
+      fields[key] = this.data[key];
     }
-
     return {
-        id: this.data.id,
-        fields: fields
-    }
+      id: this.data.id,
+      fields,
+    };
   }
 
-    // Récupère les données
+  /**
+   * Récupère les données formatées pour Grist.
+   * @returns {Object} Données prêtes pour Grist.
+   */
   getDataForGrist() {
-    let temp_dict = this.getData()
-
-    console.log(temp_dict)
-
-    var fields = {}
-
-    console.log(this.mapping)
-
-    for (const [key, value] of Object.entries(this.mapping)) {
-      if (key === 'id') continue
-      fields[value] = temp_dict.fields[key]
+    const tempData = this.getData();
+    const fields = {};
+    for (const [key, gristColumn] of Object.entries(this.mapping)) {
+      if (key === 'id') continue;
+      fields[gristColumn] = tempData.fields[key];
     }
-
     return {
-        id: this.data.id,
-        fields: fields
-    }
+      id: this.data.id,
+      fields,
+    };
+  }
+
+  /**
+   * Génère un UUID (simplifié pour l'exemple).
+   * @returns {string} UUID généré.
+   */
+  generateUUID() {
+    return Math.random().toString(36).substring(2, 15);
   }
 }
 
 // ========== VUE ==========
 class ObjectView {
+  /**
+   * Vue du formulaire.
+   */
   constructor() {
-    this.rootElement = document.getElementById("object-form");
-    this.inputs = {};   
-    
+    this.rootElement = document.getElementById('object-form');
+    this.inputs = {};
+    this.saveButton = document.getElementById('save-button');
     this.createForm();
-    this.saveButton = document.getElementById("save-button");
   }
 
-  createForm(){
-    for (const [key, value] of Object.entries(data)) {
+  /**
+   * Crée le formulaire dynamiquement.
+   */
+  createForm() {
+    for (const [key, field] of Object.entries(formFields)) {
+      if (field.hidden) continue;
 
-      console.log([key, value])
-      if (value['hidden']) continue
-
-      var div = document.getElementById(value.elemt_id)
-
-      // console.log("Looking for " + value.elemt_id)
-      
-      if (!div){
-        div = document.createElement("div");
-
-        div.id = value.elemt_id
-        div.classList.add("mb-3")
-        this.rootElement.appendChild(div)
+      let div = document.getElementById(field.elementId);
+      if (!div) {
+        div = document.createElement('div');
+        div.id = field.elementId;
+        div.classList.add('mb-3');
+        this.rootElement.appendChild(div);
       }
 
-      var input = document.getElementById(`${value.elemt_id}-input`)
-      if (!input){
-        let styles = adjustFormStyle(value.type)
-        if (!!styles) {
-          styles.forEach(e => div.classList.add(e))
+      let input = document.getElementById(`${field.elementId}-input`);
+      if (!input) {
+        const styles = adjustFormStyle(field.type);
+        if (styles.length > 0) {
+          div.classList.add(...styles);
         }
-        div.innerHTML = createFormField(value.name, value.elemt_id, value.type);
-        input = document.getElementById(`${value.elemt_id}-input`);
-      }      
+        div.innerHTML = createFormField(field.name, field.elementId, field.type);
+        input = document.getElementById(`${field.elementId}-input`);
+      }
 
       this.inputs[key] = input;
-      
     }
-  // console.log(this.inputs)    
   }
 
-  // Affiche les données
-  render(data_from_model) {
-    // this.idElement.value = data.id;
-    // this.referenceElement.value = data.reference;
-    // this.managerElement.value = data.manager;
-    // this.activeElement.checked = data.isActive;
-    // this.addressElement.value = data.address;
-    console.log(data_from_model)
-    for (const [key, value] of Object.entries(data)) {
-      // console.log(key)
-      // console.log(!!this.inputs[key])
-      if (!(!!this.inputs[key])) continue
-      // console.log(this.inputs[key])      
-      this.inputs[key].value = data_from_model.fields[key]
-    }    
+  /**
+   * Affiche les données dans le formulaire.
+   * @param {Object} data - Données à afficher.
+   */
+  render(data) {
+    for (const [key, field] of Object.entries(formFields)) {
+      if (!this.inputs[key]) continue;
+      this.inputs[key].value = data.fields[key];
+    }
   }
 
-  // Lie les événements
+  /**
+   * Lie l'événement de sauvegarde au bouton.
+   * @param {Function} handler - Fonction à exécuter lors de la sauvegarde.
+   */
   bindSave(handler) {
-    this.saveButton.addEventListener("click", handler);
+    this.saveButton.addEventListener('click', handler);
   }
 
-  // Récupère les données du formulaire
+  /**
+   * Récupère les données du formulaire.
+   * @returns {Object.<string, *>} Données du formulaire.
+   */
   getFormData() {
-    dict = {};
-
-    for (const [key, value] of Object.entries(data)) {
-      // console.log(key)
-      // console.log(!!this.inputs[key])
-      if (!(!!this.inputs[key])) continue
-      // console.log(this.inputs[key])      
-      dict[key] = this.inputs[key].value ;
-    } 
-    console.log(dict);
-
-    return dict;
+    const formData = {};
+    for (const [key, field] of Object.entries(formFields)) {
+      if (!this.inputs[key]) continue;
+      formData[key] = this.inputs[key].value;
+    }
+    return formData;
   }
 }
 
 // ========== CONTRÔLEUR ==========
 class ObjectController {
+  /**
+   * Contrôleur du widget.
+   * @param {ObjectModel} model - Modèle de données.
+   * @param {ObjectView} view - Vue du formulaire.
+   */
   constructor(model, view) {
     this.model = model;
     this.view = view;
-
-    // Initialisation
     this.view.render(this.model.getData());
-
-    // Liaison des événements
     this.view.bindSave(() => this.handleSave());
   }
-  // Met à jour la vue
+
+  /**
+   * Met à jour la vue.
+   */
   render() {
     this.view.render(this.model.getData());
   }
 
-  // Gère la sauvegarde
+  /**
+   * Gère la sauvegarde des données.
+   */
   async handleSave() {
-    console.log("Saving ....")
     const formData = this.view.getFormData();
     this.model.updateFromForm(formData);
-    console.log(formData)
-    console.log(this.model.getDataForGrist())
     await this.sendDataToGrist(this.model.getDataForGrist());
   }
 
-  // Envoie les données à Grist
+  /**
+   * Envoie les données à Grist.
+   * @param {Object} data - Données à envoyer.
+   */
   async sendDataToGrist(data) {
-    await grist.selectedTable.update( data)
-    alert("Objet sauvegardé avec succès !");
+    await grist.selectedTable.update(data);
+    alert('Objet sauvegardé avec succès !');
   }
 }
 
@@ -250,48 +343,36 @@ const model = new ObjectModel();
 const view = new ObjectView();
 const controller = new ObjectController(model, view);
 
-grist.onRecord(function(record, mappings) {
-    const mapped = grist.mapColumnNames(record);
-    // First check if all columns were mapped.
-    console.log("mapped")
-    console.log(mapped)
-    console.log("mappings")
-    console.log(mappings)
+/**
+ * Callback appelé par Grist lors de la sélection d'un enregistrement.
+ * @param {Object} record - Enregistrement sélectionné.
+ * @param {Object} mappings - Mappage des colonnes.
+ */
+grist.onRecord((record, mappings) => {
+  const mappedRecord = grist.mapColumnNames(record);
+  if (!mappedRecord) {
+    console.error('Veuillez mapper toutes les colonnes requises.');
+    return;
+  }
 
-    let mappingToGrist = {}
-
-    for (const [key, value] of Object.entries(appSideMapping)) {
-      if ((mappings[value])){
-        mappingToGrist[key] = mappings[value]
-      }
+  // Crée un mappage entre les clés du formulaire et Grist
+  const mappingToGrist = {};
+  for (const [key, gristColumn] of Object.entries(appSideMapping)) {
+    if (mappings[gristColumn]) {
+      mappingToGrist[key] = mappings[gristColumn];
     }
+  }
 
-    model.updateMapping(mappingToGrist)
-    if (mapped) {
+  model.updateMapping(mappingToGrist);
 
-        dict = {'id':record.id}
-        
-        for (const [key, value] of Object.entries(appSideMapping)) {
-            dict[key] = (value !== undefined) ? mapped[value] : defaultValues[value]
-        }
+  // Prépare les données pour le modèle
+  const recordData = { id: record.id };
+  for (const [key, gristColumn] of Object.entries(appSideMapping)) {
+    recordData[key] = mappedRecord[gristColumn] !== undefined
+      ? mappedRecord[gristColumn]
+      : defaultValues[key];
+  }
 
-        // console.log("Dictionaire")
-        // console.log(dict)
-
-        model.updateFromGrist(dict)
-        // Rafraîchir la vue après la mise à jour du modèle
-        controller.render();        
-
-
-    } else {
-        // Helper returned a null value. It means that not all
-        // required columns were mapped.
-        console.error("Please map all columns");
-    }
-        
+  model.updateFromGrist(recordData);
+  controller.render();
 });
-
-// grist.onRecords(function(records) {
-//     console.log(records);
-// });
-
