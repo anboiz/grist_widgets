@@ -85,7 +85,15 @@ function updateMarker() {
   const latitude = parseFloat(coordinateYInput.value);
 
   // Vérifie que les coordonnées sont valides
-  if (isNaN(longitude) || isNaN(latitude)) {
+  if ((isNaN(longitude) || isNaN(latitude)) || ((longitude === 0)&&(latitude === 0))) {
+    map.flyTo({
+        center: MAP_CENTER,
+        zoom: MAP_ZOOM
+    });
+    // Supprime l'ancien marqueur s'il existe
+    if (marker) {
+        marker.remove();
+    }
     return;
   }
 
