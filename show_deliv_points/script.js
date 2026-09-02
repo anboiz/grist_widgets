@@ -230,8 +230,8 @@ class ObjectController {
     const formData = this.view.getFormData();
     this.model.updateFromForm(formData);
     console.log(formData)
-    console.log(this.model.getData())
-    await this.sendDataToGrist(this.model.getData());
+    console.log(this.model.getDataForGrist())
+    await this.sendDataToGrist(this.model.getDataForGrist());
   }
 
   // Envoie les données à Grist
