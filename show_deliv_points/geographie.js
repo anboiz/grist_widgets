@@ -127,3 +127,9 @@ const callback = (mutationList, observer) => {
     }
   }
 };
+
+const observer = new MutationObserver(callback);
+
+// Start observing the target node for configured mutations
+observer.observe(coordinateXInput, config);
+observer.observe(coordinateYInput, config);
