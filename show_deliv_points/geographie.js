@@ -126,7 +126,7 @@ function addIgnOrthophotos() {
  */
 function buildWmtsTileUrl(layerConfig) {
   const { url, layer, style, format, tileMatrixSet } = layerConfig;
-  return `${url}?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=${layer}&STYLE=${style}&FORMAT=${format}&TILEMATRIXSET=${tileMatrixSet}&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}`;
+  return [`${url}?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=${layer}&STYLE=${style}&FORMAT=${format}&TILEMATRIXSET=${tileMatrixSet}&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}`];
 }
 
 /**
