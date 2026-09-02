@@ -53,8 +53,9 @@ function selectSuggestion(suggestion) {
 
   // Remplit les coordonnées (X = longitude, Y = latitude)
   const [longitude, latitude] = suggestion.geometry.coordinates;
-  coordinateXInput.value = longitude;
-  coordinateYInput.value = latitude;
+  coordinateXInput.value = parseFloat(longitude).toFixed(6); // Conversion en float avec 6 décimales
+  coordinateYInput.value = parseFloat(latitude).toFixed(6); // Conversion en float avec 6 décimales
+
 
   // Masque les suggestions
   addressSuggestions.style.display = 'none';

@@ -12,6 +12,7 @@ const DATA_TYPES = {
   INT: 'int',
   STR: 'str',
   BOOL: 'bool',
+  FLOAT: 'float',
 };
 
 /**
@@ -63,15 +64,15 @@ const formFields = {
     elementId: 'objectauto-isActive',
   },
     coordinateX: {
-    type: DATA_TYPES.STR,
-    // link: 'CoordinateX',
+    type: DATA_TYPES.FLOAT,
+    link: 'Longitude',
     name: 'Longitude (WGS84)',
     elementId: 'objectauto-coordinate-x',
 
   },
   coordinateY: {
-    type: DATA_TYPES.STR,
-    // link: 'CoordinateY',
+    type: DATA_TYPES.FLOAT,
+    link: 'Latitude',
     name: 'Latitude (WGS84)',
     elementId: 'objectauto-coordinate-y',
 
@@ -317,6 +318,8 @@ class ObjectView {
       if (!this.inputs[key]) continue;
       if (field.type == DATA_TYPES.BOOL){
         formData[key] = this.inputs[key].checked;
+      } else if (field.type == DATA_TYPES.FLOAT){
+        formData[key] = parseFloat(this.inputs[key].value);
       } else {
         formData[key] = this.inputs[key].value;
       }
