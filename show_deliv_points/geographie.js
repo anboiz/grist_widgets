@@ -16,6 +16,35 @@ const MAP_ZOOM = 5; // Niveau de zoom initial
 let map = null;
 let marker = null;
 
+
+
+/**
+ * Initialise la carte MapLibre GL JS avec les orthophotos de l'IGN.
+ */
+function initMap() {
+  map = new maplibregl.Map({
+    container: 'map',
+    // Style vide, car nous allons ajouter manuellement les sources et couches
+    style: {
+      version: 8,
+      sources: {},
+      layers: [],
+    },
+    center: MAP_CENTER,
+    zoom: MAP_ZOOM,
+  });
+
+  // Ajoute les contrôles de navigation
+  map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+  // Ajoute les orthophotos de l'IGN comme source de tuiles
+  addIgnOrthophotos();
+
+  // Écoute les changements sur les champs de coordonnées
+  coordinateXInput.addEventListener('change', updateMarker);
+  coordinateYInput.addEventListener('change', updateMarker);
+}
+
 /**
  * Ajoute les orthophotos de l'IGN comme fond de carte.
  * Utilisation du service WMTS de GéoPlatform (data.geopf.fr).
@@ -46,35 +75,6 @@ function addIgnOrthophotos() {
     maxzoom: 19,
   });
 }
-
-/**
- * Initialise la carte MapLibre GL JS avec les orthophotos de l'IGN.
- */
-function initMap() {
-  map = new maplibregl.Map({
-    container: 'map',
-    // Style vide, car nous allons ajouter manuellement les sources et couches
-    style: {
-      version: 8,
-      sources: {},
-      layers: [],
-    },
-    center: MAP_CENTER,
-    zoom: MAP_ZOOM,
-  });
-
-  // Ajoute les contrôles de navigation
-  map.addControl(new maplibregl.NavigationControl(), 'top-right');
-
-  // Ajoute les orthophotos de l'IGN comme source de tuiles
-  addIgnOrthophotos();
-
-  // Écoute les changements sur les champs de coordonnées
-  coordinateXInput.addEventListener('change', updateMarker);
-  coordinateYInput.addEventListener('change', updateMarker);
-}
-
-
 
 /**
  * Met à jour la position du marqueur sur la carte en fonction des coordonnées.
