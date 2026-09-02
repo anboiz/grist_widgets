@@ -4,8 +4,9 @@
  */
 
 // Éléments DOM
-const coordinateXInput = document.getElementById('objectauto-coordinate-x-input');
-const coordinateYInput = document.getElementById('objectauto-coordinate-y-input');
+
+// const coordinateXInput = document.getElementById('objectauto-coordinate-x-input');
+// const coordinateYInput = document.getElementById('objectauto-coordinate-y-input');
 
 // Configuration de la carte
 const MAP_CENTER = [2.3522, 46.6034]; // Coordonnées centrées sur la France
