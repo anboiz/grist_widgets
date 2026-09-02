@@ -58,6 +58,7 @@ const formFields = {
   isActive: {
     type: DATA_TYPES.BOOL,
     default: true,
+    link: 'Est_actif',
     name: 'Est actif ?',
     elementId: 'objectauto-isActive',
   },
