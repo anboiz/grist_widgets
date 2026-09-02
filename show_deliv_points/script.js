@@ -60,8 +60,8 @@ function createFormField(name, elemt_id, type){
         // newDiv.classList.add("form-switch")
           
         // newDiv.innerHTML = 
-        return `<label class="form-label"><strong>${value.name}</strong></label>
-                <input type="checkbox" class="form-check-input" id="${value.elemt_id}-input">`;
+        return `<label class="form-label"><strong>${name}</strong></label>
+                <input type="checkbox" class="form-check-input" id="${elemt_id}-input">`;
         // this.rootElement.appendChild(newDiv)
   }
 }
