@@ -110,11 +110,15 @@ class ObjectModel {
   getDataForGrist() {
     let temp_dict = this.getData()
 
+    console.log(temp_dict)
+
     var fields = {}
+
+    console.log(this.mapping)
 
     for (const [key, value] of Object.entries(this.mapping)) {
       if (key === 'id') continue
-      fields[key] = temp_dict.fields[value]
+      fields[value] = temp_dict.fields[value]
     }
 
     return {
