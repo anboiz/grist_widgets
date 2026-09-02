@@ -60,12 +60,13 @@ let coordinateObserver = null;
 // =============================================
 // ÉLÉMENTS DOM
 // =============================================
+// Non nécessaire car déclarés dans adresse.js
 
-/** @type {HTMLInputElement} */
-const coordinateXInput = document.getElementById('objectauto-coordinate-x');
+// /** @type {HTMLInputElement} */
+// const coordinateXInput = document.getElementById('objectauto-coordinate-x');
 
-/** @type {HTMLInputElement} */
-const coordinateYInput = document.getElementById('objectauto-coordinate-y');
+// /** @type {HTMLInputElement} */
+// const coordinateYInput = document.getElementById('objectauto-coordinate-y');
 
 // =============================================
 // FONCTIONS PRINCIPALES
