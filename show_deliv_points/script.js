@@ -141,7 +141,7 @@ class ObjectView {
       if (!input){
         div.classList.add(adjustFormStyle(value.type));
         div.innerHTML = createFormField(value.name, value.elemt_id, value.type);
-        input = document.getElementById(value.elemt_id`${value.elemt_id}-input`);
+        input = document.getElementById(`${value.elemt_id}-input`);
       }      
 
       this.inputs[key] = input;
