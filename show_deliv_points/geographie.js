@@ -108,3 +108,22 @@ function updateMarker() {
 
 // Initialise la carte lorsque la page est chargée
 document.addEventListener('DOMContentLoaded', initMap);
+
+// Observer 
+// Options for the observer (which mutations to observe)
+const config = { attributes: true };
+
+// Callback function to execute when mutations are observed
+const callback = (mutationList, observer) => {
+  for (const mutation of mutationList) {
+    console.log("Mutation")
+    console.log(mutation)
+    console.log(mutation.type)
+    console.log(`The ${mutation.attributeName} attribute was modified.`);
+    if (mutation.type === 'attributes' && mutation.attributeName === 'value') {
+        // Déclenche l'événement 'change' pour mettre à jour la carte
+        console.log(`Ok on y va`);
+        updateMarker();
+    }
+  }
+};
