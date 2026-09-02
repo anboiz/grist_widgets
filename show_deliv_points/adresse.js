@@ -59,6 +59,12 @@ function selectSuggestion(suggestion) {
 
   // Masque les suggestions
   addressSuggestions.style.display = 'none';
+
+  
+  // Met à jour la carte (si elle est initialisée)
+  if (typeof updateMarker === 'function') {
+    updateMarker();
+  }
 }
 
 /**
