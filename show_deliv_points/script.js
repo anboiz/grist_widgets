@@ -293,6 +293,8 @@ class ObjectView {
   getFormData() {
     const formData = {};
     for (const [key, field] of Object.entries(formFields)) {
+      console.log(key)
+      console.log(this.inputs[key])
       if (!this.inputs[key]) continue;
       formData[key] = this.inputs[key].value;
     }
