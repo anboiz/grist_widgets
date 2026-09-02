@@ -263,6 +263,7 @@ class ObjectView {
       }
 
       this.inputs[key] = input;
+      console.log(this.inputs)
     }
   }
 
@@ -295,6 +296,8 @@ class ObjectView {
       if (!this.inputs[key]) continue;
       formData[key] = this.inputs[key].value;
     }
+    console.log('Données du formulaire')
+    console.log(formData)
     return formData;
   }
 }
@@ -334,6 +337,8 @@ class ObjectController {
    * @param {Object} data - Données à envoyer.
    */
   async sendDataToGrist(data) {
+    console.log('Envoi à Grist')
+    console.log(data)
     await grist.selectedTable.update(data);
     alert('Objet sauvegardé avec succès !');
   }
