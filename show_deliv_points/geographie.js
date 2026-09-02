@@ -1,30 +1,83 @@
 /**
  * @file geographie.js
- * @description Gestion de la carte MapLibre GL JS pour afficher un point à partir des coordonnées X (longitude) et Y (latitude).
+ * @description Gestion de la carte MapLibre GL JS pour afficher un point à partir de coordonnées X (longitude) et Y (latitude).
  * Utilisation des orthophotos de l'IGN via le service WMTS de GéoPlatform.
  */
 
-// Éléments DOM
-// const coordinateXInput = document.getElementById('objectauto-coordinate-x');
-// const coordinateYInput = document.getElementById('objectauto-coordinate-y');
+// =============================================
+// CONSTANTES
+// =============================================
 
-// Configuration de la carte
-const MAP_CENTER = [2.3522, 46.6034]; // Coordonnées centrées sur la France
-const MAP_ZOOM = 4; // Niveau de zoom initial
+/**
+ * Coordonnées par défaut centrées sur la France.
+ * @type {number[]}
+ */
+const MAP_CENTER = [2.3522, 46.6034];
 
-// Initialisation de la carte
+/**
+ * Niveau de zoom initial de la carte.
+ * @type {number}
+ */
+const MAP_ZOOM = 4;
+
+/**
+ * Niveau de zoom pour afficher les détails d'une adresse.
+ * @type {number}
+ */
+const DETAIL_ZOOM = 15;
+
+/**
+ * URL du service WMTS des orthophotos de l'IGN.
+ * @type {string}
+ */
+const IGN_ORTHO_URL = 'https://data.geopf.fr/wmts';
+
+/**
+ * Configuration de la couche WMTS pour les orthophotos.
+ * @type {Object}
+ */
+const IGN_ORTHO_LAYER_CONFIG = {
+  url: 'https://data.geopf.fr/wmts',
+  layer: 'HR.ORTHOIMAGERY.ORTHOPHOTOS',
+  style: 'normal',
+  format: 'image/jpeg',
+  tileMatrixSet: 'PM',
+};
+
+// =============================================
+// VARIABLES GLOBALES
+// =============================================
+
+/** @type {maplibregl.Map} */
 let map = null;
+
+/** @type {maplibregl.Marker} */
 let marker = null;
 
+/** @type {MutationObserver} */
+let coordinateObserver = null;
 
+// =============================================
+// ÉLÉMENTS DOM
+// =============================================
+
+/** @type {HTMLInputElement} */
+const coordinateXInput = document.getElementById('objectauto-coordinate-x');
+
+/** @type {HTMLInputElement} */
+const coordinateYInput = document.getElementById('objectauto-coordinate-y');
+
+// =============================================
+// FONCTIONS PRINCIPALES
+// =============================================
 
 /**
  * Initialise la carte MapLibre GL JS avec les orthophotos de l'IGN.
  */
 function initMap() {
+  // Initialisation de la carte
   map = new maplibregl.Map({
     container: 'map',
-    // Style minimal pour initialiser la carte
     style: {
       version: 8,
       sources: {},
@@ -34,39 +87,29 @@ function initMap() {
     zoom: MAP_ZOOM,
   });
 
-  // Ajoute les contrôles de navigation
+  // Ajout des contrôles de navigation
   map.addControl(new maplibregl.NavigationControl(), 'top-right');
 
-  // Attend que la carte soit complètement chargée avant d'ajouter les sources et couches
-  map.on('load', () => {
-    addIgnOrthophotos();
-  });
+  // Ajout des orthophotos une fois la carte chargée
+  map.on('load', addIgnOrthophotos);
 
-//   // Écoute les changements sur les champs de coordonnées
-//   coordinateXInput.addEventListener('change', updateMarker);
-//   coordinateYInput.addEventListener('change', updateMarker);
+  // Initialisation de l'observateur pour les coordonnées
+  initCoordinateObserver();
 }
 
 /**
  * Ajoute les orthophotos de l'IGN comme fond de carte.
- * Utilisation du service WMTS de GéoPlatform (data.geopf.fr).
  */
 function addIgnOrthophotos() {
-  // URL du service WMTS des orthophotos de l'IGN (GéoPlatform)
-  const ignOrthoUrl = 'https://data.geopf.fr/wmts';
-
   // Configuration de la source WMTS
   map.addSource('ign-ortho', {
     type: 'raster',
-    tiles: [
-      // Requête WMTS pour les orthophotos
-      `${ignOrthoUrl}?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=HR.ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&FORMAT=image/jpeg&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}`
-    ],
+    tiles: buildWmtsTileUrl(IGN_ORTHO_LAYER_CONFIG),
     tileSize: 256,
     attribution: '© <a href="https://www.ign.fr" target="_blank">IGN</a>',
   });
 
-  // Ajoute une couche pour afficher les orthophotos
+  // Ajout de la couche pour afficher les orthophotos
   map.addLayer({
     id: 'ign-ortho-layer',
     type: 'raster',
@@ -76,6 +119,14 @@ function addIgnOrthophotos() {
   });
 }
 
+/**
+ * Construit l'URL des tuiles WMTS pour les orthophotos de l'IGN.
+ * @returns {string} URL des tuiles WMTS.
+ */
+function buildWmtsTileUrl(layerConfig) {
+  const { url, layer, style, format, tileMatrixSet } = layerConfig;
+  return `${url}?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=${layer}&STYLE=${style}&FORMAT=${format}&TILEMATRIXSET=${tileMatrixSet}&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}`;
+}
 
 /**
  * Met à jour la position du marqueur sur la carte en fonction des coordonnées.
@@ -84,25 +135,64 @@ function updateMarker() {
   const longitude = parseFloat(coordinateXInput.value);
   const latitude = parseFloat(coordinateYInput.value);
 
-  // Vérifie que les coordonnées sont valides
-  if ((isNaN(longitude) || isNaN(latitude)) || ((longitude === 0)&&(latitude === 0))) {
-    map.flyTo({
-        center: MAP_CENTER,
-        zoom: MAP_ZOOM
-    });
-    // Supprime l'ancien marqueur s'il existe
-    if (marker) {
-        marker.remove();
-    }
+  // Si les coordonnées ne sont pas valides, recentre la carte sur la France
+  if (areCoordinatesInvalid(longitude, latitude)) {
+    resetMapToDefaultView();
     return;
   }
 
+  // Met à jour la vue de la carte et le marqueur
+  updateMapView(longitude, latitude);
+}
+
+/**
+ * Vérifie si les coordonnées sont invalides.
+ * @param {number} longitude - Longitude.
+ * @param {number} latitude - Latitude.
+ * @returns {boolean} `true` si les coordonnées sont invalides.
+ */
+function areCoordinatesInvalid(longitude, latitude) {
+  return isNaN(longitude) || isNaN(latitude) || (longitude === 0 && latitude === 0);
+}
+
+/**
+ * Recentre la carte sur la vue par défaut (France).
+ */
+function resetMapToDefaultView() {
+  map.flyTo({
+    center: MAP_CENTER,
+    zoom: MAP_ZOOM,
+  });
+
+  // Supprime le marqueur s'il existe
+  if (marker) {
+    marker.remove();
+    marker = null;
+  }
+}
+
+/**
+ * Met à jour la vue de la carte et ajoute un marqueur.
+ * @param {number} longitude - Longitude.
+ * @param {number} latitude - Latitude.
+ */
+function updateMapView(longitude, latitude) {
   // Centre la carte sur les nouvelles coordonnées
   map.flyTo({
     center: [longitude, latitude],
-    zoom: 15, // Zoom plus proche pour voir les détails des orthophotos
+    zoom: DETAIL_ZOOM,
   });
 
+  // Met à jour le marqueur
+  updateMarkerPosition(longitude, latitude);
+}
+
+/**
+ * Met à jour la position du marqueur.
+ * @param {number} longitude - Longitude.
+ * @param {number} latitude - Latitude.
+ */
+function updateMarkerPosition(longitude, latitude) {
   // Supprime l'ancien marqueur s'il existe
   if (marker) {
     marker.remove();
@@ -114,24 +204,37 @@ function updateMarker() {
     .addTo(map);
 }
 
+// =============================================
+// OBSERVATEUR DE COORDONNÉES
+// =============================================
+
+/**
+ * Initialise l'observateur pour surveiller les changements des coordonnées.
+ */
+function initCoordinateObserver() {
+  // Configuration de l'observateur
+  const config = { attributes: true, attributeFilter: ['value'] };
+
+  // Callback pour les mutations
+  const callback = (mutationList) => {
+    for (const mutation of mutationList) {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'value') {
+        updateMarker();
+      }
+    }
+  };
+
+  // Création de l'observateur
+  coordinateObserver = new MutationObserver(callback);
+
+  // Observation des champs de coordonnées
+  coordinateObserver.observe(coordinateXInput, config);
+  coordinateObserver.observe(coordinateYInput, config);
+}
+
+// =============================================
+// INITIALISATION
+// =============================================
+
 // Initialise la carte lorsque la page est chargée
 document.addEventListener('DOMContentLoaded', initMap);
-
-// Observer 
-// Options for the observer (which mutations to observe)
-const config = { attributes: true };
-
-// Callback function to execute when mutations are observed
-const callback = (mutationList, observer) => {
-  for (const mutation of mutationList) {
-    if (mutation.type === 'attributes' && mutation.attributeName === 'value') {
-        updateMarker();
-    }
-  }
-};
-
-const observer = new MutationObserver(callback);
-
-// Start observing the target node for configured mutations
-observer.observe(coordinateXInput, config);
-observer.observe(coordinateYInput, config);
