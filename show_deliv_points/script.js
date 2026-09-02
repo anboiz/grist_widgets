@@ -328,6 +328,8 @@ class ObjectController {
    */
   async handleSave() {
     const formData = this.view.getFormData();
+    console.log('Form Data')
+    console.log(formData)
     this.model.updateFromForm(formData);
     await this.sendDataToGrist(this.model.getDataForGrist());
   }
