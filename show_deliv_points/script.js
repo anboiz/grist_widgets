@@ -86,9 +86,6 @@ class ObjectModel {
     // Met à jour depuis le Formulaire
   updateFromForm(formData) {
     for (const [key, value] of Object.entries(formData)) {
-      // console.log(key)
-      // console.log(!!this.inputs[key])
-      // console.log(this.inputs[key])      
       this.data[key] = value
     } 
     console.log(this.data)
@@ -101,6 +98,23 @@ class ObjectModel {
     for (const [key, value] of Object.entries(data)) {
       if (key === 'id') continue
       fields[key] = this.data[key]
+    }
+
+    return {
+        id: this.data.id,
+        fields: fields
+    }
+  }
+
+    // Récupère les données
+  getDataForGrist() {
+    let temp_dict = this.getData()
+
+    var fields = {}
+
+    for (const [key, value] of Object.entries(this.mapping)) {
+      if (key === 'id') continue
+      fields[key] = temp_dict.fields[value]
     }
 
     return {
@@ -128,7 +142,7 @@ class ObjectView {
 
       var div = document.getElementById(value.elemt_id)
 
-      console.log("Looking for " + value.elemt_id)
+      // console.log("Looking for " + value.elemt_id)
       
       if (!div){
         div = document.createElement("div");
@@ -151,7 +165,7 @@ class ObjectView {
       this.inputs[key] = input;
       
     }
-  console.log(this.inputs)    
+  // console.log(this.inputs)    
   }
 
   // Affiche les données
@@ -249,8 +263,8 @@ grist.onRecord(function(record, mappings) {
             dict[key] = (value !== undefined) ? mapped[value] : defaultValues[value]
         }
 
-        console.log("Dictionaire")
-        console.log(dict)
+        // console.log("Dictionaire")
+        // console.log(dict)
 
         model.updateFromGrist(dict)
         // Rafraîchir la vue après la mise à jour du modèle
