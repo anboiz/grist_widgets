@@ -374,10 +374,24 @@ class ObjectController {
   }
 }
 
+// Récupère la liste des contrats
+async function fetchContrats() {
+  try {
+    const contrats = await grist.docApi.fetchTable('CONTRATS');
+    console.log(contrats)
+    return contrats;
+  } catch (error) {
+    console.error('Erreur lors de la récupération des contrats :', error);
+    return [];
+  }
+}
+
 // ========== INITIALISATION ==========
 const model = new ObjectModel();
 const view = new ObjectView();
 const controller = new ObjectController(model, view);
+
+
 
 /**
  * Callback appelé par Grist lors de la sélection d'un enregistrement.
