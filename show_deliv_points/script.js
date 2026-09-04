@@ -376,8 +376,10 @@ class ObjectController {
 
 // Récupère la liste des contrats
 async function fetchContrats() {
+  console.log("Retrieving contrats")
   try {
     const contrats = await grist.docApi.fetchTable('CONTRATS');
+    console.log("Contrats :")
     console.log(contrats)
     return contrats;
   } catch (error) {
@@ -391,7 +393,7 @@ const model = new ObjectModel();
 const view = new ObjectView();
 const controller = new ObjectController(model, view);
 
-
+fetchContrats()
 
 /**
  * Callback appelé par Grist lors de la sélection d'un enregistrement.
