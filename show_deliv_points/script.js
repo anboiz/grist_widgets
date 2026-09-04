@@ -378,7 +378,7 @@ class ObjectController {
 async function fetchContrats() {
   console.log("Retrieving contrats")
   try {
-    const contrats = await grist.docApi.fetchTable('CONTRATS');
+    const contrats = await grist.docApi.fetchTable('Contrats');
     console.log("Contrats :")
     console.log(contrats)
     return contrats;
