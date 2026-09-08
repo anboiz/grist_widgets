@@ -75,7 +75,12 @@ const formFields = {
     link: 'Latitude',
     name: 'Latitude (WGS84)',
     elementId: 'objectauto-coordinate-y',
-
+  },
+  contract: {
+    type: DATA_TYPES.STR,
+    link: 'Contract',
+    name: 'Contrat',
+    elementId: 'objectauto-contrat',
   },
 };
 
