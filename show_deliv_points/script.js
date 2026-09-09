@@ -13,6 +13,7 @@ const DATA_TYPES = {
   STR: 'str',
   BOOL: 'bool',
   FLOAT: 'float',
+  REF: 'ref',
 };
 
 /**
@@ -77,7 +78,7 @@ const formFields = {
     elementId: 'objectauto-coordinate-y',
   },
   contract: {
-    type: DATA_TYPES.INT,
+    type: DATA_TYPES.REF,
     link: 'Contract',
     name: 'Contrat associé',
     elementId: 'objectauto-contrat',
@@ -230,6 +231,13 @@ class ObjectModel {
     const fields = {};
     for (const [key, gristColumn] of Object.entries(this.mapping)) {
       if (key === 'id') continue;
+      console.log(key)
+      if (formFields[key].type == DATA_TYPES.REF){
+        console.log(key)
+        console.log(gristColumn)
+        console.log(tempData.fields[key])
+
+      }
       fields[gristColumn] = tempData.fields[key];
     }
     return {
@@ -328,7 +336,7 @@ class ObjectView {
       if (!this.inputs[key]) continue;
       if (field.type == DATA_TYPES.BOOL){
         formData[key] = this.inputs[key].checked;
-      } else if (field.type == DATA_TYPES.INT){
+      } else if ((field.type == DATA_TYPES.INT) || (field.type == DATA_TYPES.REF)){
         formData[key] = parseInt(this.inputs[key].value);
       } else if (field.type == DATA_TYPES.FLOAT){
         formData[key] = parseFloat(this.inputs[key].value);
