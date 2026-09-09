@@ -77,9 +77,9 @@ const formFields = {
     elementId: 'objectauto-coordinate-y',
   },
   contract: {
-    type: DATA_TYPES.STR,
+    type: DATA_TYPES.INT,
     link: 'Contract',
-    name: 'Contrat',
+    name: 'Contrat associé',
     elementId: 'objectauto-contrat',
   },
 };
@@ -162,6 +162,8 @@ function createFormField(name, elementId, type) {
   }
   return '';
 }
+
+
 
 // ========== MODÈLE ==========
 class ObjectModel {
@@ -393,12 +395,57 @@ async function fetchContrats() {
   }
 }
 
+/**
+ * Formate les données des contrats pour le champ de sélection.
+ */
+function formatContratsForSelect(contrats) {
+  if (!contrats || !contrats.id || !contrats.id.length) {
+    return [];
+  }
+
+  const contratsFormates = [];
+  for (let i = 0; i < contrats.id.length; i++) {
+    const contrat = {
+      id: contrats.id[i],
+      nom: contrats.Nom[i] || 'Non spécifié',
+      titulaire: contrats.Titulaire[i] || 'Non spécifié',
+      energie: contrats.Energie[i] || 'Non spécifiée',
+      type: contrats.Type[i] || 'Non spécifié',
+    };
+    contratsFormates.push(contrat);
+  }
+
+  console.log(contratsFormates)
+
+  return contratsFormates;
+}
+
+/**
+ * Remplit le champ de sélection des contrats.
+ */
+async function fillContratSelect(contratsFormates) {
+  const selectElement = document.getElementById('objectauto-contrat-input');
+
+  while (selectElement.options.length > 1) {
+    selectElement.remove(1);
+  }
+
+  contratsFormates.forEach(contrat => {
+    const option = document.createElement('option');
+    option.value = contrat.id;
+    option.textContent = `${contrat.nom} (${contrat.titulaire} - ${contrat.energie})`;
+    selectElement.appendChild(option);
+  });
+}
+
 // ========== INITIALISATION ==========
 const model = new ObjectModel();
 const view = new ObjectView();
 const controller = new ObjectController(model, view);
 
-fetchContrats()
+
+
+fillContratSelect(formatContratsForSelect(fetchContrats()))
 
 /**
  * Callback appelé par Grist lors de la sélection d'un enregistrement.
