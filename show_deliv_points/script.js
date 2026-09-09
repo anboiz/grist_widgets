@@ -451,7 +451,7 @@ const controller = new ObjectController(model, view);
 
 
 
-fillContratSelect(formatContratsForSelect(fetchContrats()))
+fillContratSelect(formatContratsForSelect(await fetchContrats()))
 
 /**
  * Callback appelé par Grist lors de la sélection d'un enregistrement.
