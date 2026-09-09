@@ -449,9 +449,14 @@ const model = new ObjectModel();
 const view = new ObjectView();
 const controller = new ObjectController(model, view);
 
+const contrats = await fetchContrats()
+console.log(contrats)
 
-
-fillContratSelect(formatContratsForSelect(await fetchContrats()))
+fillContratSelect(
+  formatContratsForSelect(
+    contrats
+  )
+)
 
 /**
  * Callback appelé par Grist lors de la sélection d'un enregistrement.
