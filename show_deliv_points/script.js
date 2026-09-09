@@ -325,6 +325,8 @@ class ObjectView {
       if (!this.inputs[key]) continue;
       if (field.type == DATA_TYPES.BOOL){
         formData[key] = this.inputs[key].checked;
+      } else if (field.type == DATA_TYPES.INT){
+        formData[key] = parseInt(this.inputs[key].value);
       } else if (field.type == DATA_TYPES.FLOAT){
         formData[key] = parseFloat(this.inputs[key].value);
       } else {
@@ -410,7 +412,7 @@ function formatContratsForSelect(contrats) {
   const contratsFormates = [];
   for (let i = 0; i < contrats.id.length; i++) {
     const contrat = {
-      id: contrats.id[i],
+      id: parseInt(contrats.id[i]),
       nom: contrats.Nom[i] || 'Non spécifié',
       titulaire: contrats.Titulaire[i] || 'Non spécifié',
       energie: contrats.Energie[i] || 'Non spécifiée',
