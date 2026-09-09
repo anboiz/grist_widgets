@@ -235,13 +235,6 @@ class ObjectModel {
       if (key === 'id') continue;
       
       console.log(key)
-      if (formFields[key].type == DATA_TYPES.REF){
-        console.log(key)
-        console.log(gristColumn)
-        console.log(tempData.fields[key])
-        fields[gristColumn].rowId = tempData.fields[key];
-
-      }
       fields[gristColumn] = tempData.fields[key];
     }
     console.log(fields)
