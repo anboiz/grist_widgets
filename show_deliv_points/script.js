@@ -429,7 +429,11 @@ function formatContratsForSelect(contrats) {
 /**
  * Remplit le champ de sélection des contrats.
  */
-async function fillContratSelect(contratsFormates) {
+async function fillContratSelect() {
+  const contratsData = await fetchContrats();
+  console.log(contratsData)
+  const contratsFormates = formatContratsForSelect(contratsData);
+  console.log(contratsFormates)
   const selectElement = document.getElementById('objectauto-contrat-input');
 
   while (selectElement.options.length > 1) {
@@ -449,14 +453,7 @@ const model = new ObjectModel();
 const view = new ObjectView();
 const controller = new ObjectController(model, view);
 
-const contrats = await fetchContrats()
-console.log(contrats)
-
-fillContratSelect(
-  formatContratsForSelect(
-    contrats
-  )
-)
+fillContratSelect()
 
 /**
  * Callback appelé par Grist lors de la sélection d'un enregistrement.
