@@ -223,7 +223,7 @@ class ObjectModel {
   }
 
   /**
-   * Récupère les données formatées pour Grist.
+   * Récupère les données formatées pour Grist du modèle pour les injecter dans Grist.
    * @returns {Object} Données prêtes pour Grist.
    */
   getDataForGrist() {
@@ -239,6 +239,7 @@ class ObjectModel {
         console.log(key)
         console.log(gristColumn)
         console.log(tempData.fields[key])
+        fields[gristColumn].rowId = tempData.fields[key];
 
       }
       fields[gristColumn] = tempData.fields[key];
@@ -310,11 +311,13 @@ class ObjectView {
       if (!this.inputs[key]) continue;
       if (field.type == DATA_TYPES.BOOL){
         this.inputs[key].checked = data.fields[key];
-      } else {
+      } else if (field.type == DATA_TYPES.REF){
         console.log(key)
         console.log(data.fields[key])
+        this.inputs[key].value = data.fields[key].rowId;
+      } else {
         this.inputs[key].value = data.fields[key];
-        data.fields[this.inputs[key].value]
+        // data.fields[this.inputs[key].value]
       }
       
     }
