@@ -383,7 +383,7 @@ class ObjectController {
 
 // Récupère la liste des contrats
 async function fetchContrats() {
-  console.log("Retrieving contrats")
+  console.log("Retrieving contrats...")
   try {
     const contrats = await grist.docApi.fetchTable('Contrats');
     console.log("Contrats :")
@@ -399,7 +399,11 @@ async function fetchContrats() {
  * Formate les données des contrats pour le champ de sélection.
  */
 function formatContratsForSelect(contrats) {
+  console.log("Retraitement des contrats...")
+  console.log(contrats)
+  contrats
   if (!contrats || !contrats.id || !contrats.id.length) {
+    console.log("Oups...")
     return [];
   }
 
@@ -412,6 +416,8 @@ function formatContratsForSelect(contrats) {
       energie: contrats.Energie[i] || 'Non spécifiée',
       type: contrats.Type[i] || 'Non spécifié',
     };
+    console.log("Contrat ", contrats.id[i])
+    console.log(contrat)
     contratsFormates.push(contrat);
   }
 
