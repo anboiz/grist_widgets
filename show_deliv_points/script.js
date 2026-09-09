@@ -299,7 +299,10 @@ class ObjectView {
       if (field.type == DATA_TYPES.BOOL){
         this.inputs[key].checked = data.fields[key];
       } else {
+        console.log(key)
+        console.log(data.fields[key])
         this.inputs[key].value = data.fields[key];
+        data.fields[this.inputs[key].value]
       }
       
     }
