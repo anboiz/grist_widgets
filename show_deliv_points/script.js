@@ -227,10 +227,13 @@ class ObjectModel {
    * @returns {Object} Données prêtes pour Grist.
    */
   getDataForGrist() {
+    console.log("Retrieving data from Grist...")
     const tempData = this.getData();
+    console.log(tempData)
     const fields = {};
     for (const [key, gristColumn] of Object.entries(this.mapping)) {
       if (key === 'id') continue;
+      
       console.log(key)
       if (formFields[key].type == DATA_TYPES.REF){
         console.log(key)
@@ -240,6 +243,7 @@ class ObjectModel {
       }
       fields[gristColumn] = tempData.fields[key];
     }
+    console.log(fields)
     return {
       id: this.data.id,
       fields,
@@ -399,8 +403,8 @@ async function fetchContrats() {
   console.log("Retrieving contrats...")
   try {
     const contrats = await grist.docApi.fetchTable('Contrats');
-    console.log("Contrats :")
-    console.log(contrats)
+    // console.log("Contrats :")
+    // console.log(contrats)
     return contrats;
   } catch (error) {
     console.error('Erreur lors de la récupération des contrats :', error);
@@ -412,8 +416,8 @@ async function fetchContrats() {
  * Formate les données des contrats pour le champ de sélection.
  */
 function formatContratsForSelect(contrats) {
-  console.log("Retraitement des contrats...")
-  console.log(contrats)
+  // console.log("Retraitement des contrats...")
+  // console.log(contrats)
   contrats
   if (!contrats || !contrats.id || !contrats.id.length) {
     console.log("Oups...")
@@ -429,12 +433,12 @@ function formatContratsForSelect(contrats) {
       energie: contrats.Energie[i] || 'Non spécifiée',
       type: contrats.Type[i] || 'Non spécifié',
     };
-    console.log("Contrat ", contrats.id[i])
-    console.log(contrat)
+    // console.log("Contrat ", contrats.id[i])
+    // console.log(contrat)
     contratsFormates.push(contrat);
   }
 
-  console.log(contratsFormates)
+  // console.log(contratsFormates)
 
   return contratsFormates;
 }
@@ -444,9 +448,9 @@ function formatContratsForSelect(contrats) {
  */
 async function fillContratSelect() {
   const contratsData = await fetchContrats();
-  console.log(contratsData)
+  // console.log(contratsData)
   const contratsFormates = formatContratsForSelect(contratsData);
-  console.log(contratsFormates)
+  // console.log(contratsFormates)
   const selectElement = document.getElementById('objectauto-contrat-input');
 
   while (selectElement.options.length > 1) {
