@@ -227,17 +227,13 @@ class ObjectModel {
    * @returns {Object} Données prêtes pour Grist.
    */
   getDataForGrist() {
-    console.log("Retrieving data from Grist...")
     const tempData = this.getData();
-    console.log(tempData)
     const fields = {};
     for (const [key, gristColumn] of Object.entries(this.mapping)) {
       if (key === 'id') continue;
       
-      console.log(key)
       fields[gristColumn] = tempData.fields[key];
     }
-    console.log(fields)
     return {
       id: this.data.id,
       fields,
@@ -291,7 +287,6 @@ class ObjectView {
       }
 
       this.inputs[key] = input;
-      console.log(this.inputs)
     }
   }
 
@@ -305,8 +300,6 @@ class ObjectView {
       if (field.type == DATA_TYPES.BOOL){
         this.inputs[key].checked = data.fields[key];
       } else if (field.type == DATA_TYPES.REF){
-        console.log(key)
-        console.log(data.fields[key])
         this.inputs[key].value = data.fields[key].rowId;
       } else {
         this.inputs[key].value = data.fields[key];
@@ -331,8 +324,6 @@ class ObjectView {
   getFormData() {
     const formData = {};
     for (const [key, field] of Object.entries(formFields)) {
-      console.log(key)
-      console.log(this.inputs[key])
       if (!this.inputs[key]) continue;
       if (field.type == DATA_TYPES.BOOL){
         formData[key] = this.inputs[key].checked;
@@ -344,8 +335,6 @@ class ObjectView {
         formData[key] = this.inputs[key].value;
       }
     }
-    console.log('Données du formulaire')
-    console.log(formData)
     return formData;
   }
 }
@@ -376,8 +365,6 @@ class ObjectController {
    */
   async handleSave() {
     const formData = this.view.getFormData();
-    console.log('Form Data')
-    console.log(formData)
     this.model.updateFromForm(formData);
     await this.sendDataToGrist(this.model.getDataForGrist());
   }
@@ -387,8 +374,6 @@ class ObjectController {
    * @param {Object} data - Données à envoyer.
    */
   async sendDataToGrist(data) {
-    console.log('Envoi à Grist')
-    console.log(data)
     await grist.selectedTable.update(data);
     alert('Objet sauvegardé avec succès !');
   }
@@ -399,8 +384,6 @@ async function fetchContrats() {
   console.log("Retrieving contrats...")
   try {
     const contrats = await grist.docApi.fetchTable('Contrats');
-    // console.log("Contrats :")
-    // console.log(contrats)
     return contrats;
   } catch (error) {
     console.error('Erreur lors de la récupération des contrats :', error);
@@ -412,11 +395,10 @@ async function fetchContrats() {
  * Formate les données des contrats pour le champ de sélection.
  */
 function formatContratsForSelect(contrats) {
-  // console.log("Retraitement des contrats...")
-  // console.log(contrats)
+  console.log("Retraitement des contrats...")
+
   contrats
   if (!contrats || !contrats.id || !contrats.id.length) {
-    console.log("Oups...")
     return [];
   }
 
@@ -429,12 +411,10 @@ function formatContratsForSelect(contrats) {
       energie: contrats.Energie[i] || 'Non spécifiée',
       type: contrats.Type[i] || 'Non spécifié',
     };
-    // console.log("Contrat ", contrats.id[i])
-    // console.log(contrat)
+
     contratsFormates.push(contrat);
   }
 
-  // console.log(contratsFormates)
 
   return contratsFormates;
 }
@@ -444,9 +424,7 @@ function formatContratsForSelect(contrats) {
  */
 async function fillContratSelect() {
   const contratsData = await fetchContrats();
-  // console.log(contratsData)
   const contratsFormates = formatContratsForSelect(contratsData);
-  // console.log(contratsFormates)
   const selectElement = document.getElementById('objectauto-contrat-input');
 
   while (selectElement.options.length > 1) {
