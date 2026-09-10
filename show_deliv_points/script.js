@@ -25,7 +25,12 @@ const DATA_TYPES = {
  * @property {string} [elementId] - ID de l'élément de saisie dans le formulaire.
  * @property {*} [default] - Valeur par défaut.
  * @property {boolean} [hidden=false] - Indique si l'élément doit être masqué dans le formulaire.
- */
+ * @property {Object} [refConfig] - Configuration spécifique aux références (pour type REF).
+ * @property {string} [refConfig.table] - Nom de la table de référence.
+ * @property {string} [refConfig.displayField] - Champ à afficher dans les options.
+ * @property {string} [refConfig.valueField='id'] - Champ à utiliser comme valeur.
+ * @property {string} [refConfig.iconField] - Champ optionnel pour une icône (ex: FontAwesome).
+ * /
 
 /**
  * Configuration des champs du formulaire.
@@ -40,10 +45,16 @@ const formFields = {
     elementId: 'objectauto-reference',
   },
   fluide: {
-    type: DATA_TYPES.STR,
+    type: DATA_TYPES.REF,
     link: 'Fluide',
     name: 'Fluide',
     elementId: 'objectauto-fluide',
+    refConfig: {
+      table: 'Fluides', // Nom de la table de référence
+      displayField: 'Nom', // Champ à afficher dans les options
+      valueField: 'id', // Champ à utiliser comme valeur (par défaut: 'id')
+      iconField: 'Symbole', // Champ optionnel pour une icône
+    },
   },
   manager: {
     type: DATA_TYPES.STR,
@@ -82,6 +93,11 @@ const formFields = {
     link: 'Contract',
     name: 'Contrat associé',
     elementId: 'objectauto-contrat',
+    refConfig: {
+      table: 'Contrats',
+      displayField: 'Nom',
+      valueField: 'id',
+    },
   },
 };
 
@@ -159,6 +175,13 @@ function createFormField(name, elementId, type) {
     return `
       <label class="form-label"><strong>${name}</strong></label>
       <input type="checkbox" class="form-check-input" id="${elementId}-input">
+    `;
+  } else if (type === DATA_TYPES.REF) {
+    return `
+      <label class="form-label"><strong>${name}</strong></label>
+      <select class="form-select" id="${elementId}-input">
+        <option value="" selected>Sélectionnez un${name.toLowerCase()}</option>
+      </select>
     `;
   }
   return '';
@@ -258,7 +281,7 @@ class ObjectView {
     this.rootElement = document.getElementById('object-form');
     this.inputs = {};
     this.saveButton = document.getElementById('save-button');
-    this.createForm();
+    this.initRefFields().catch(console.error); // Initialisation des champs de référence
   }
 
   /**
@@ -285,6 +308,11 @@ class ObjectView {
         div.innerHTML = createFormField(field.name, field.elementId, field.type);
         input = document.getElementById(`${field.elementId}-input`);
       }
+
+       // Si c'est un champ de référence, remplissez-le
+      if (field.type === DATA_TYPES.REF) {
+        fillRefSelect(field.elementId, field).catch(console.error);
+      }     
 
       this.inputs[key] = input;
     }
@@ -339,6 +367,17 @@ class ObjectView {
   }
 }
 
+/**
+ * Initialise tous les champs de référence.
+ */
+async function initRefFields() {
+  for (const [key, field] of Object.entries(formFields)) {
+    if (field.type === DATA_TYPES.REF) {
+      await fillRefSelect(field.elementId, field);
+    }
+  }
+}
+
 // ========== CONTRÔLEUR ==========
 class ObjectController {
   /**
@@ -377,6 +416,87 @@ class ObjectController {
     await grist.selectedTable.update(data);
     alert('Objet sauvegardé avec succès !');
   }
+}
+
+/**
+ * Cache pour stocker les données de référence déjà récupérées.
+ * @type {Object.<string, Array>}
+ */
+const refDataCache = {};
+
+/**
+ * Récupère les données de référence depuis Grist.
+ * @param {string} tableName - Nom de la table de référence.
+ * @returns {Promise<Array>} Liste des enregistrements de référence.
+ */
+async function fetchRefData(tableName) {
+  // Vérifie si les données sont déjà en cache
+  if (refDataCache[tableName]) {
+    return refDataCache[tableName];
+  }
+
+  try {
+    const data = await grist.docApi.fetchTable(tableName);
+    refDataCache[tableName] = data;
+    return data;
+  } catch (error) {
+    console.error(`Erreur lors de la récupération des données de référence (${tableName}):`, error);
+    return { id: [], [data.displayField]: [] };
+  }
+}
+
+/**
+ * Formate les données de référence pour un champ SELECT.
+ * @param {Array} refData - Données de référence brutes.
+ * @param {FormFieldConfig} fieldConfig - Configuration du champ.
+ * @returns {Array} Liste des options formatées.
+ */
+function formatRefOptions(refData, fieldConfig) {
+  if (!refData || !refData.id || !refData.id.length) {
+    return [];
+  }
+
+  const { displayField, valueField = 'id', iconField } = fieldConfig.refConfig;
+  return refData.id.map((_, index) => {
+    const option = {
+      value: refData[valueField][index],
+      label: refData[displayField][index] || 'Non spécifié',
+    };
+
+    if (iconField && refData[iconField]) {
+      option.icon = refData[iconField][index];
+    }
+
+    return option;
+  });
+}
+
+/**
+ * Remplit un champ SELECT avec les options de référence.
+ * @param {string} elementId - ID de l'élément SELECT.
+ * @param {FormFieldConfig} fieldConfig - Configuration du champ.
+ */
+async function fillRefSelect(elementId, fieldConfig) {
+  const selectElement = document.getElementById(`${elementId}-input`);
+  if (!selectElement) return;
+
+  const refData = await fetchRefData(fieldConfig.refConfig.table);
+  const options = formatRefOptions(refData, fieldConfig);
+
+  // Efface les options existantes (sauf la première)
+  while (selectElement.options.length > 1) {
+    selectElement.remove(1);
+  }
+
+  // Ajoute les options formatées
+  options.forEach(option => {
+    const optionElement = document.createElement('option');
+    optionElement.value = option.value;
+    optionElement.textContent = option.icon
+      ? `${option.label} <i class="${option.icon}"></i>`
+      : option.label;
+    selectElement.appendChild(optionElement);
+  });
 }
 
 // Récupère la liste des contrats
