@@ -281,7 +281,7 @@ class ObjectView {
     this.rootElement = document.getElementById('object-form');
     this.inputs = {};
     this.saveButton = document.getElementById('save-button');
-    this.initRefFields().catch(console.error); // Initialisation des champs de référence
+    // initRefFields().catch(console.error); // Initialisation des champs de référence
   }
 
   /**
@@ -367,16 +367,16 @@ class ObjectView {
   }
 }
 
-/**
- * Initialise tous les champs de référence.
- */
-async function initRefFields() {
-  for (const [key, field] of Object.entries(formFields)) {
-    if (field.type === DATA_TYPES.REF) {
-      await fillRefSelect(field.elementId, field);
-    }
-  }
-}
+// /**
+//  * Initialise tous les champs de référence.
+//  */
+// async function initRefFields() {
+//   for (const [key, field] of Object.entries(formFields)) {
+//     if (field.type === DATA_TYPES.REF) {
+//       await fillRefSelect(field.elementId, field);
+//     }
+//   }
+// }
 
 // ========== CONTRÔLEUR ==========
 class ObjectController {
