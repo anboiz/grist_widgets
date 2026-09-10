@@ -503,11 +503,37 @@ async function fillRefSelect(elementId, fieldConfig) {
   options.forEach(option => {
     const optionElement = document.createElement('option');
     optionElement.value = option.value;
-    optionElement.textContent = option.icon
-      ? `${option.label} <i class="${option.icon}"></i>`
-      : option.label;
+    optionElement.textContent = option.label;
+    if (option.icon) {
+      optionElement.dataset.icon = option.icon; // Stocke l'icône dans un dataset
+    }
     selectElement.appendChild(optionElement);
   });
+
+  // Initialise Select2 si disponible
+  if (typeof $.fn.select2 === 'function') {
+    $(`#${elementId}-input`).select2({
+      theme: 'bootstrap5',
+      templateResult: formatOptionWithIcon,
+      templateSelection: formatOptionWithIcon,
+    });
+  }
+}
+
+/**
+ * Formate une option avec une icône (pour Select2).
+ * @param {Object} option - Option à formater.
+ * @returns {jQuery} Élément jQuery formaté.
+ */
+function formatOptionWithIcon(option) {
+  if (!option.id) return option.text;
+
+  const icon = $(option.element).data('icon');
+  if (!icon) return option.text;
+
+  return $(
+    `<span>${option.text} <i class="${icon} ms-2"></i></span>`
+  );
 }
 
 // Récupère la liste des contrats
