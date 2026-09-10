@@ -504,20 +504,20 @@ async function fillRefSelect(elementId, fieldConfig) {
     const optionElement = document.createElement('option');
     optionElement.value = option.value;
     optionElement.textContent = option.label;
-    if (option.icon) {
-      optionElement.dataset.icon = option.icon; // Stocke l'icône dans un dataset
-    }
+    // if (option.icon) {
+    //   optionElement.dataset.icon = option.icon; // Stocke l'icône dans un dataset
+    // }
     selectElement.appendChild(optionElement);
   });
 
-  // Initialise Select2 si disponible
-  if (typeof $.fn.select2 === 'function') {
-    $(`#${elementId}-input`).select2({
-      theme: 'bootstrap5',
-      templateResult: formatOptionWithIcon,
-      templateSelection: formatOptionWithIcon,
-    });
-  }
+  // // Initialise Select2 si disponible
+  // if (typeof $.fn.select2 === 'function') {
+  //   $(`#${elementId}-input`).select2({
+  //     theme: 'bootstrap5',
+  //     templateResult: formatOptionWithIcon,
+  //     templateSelection: formatOptionWithIcon,
+  //   });
+  // }
 }
 
 /**
