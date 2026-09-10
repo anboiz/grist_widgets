@@ -166,6 +166,8 @@ function adjustFormStyle(type) {
  * @returns {string} HTML du champ.
  */
 function createFormField(name, elementId, type) {
+  console.log('Creating field : ', name, ', Type :', type)
+
   if (type === DATA_TYPES.STR) {
     return `
       <label class="form-label"><strong>${name}</strong></label>
@@ -288,7 +290,9 @@ class ObjectView {
    * Crée le formulaire dynamiquement.
    */
   createForm() {
+    console.log('Formulaire...')
     for (const [key, field] of Object.entries(formFields)) {
+      console.log({key, field})
       if (field.hidden) continue;
 
       let div = document.getElementById(field.elementId);
@@ -311,6 +315,8 @@ class ObjectView {
 
        // Si c'est un champ de référence, remplissez-le
       if (field.type === DATA_TYPES.REF) {
+        console.log('Retrieving options...')
+        console.log(fillRefSelect(field.elementId, field))
         fillRefSelect(field.elementId, field).catch(console.error);
       }     
 
@@ -452,6 +458,7 @@ async function fetchRefData(tableName) {
  * @returns {Array} Liste des options formatées.
  */
 function formatRefOptions(refData, fieldConfig) {
+  console.log([refData, fieldConfig])
   if (!refData || !refData.id || !refData.id.length) {
     return [];
   }
@@ -467,6 +474,8 @@ function formatRefOptions(refData, fieldConfig) {
       option.icon = refData[iconField][index];
     }
 
+    console.log({option})
+
     return option;
   });
 }
@@ -477,6 +486,7 @@ function formatRefOptions(refData, fieldConfig) {
  * @param {FormFieldConfig} fieldConfig - Configuration du champ.
  */
 async function fillRefSelect(elementId, fieldConfig) {
+  console.log([elementId, fieldConfig])
   const selectElement = document.getElementById(`${elementId}-input`);
   if (!selectElement) return;
 
