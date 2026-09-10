@@ -283,6 +283,7 @@ class ObjectView {
     this.rootElement = document.getElementById('object-form');
     this.inputs = {};
     this.saveButton = document.getElementById('save-button');
+    this.createForm()
     // initRefFields().catch(console.error); // Initialisation des champs de référence
   }
 
