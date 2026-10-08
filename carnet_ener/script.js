@@ -304,6 +304,9 @@ class ObjectView {
       if (field.type == DATA_TYPES.BOOL){
         this.inputs[key].checked = data.fields[key];
       } else if (field.type == DATA_TYPES.REF){
+        console.log(field.type)
+        console.log(key)
+        console.log(data.fields[key])
         this.inputs[key].value = data.fields[key].rowId;
       } else {
         this.inputs[key].value = data.fields[key];
