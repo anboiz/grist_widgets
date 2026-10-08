@@ -299,6 +299,7 @@ class ObjectView {
    */
   render(data) {
     for (const [key, field] of Object.entries(formFields)) {
+      console.log({'key':key,'fields':field})
       if (!this.inputs[key]) continue;
       if (field.type == DATA_TYPES.BOOL){
         this.inputs[key].checked = data.fields[key];
