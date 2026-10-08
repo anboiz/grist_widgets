@@ -38,67 +38,35 @@ const DATA_TYPES = {
  */
 const formFields = {
   id: { type: DATA_TYPES.INT, link: 'id', hidden: true },
-  reference: {
+  bat_id: {
     type: DATA_TYPES.STR,
-    link: 'Reference',
-    name: 'Référence du gestionnaire de réseau',
-    elementId: 'objectauto-reference',
+    link: 'id_gesimmo',
+    name: 'Code GesImmo du bâtiment',
+    elementId: 'objectauto-id_gesimmo',
   },
-  fluide: {
+  bat_comm: {
+    type: DATA_TYPES.STR,
+    link: 'batiment_comm',
+    name: 'Description du bâtiment pour contrôle de cohérence',
+    elementId: 'objectauto-batiment_comm',
+  },
+  deet_comm: {
+    type: DATA_TYPES.STR,
+    link: 'deet_comm',
+    name: 'Commentaire sur le staut du bâtiment au regard des obligations du dipositif éco-énergie tertiaire (DEET ou Décret tertiaire)',
+    elementId: 'objectauto-deet_comm',
+  },
+  bacs_statut: {
     type: DATA_TYPES.REF,
-    link: 'Fluide',
-    name: 'Fluide',
-    elementId: 'objectauto-fluide',
+    link: 'bacs_statut',
+    name: 'Statut du bâtiment au regard du décret BACS (Building Automation en Control Systems)',
+    elementId: 'objectauto-bacs_statut',
     refConfig: {
-      table: 'Fluides', // Nom de la table de référence
-      displayField: 'Nom', // Champ à afficher dans les options
+      table: 'BACS_STATUT_OPT', // Nom de la table de référence
+      displayField: 'Valeur', // Champ à afficher dans les options
       valueField: 'id', // Champ à utiliser comme valeur (par défaut: 'id')
-      iconField: 'Symbole', // Champ optionnel pour une icône
     },
-  },
-  manager: {
-    type: DATA_TYPES.STR,
-    link: 'Gestionnaire',
-    name: 'Gestionnaire du réseau',
-    elementId: 'objectauto-manager',
-  },
-  address: {
-    type: DATA_TYPES.STR,
-    link: 'Adresse',
-    name: 'Adresse postale',
-    elementId: 'objectauto-address',
-  },
-  isActive: {
-    type: DATA_TYPES.BOOL,
-    default: true,
-    link: 'Est_actif',
-    name: 'Est actif ?',
-    elementId: 'objectauto-isActive',
-  },
-    coordinateX: {
-    type: DATA_TYPES.FLOAT,
-    link: 'Longitude',
-    name: 'Longitude (WGS84)',
-    elementId: 'objectauto-coordinate-x',
-
-  },
-  coordinateY: {
-    type: DATA_TYPES.FLOAT,
-    link: 'Latitude',
-    name: 'Latitude (WGS84)',
-    elementId: 'objectauto-coordinate-y',
-  },
-  contract: {
-    type: DATA_TYPES.REF,
-    link: 'Contract',
-    name: 'Contrat associé',
-    elementId: 'objectauto-contrat',
-    refConfig: {
-      table: 'Contrats',
-      displayField: 'Nom',
-      valueField: 'id',
-    },
-  },
+  }
 };
 
 /**
