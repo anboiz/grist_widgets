@@ -505,72 +505,72 @@ function formatOptionWithIcon(option) {
   );
 }
 
-// Récupère la liste des contrats
-async function fetchContrats() {
-  console.log("Retrieving contrats...")
-  try {
-    const contrats = await grist.docApi.fetchTable('Contrats');
-    return contrats;
-  } catch (error) {
-    console.error('Erreur lors de la récupération des contrats :', error);
-    return [];
-  }
-}
+// // Récupère la liste des contrats
+// async function fetchContrats() {
+//   console.log("Retrieving contrats...")
+//   try {
+//     const contrats = await grist.docApi.fetchTable('Contrats');
+//     return contrats;
+//   } catch (error) {
+//     console.error('Erreur lors de la récupération des contrats :', error);
+//     return [];
+//   }
+// }
 
 /**
  * Formate les données des contrats pour le champ de sélection.
  */
-function formatContratsForSelect(contrats) {
-  console.log("Retraitement des contrats...")
+// function formatContratsForSelect(contrats) {
+//   console.log("Retraitement des contrats...")
 
-  contrats
-  if (!contrats || !contrats.id || !contrats.id.length) {
-    return [];
-  }
+//   contrats
+//   if (!contrats || !contrats.id || !contrats.id.length) {
+//     return [];
+//   }
 
-  const contratsFormates = [];
-  for (let i = 0; i < contrats.id.length; i++) {
-    const contrat = {
-      id: parseInt(contrats.id[i]),
-      nom: contrats.Nom[i] || 'Non spécifié',
-      titulaire: contrats.Titulaire[i] || 'Non spécifié',
-      energie: contrats.Energie[i] || 'Non spécifiée',
-      type: contrats.Type[i] || 'Non spécifié',
-    };
+//   const contratsFormates = [];
+//   for (let i = 0; i < contrats.id.length; i++) {
+//     const contrat = {
+//       id: parseInt(contrats.id[i]),
+//       nom: contrats.Nom[i] || 'Non spécifié',
+//       titulaire: contrats.Titulaire[i] || 'Non spécifié',
+//       energie: contrats.Energie[i] || 'Non spécifiée',
+//       type: contrats.Type[i] || 'Non spécifié',
+//     };
 
-    contratsFormates.push(contrat);
-  }
+//     contratsFormates.push(contrat);
+//   }
 
 
-  return contratsFormates;
-}
+//   return contratsFormates;
+// }
 
 /**
  * Remplit le champ de sélection des contrats.
  */
-async function fillContratSelect() {
-  const contratsData = await fetchContrats();
-  const contratsFormates = formatContratsForSelect(contratsData);
-  const selectElement = document.getElementById('objectauto-contrat-input');
+// async function fillContratSelect() {
+//   const contratsData = await fetchContrats();
+//   const contratsFormates = formatContratsForSelect(contratsData);
+//   const selectElement = document.getElementById('objectauto-contrat-input');
 
-  while (selectElement.options.length > 1) {
-    selectElement.remove(1);
-  }
+//   while (selectElement.options.length > 1) {
+//     selectElement.remove(1);
+//   }
 
-  contratsFormates.forEach(contrat => {
-    const option = document.createElement('option');
-    option.value = contrat.id;
-    option.textContent = `${contrat.nom} (${contrat.titulaire} - ${contrat.energie})`;
-    selectElement.appendChild(option);
-  });
-}
+//   contratsFormates.forEach(contrat => {
+//     const option = document.createElement('option');
+//     option.value = contrat.id;
+//     option.textContent = `${contrat.nom} (${contrat.titulaire} - ${contrat.energie})`;
+//     selectElement.appendChild(option);
+//   });
+// }
 
 // ========== INITIALISATION ==========
 const model = new ObjectModel();
 const view = new ObjectView();
 const controller = new ObjectController(model, view);
 
-fillContratSelect()
+// fillContratSelect()
 
 /**
  * Callback appelé par Grist lors de la sélection d'un enregistrement.
