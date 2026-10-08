@@ -307,7 +307,7 @@ class ObjectView {
         console.log(field.type)
         console.log(key)
         console.log(data.fields[key])
-        this.inputs[key].value = data.fields[key].rowId;
+        this.inputs[key].value = string(data.fields[key].rowId);
       } else {
         this.inputs[key].value = data.fields[key];
         // data.fields[this.inputs[key].value]
