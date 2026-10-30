@@ -294,7 +294,7 @@ class ObjectView {
    * @param {Function} handler - Fonction à exécuter lors de la sauvegarde.
    */
   bindSave(handler) {
-    this.saveButton.addEventListener('click', handler);
+    // this.saveButton.addEventListener('click', handler);
   }
 
   /**
