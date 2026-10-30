@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>InfoEnergie Widget</title>
+  <!-- Chargement de l'API Grist pour les widgets -->
+  <script src="https://docs.getgrist.com/grist-plugin-api.js"></script>
+  <style>
+    /* Styles CSS pour le widget */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 10px;
+    }
+    #widget-container {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      max-width: 600px;
+    }
+    .field {
+      margin-bottom: 8px;
+    }
+    .field-label {
+      font-weight: bold;
+    }
+    .nav-buttons {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+    button {
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="widget-container">
+    <h3 id="widget-title">Informations Énergie</h3>
+    <div id="fields-container"></div>
+    <div class="nav-buttons">
+      <button id="prev-btn" disabled>← Précédent</button>
+      <button id="next-btn" disabled>Suivant →</button>
+    </div>
+  </div>
+  <!-- Votre script principal -->
+  <script src="script.js"></script>
+</body>
+</html>

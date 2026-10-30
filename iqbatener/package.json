@@ -1,0 +1,16 @@
+{
+  "name": "@anboiz/widget-iqbat",
+  "description": "Project for testing Custom Widget in Grist.",
+  "homePage": "https://github.com/anboiz/grist_widgets/iqbatener",
+  "version": "0.0.1",
+  "grist": {
+    "name": "Delivery points",
+    "url": "https://anboiz.github.io/grist_widgets/iqbatener",
+    "widgetId": "@anboiz/widget-delivery",
+    "published": true,
+    "accessLevel": "read table",
+    "renderAfterReady": true,
+    "description": "",
+    "isGristLabsMaintained": false
+  }
+}
