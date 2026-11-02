@@ -44,6 +44,35 @@ const formFields = {
     name: 'Code GesImmo du bâtiment',
     elementId: 'objectauto-gesimmo',
   },
+  source: {
+    type: DATA_TYPES.STR,
+    link: 'source',
+    name: 'Fichier source',
+    elementId: 'objectauto-source',
+  },
+  batiment_comm: {
+    type: DATA_TYPES.STR,
+    link: 'batiment_comm',
+    name: 'Commentaire pour identifier le bâtiment',
+    elementId: 'objectauto-batiment_comm',
+  },
+  deet_comm: {
+    type: DATA_TYPES.STR,
+    link: 'deet_comm',
+    name: 'Commentaire de l\'auditeur sur le statut au regard du dispositif écoénergie tertiaire',
+    elementId: 'objectauto-deet_comm',
+  },
+  bacs_statut: {
+    type: DATA_TYPES.REF,
+    link: 'bacs_statut',
+    name: 'Statut au regard du décret BACS',
+    elementId: 'objectauto-bacs_statut',
+    refConfig: {
+      table: 'BACS_STATUT_OPT',
+      displayField: 'Valeur',
+      valueField: 'Code',
+    },
+  },
 };
 
 /**
