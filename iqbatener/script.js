@@ -518,23 +518,8 @@ function updateNavigationButtons() {
  */
 async function loadRecord(index) {
   console.log('Loading record index : ' + index)
-  // if (index < 0 || index >= allRecords['id'].length) return;
-
-  // const record = allRecords[index];
-  // const mappedRecord = grist.mapColumnNames(record);
-
-  // // Prépare les données pour le modèle
-  // const recordData = { id: record.id };
-  // for (const [key, gristColumn] of Object.entries(appSideMapping)) {
-  //   recordData[key] = mappedRecord[gristColumn] !== undefined
-  //     ? mappedRecord[gristColumn]
-  //     : defaultValues[key];
-  // }
-
-  // model.updateFromGrist(recordData);
-  // controller.render();
-  console.log(grist)
   grist.viewApi.setSelectedRows(index)
+  console.log(grist.viewApi.fetchSelectedRecord(index))
 }
 
 /**
@@ -588,13 +573,12 @@ setupNavigationListeners(currentTableId);
  * @param {Object} mappings - Mappage des colonnes.
  */
 grist.onRecord((record, mappings) => {
-  console.log({"Longueur de la liste":allRecords.length})
-  if (allRecords.length > 0) {
-    const recordId = record.id;
-    currentRecordIndex = allRecords.findIndex(r => r.id === recordId);
-    if (currentRecordIndex === -1) currentRecordIndex = 0;
-    updateNavigationButtons();
-  }
+
+  const recordId = record.id;
+  currentRecordIndex = allRecords.findIndex(r => r.id === recordId);
+  if (currentRecordIndex === -1) currentRecordIndex = 0;
+  updateNavigationButtons();
+
 
   const mappedRecord = grist.mapColumnNames(record);
   if (!mappedRecord) {
