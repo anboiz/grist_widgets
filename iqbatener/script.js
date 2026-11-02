@@ -512,6 +512,7 @@ function updateNavigationButtons() {
  */
 function setupNavigationListeners() {
   console.log("---Setup des boutons---")
+  console.log(document.getElementById('prev-btn'))
   document.getElementById('prev-btn').addEventListener('click', () => {
     console.log('Prev. button pressed')
     console.log(currentRecordIndex)
@@ -521,7 +522,7 @@ function setupNavigationListeners() {
       updateNavigationButtons();
     }
   });
-
+  console.log(document.getElementById('next-btn'))
   document.getElementById('next-btn').addEventListener('click', () => {
     console.log('Next button pressed')
     console.log(currentRecordIndex)
@@ -540,11 +541,10 @@ grist.ready({
   requiredAccess: 'full',
 })
 
-// Attendre que Grist soit prêt
-grist.on('ready', () => {
-  fetchAllRecords(currentTableId);
-  setupNavigationListeners();
-});
+console.log('I\'m ready !!!!!!")
+fetchAllRecords(currentTableId);
+setupNavigationListeners();
+
 
 /**
  * Charge un enregistrement spécifique dans le formulaire.
