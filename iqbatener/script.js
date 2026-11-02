@@ -547,6 +547,7 @@ function setupNavigationListeners() {
     }
   });
   console.log(document.getElementById('next-btn'))
+  console.log({"longueur":allRecords.length,"detail":allRecords)
   document.getElementById('next-btn').addEventListener('click', () => {
     console.log('Next button pressed')
     console.log(currentRecordIndex)
