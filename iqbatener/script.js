@@ -472,11 +472,15 @@ async function fetchAllRecords(currentTableId) {
   try {
     const data = await grist.docApi.fetchTable(currentTableId);
       allRecords = data;
-    console.log({"DonneesCollectees":allRecords});
+    console.log({
+      "DonneesCollectees":allRecords,
+      "Longueur":allRecords.length
+    });
     if (allRecords.length > 0) {
+
       currentRecordIndex = 0;
-      updateNavigationButtons();
-      loadRecord(currentRecordIndex);
+      // updateNavigationButtons();
+      // loadRecord(currentRecordIndex);
       return allRecords
       
     } else {
@@ -496,7 +500,7 @@ const controller = new ObjectController(model, view);
 
 // Variables globales pour la navigation
 let currentRecordIndex = 0;
-let allRecords = [];
+// let allRecords = [];
 let currentTableId = 'INFOENERGIE'; // À adapter selon votre configuration
 
 /**
@@ -538,7 +542,7 @@ async function setupNavigationListeners(currentTableId) {
   console.log("---Setup des boutons---")
   console.log({"Table":currentTableId})
   const allRecords = await fetchAllRecords(currentTableId);
-  console.log({"detail":allRecords})
+  console.log({"Detail de la requete":allRecords})
   console.log(document.getElementById('prev-btn'))
   document.getElementById('prev-btn').addEventListener('click', () => {
     console.log('Prev. button pressed')
