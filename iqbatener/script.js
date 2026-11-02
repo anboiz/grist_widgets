@@ -523,16 +523,6 @@ async function loadRecord(index) {
   console.log(selected)
 
   const mappedRecord = grist.mapColumnNames(selected);
-  
-  // Crée un mappage entre les clés du formulaire et Grist
-  const mappingToGrist = {};
-  for (const [key, gristColumn] of Object.entries(appSideMapping)) {
-    if (mappings[gristColumn]) {
-      mappingToGrist[key] = mappings[gristColumn];
-    }
-  }
-
-  model.updateMapping(mappingToGrist);
 
   // Prépare les données pour le modèle
   const recordData = { id: record.id };
