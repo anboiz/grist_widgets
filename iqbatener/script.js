@@ -310,8 +310,8 @@ class ObjectView {
         console.log({"data.fields[bacs_statut]":data.fields["bacs_statut"]})
         console.log({"field":field})
         // this.inputs[key].value = data.fields[key];
-        console.log(field["elementId"] + data.fields[key])
-        console.log(this.inputs[key])
+        console.log(field["elementId"] + "_" + data.fields[key])
+        console.log(this.inputs[key]["children"])
         // console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
       } else {
         this.inputs[key].value = data.fields[key];
@@ -320,6 +320,7 @@ class ObjectView {
       
     }
   }
+
 
   /**
    * Lie l'événement de sauvegarde au bouton.
@@ -478,7 +479,7 @@ async function fillRefSelect(elementId, fieldConfig) {
     console.log(option.value)
     console.log(elementId)
     console.log(elementId + option.value)
-    optionElement.id = elementId + option.value;
+    optionElement.id = elementId + "_" + option.value;
     optionElement.value = option.value;
     optionElement.textContent = option.label;
     // if (option.icon) {
