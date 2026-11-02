@@ -477,6 +477,7 @@ async function fetchAllRecords(currentTableId) {
       currentRecordIndex = 0;
       updateNavigationButtons();
       loadRecord(currentRecordIndex);
+      return allRecords
       
     } else {
       console.warn("Aucun enregistrement trouvé dans la table.");
@@ -506,6 +507,8 @@ function updateNavigationButtons() {
   const nextBtn = document.getElementById('next-btn');
 
 }
+
+
 
 /**
  * Configure les écouteurs d'événements pour les boutons de navigation.
@@ -542,7 +545,7 @@ grist.ready({
 })
 
 console.log("I\'m ready !!!!!!")
-fetchAllRecords(currentTableId);
+allRecords = fetchAllRecords(currentTableId);
 setupNavigationListeners();
 
 
