@@ -353,6 +353,13 @@ class ObjectController {
     await grist.selectedTable.update(data);
     alert('Objet sauvegardé avec succès !');
   }
+
+  handleNext(offset) {
+    console.log(offset)
+    console.log(this.model.data.id)
+    console.log(this.model.data.id+offset)
+    return this.model.data.id+offset
+  }
 }
 
 /**
@@ -504,15 +511,6 @@ let currentRecordIndex = 0;
 let currentTableId = 'INFOENERGIE'; // À adapter selon votre configuration
 
 /**
- * Met à jour l'état des boutons Précédent/Suivant.
- */
-function updateNavigationButtons() {
-  const prevBtn = document.getElementById('prev-btn');
-  const nextBtn = document.getElementById('next-btn');
-
-}
-
-/**
  * Charge un enregistrement spécifique dans le formulaire.
  * @param {number} index - Index de l'enregistrement à charger.
  */
@@ -553,9 +551,8 @@ async function setupNavigationListeners(currentTableId) {
     console.log('Prev. button pressed')
     console.log(currentRecordIndex)
     if (currentRecordIndex > 0) {
-      currentRecordIndex--;
-      loadRecord(allRecords['id'][currentRecordIndex]);
-      updateNavigationButtons();
+      console.log(controller.handleNext(-1))
+      loadRecord(allRecords['id'][controller.handleNext(+1)]);
     }
   });
   console.log(document.getElementById('next-btn'))
@@ -564,10 +561,8 @@ async function setupNavigationListeners(currentTableId) {
     console.log(currentRecordIndex)
     if (currentRecordIndex < allRecords['id'].length - 1) {
       
-      currentRecordIndex++;
-      console.log(currentRecordIndex)
-      loadRecord(allRecords['id'][currentRecordIndex]);
-      updateNavigationButtons();
+      console.log(controller.handleNext(+1))
+      loadRecord(allRecords['id'][controller.handleNext(+1)]);
     }
   });
 }
