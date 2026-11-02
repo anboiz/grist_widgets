@@ -543,27 +543,17 @@ async function loadRecord(index) {
  */
 async function setupNavigationListeners(currentTableId) {
   console.log("---Setup des boutons---")
-  console.log({"Table":currentTableId})
-  const allRecords = await fetchAllRecords(currentTableId);
-  console.log({"Detail de la requete":allRecords})
-  console.log(document.getElementById('prev-btn'))
+  // console.log({"Table":currentTableId})
+  // const allRecords = await fetchAllRecords(currentTableId);
+
   document.getElementById('prev-btn').addEventListener('click', () => {
     console.log('Prev. button pressed')
-    console.log(currentRecordIndex)
-    if (currentRecordIndex > 0) {
-      console.log(controller.handleNext(-1))
-      loadRecord(allRecords['id'][controller.handleNext(+1)]);
-    }
+    loadRecord(allRecords['id'][controller.handleNext(+1)]);
   });
-  console.log(document.getElementById('next-btn'))
+
   document.getElementById('next-btn').addEventListener('click', () => {
     console.log('Next button pressed')
-    console.log({"currentRecordIndex":currentRecordIndex})
-    if (currentRecordIndex < allRecords['id'].length - 1) {
-      
-      console.log(controller.handleNext(+1))
-      loadRecord(allRecords['id'][controller.handleNext(+1)]);
-    }
+    loadRecord(allRecords['id'][controller.handleNext(+1)]);
   });
 }
 
