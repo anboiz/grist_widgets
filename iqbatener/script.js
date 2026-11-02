@@ -306,10 +306,11 @@ class ObjectView {
         this.inputs[key].checked = data.fields[key];
       } else if (field.type == DATA_TYPES.REF){
         console.log({"key":key})
-        console.log({"data.fields[key]":data.fields})
+        console.log({"data.fields[key]":data.fields[key]})
         console.log({"field":field})
         // this.inputs[key].value = data.fields[key];
-        // console.log(this.inputs[key].getElementById(data.fields[key]))
+        console.log(field["elementId"] + data.fields[key])
+        console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
       } else {
         this.inputs[key].value = data.fields[key];
         // data.fields[this.inputs[key].value]
@@ -388,9 +389,9 @@ class ObjectController {
   }
 
   handleNext(offset) {
-    console.log({"offset":offset})
-    console.log({"this.model.data.id":this.model.data.id})
-    console.log({"this.model.data.id+offset":this.model.data.id+offset})
+    // console.log({"offset":offset})
+    // console.log({"this.model.data.id":this.model.data.id})
+    // console.log({"this.model.data.id+offset":this.model.data.id+offset})
     return this.model.data.id+offset
   }
 }
@@ -472,7 +473,7 @@ async function fillRefSelect(elementId, fieldConfig) {
   // Ajoute les options formatées
   options.forEach(option => {
     const optionElement = document.createElement('option');
-    optionElement.id = option.value;
+    optionElement.id = elementId + option.value;
     optionElement.value = option.value;
     optionElement.textContent = option.label;
     // if (option.icon) {
