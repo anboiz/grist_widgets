@@ -312,7 +312,7 @@ class ObjectView {
         // this.inputs[key].value = data.fields[key];
         console.log(field["elementId"] + data.fields[key])
         console.log(this.inputs[key])
-        console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
+        // console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
       } else {
         this.inputs[key].value = data.fields[key];
         // data.fields[this.inputs[key].value]
