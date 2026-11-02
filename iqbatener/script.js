@@ -534,9 +534,9 @@ function loadRecord(index) {
 /**
  * Configure les écouteurs d'événements pour les boutons de navigation.
  */
-function setupNavigationListeners(currentTableId) {
+async function setupNavigationListeners(currentTableId) {
   console.log("---Setup des boutons---")
-  allRecords = fetchAllRecords(currentTableId);
+  const allRecords = await fetchAllRecords(currentTableId);
   console.log(allRecords)
   console.log(document.getElementById('prev-btn'))
   document.getElementById('prev-btn').addEventListener('click', () => {
