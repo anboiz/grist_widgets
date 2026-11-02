@@ -574,12 +574,6 @@ setupNavigationListeners(currentTableId);
  */
 grist.onRecord((record, mappings) => {
 
-  const recordId = record.id;
-  currentRecordIndex = allRecords.findIndex(r => r.id === recordId);
-  if (currentRecordIndex === -1) currentRecordIndex = 0;
-  updateNavigationButtons();
-
-
   const mappedRecord = grist.mapColumnNames(record);
   if (!mappedRecord) {
     console.error('Veuillez mapper toutes les colonnes requises.');
