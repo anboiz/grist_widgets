@@ -557,7 +557,7 @@ async function setupNavigationListeners(currentTableId) {
   document.getElementById('next-btn').addEventListener('click', () => {
     console.log('Next button pressed')
     console.log(currentRecordIndex)
-    if (currentRecordIndex < allRecords.length - 1) {
+    if (currentRecordIndex < allRecords['id'].length - 1) {
       
       currentRecordIndex++;
       console.log(currentRecordIndex)
