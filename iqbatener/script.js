@@ -476,7 +476,7 @@ async function fetchAllRecords(currentTableId) {
       "DonneesCollectees":allRecords,
       "Longueur":allRecords.length
     });
-    if (allRecords.length > 0) {
+    if (allRecords['id'].length > 0) {
       console.log("Qqch à renvoyer !")
       currentRecordIndex = 0;
       // updateNavigationButtons();
@@ -518,7 +518,7 @@ function updateNavigationButtons() {
  */
 function loadRecord(index) {
   console.log('Loading record index : ' + index)
-  if (index < 0 || index >= allRecords.length) return;
+  if (index < 0 || index >= allRecords['id'].length) return;
 
   const record = allRecords[index];
   const mappedRecord = grist.mapColumnNames(record);
