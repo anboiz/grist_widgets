@@ -536,8 +536,9 @@ function loadRecord(index) {
  */
 async function setupNavigationListeners(currentTableId) {
   console.log("---Setup des boutons---")
+  console.log({"Table":currentTableId})
   const allRecords = await fetchAllRecords(currentTableId);
-  console.log(allRecords)
+  console.log({"detail":allRecords})
   console.log(document.getElementById('prev-btn'))
   document.getElementById('prev-btn').addEventListener('click', () => {
     console.log('Prev. button pressed')
@@ -549,7 +550,6 @@ async function setupNavigationListeners(currentTableId) {
     }
   });
   console.log(document.getElementById('next-btn'))
-  console.log({"longueur":allRecords.length,"detail":allRecords})
   document.getElementById('next-btn').addEventListener('click', () => {
     console.log('Next button pressed')
     console.log(currentRecordIndex)
