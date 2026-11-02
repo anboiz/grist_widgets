@@ -305,8 +305,8 @@ class ObjectView {
       if (field.type == DATA_TYPES.BOOL){
         this.inputs[key].checked = data.fields[key];
       } else if (field.type == DATA_TYPES.REF){
-        console.log(data.fields[key])
-        console.log(field[refConfig])
+        console.log(data.fields)
+        console.log(field)
         this.inputs[key].value = data.fields[key]['Code'];
       } else {
         this.inputs[key].value = data.fields[key];
