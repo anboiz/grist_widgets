@@ -18,13 +18,18 @@
       margin: 0;
       padding: 10px;
     }
+      /* Assurez-vous que le conteneur des boutons prend toute la largeur */
+    .nav-buttons-container {
+      width: 100%;
+    }
   </style>
 </head>
 <body>
-  <div id="widget-container mt-3">
+  <div id="widget-container" class="mt-3">
     <h3 id="widget-title">Informations Énergie</h3>
     <div id="fields-container"></div>
-    <div class="nav-buttons mt-3">
+    <!-- Conteneur pour les boutons -->
+    <div class="nav-buttons-container d-flex justify-content-between mt-3">
       <button id="prev-btn" class="btn btn-primary">← Précédent</button>
       <button id="next-btn" class="btn btn-primary">Suivant →</button>
     </div>
