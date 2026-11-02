@@ -516,23 +516,25 @@ function updateNavigationButtons() {
  * Charge un enregistrement spécifique dans le formulaire.
  * @param {number} index - Index de l'enregistrement à charger.
  */
-function loadRecord(index) {
+async function loadRecord(index) {
   console.log('Loading record index : ' + index)
-  if (index < 0 || index >= allRecords['id'].length) return;
+  // if (index < 0 || index >= allRecords['id'].length) return;
 
-  const record = allRecords[index];
-  const mappedRecord = grist.mapColumnNames(record);
+  // const record = allRecords[index];
+  // const mappedRecord = grist.mapColumnNames(record);
 
-  // Prépare les données pour le modèle
-  const recordData = { id: record.id };
-  for (const [key, gristColumn] of Object.entries(appSideMapping)) {
-    recordData[key] = mappedRecord[gristColumn] !== undefined
-      ? mappedRecord[gristColumn]
-      : defaultValues[key];
-  }
+  // // Prépare les données pour le modèle
+  // const recordData = { id: record.id };
+  // for (const [key, gristColumn] of Object.entries(appSideMapping)) {
+  //   recordData[key] = mappedRecord[gristColumn] !== undefined
+  //     ? mappedRecord[gristColumn]
+  //     : defaultValues[key];
+  // }
 
-  model.updateFromGrist(recordData);
-  controller.render();
+  // model.updateFromGrist(recordData);
+  // controller.render();
+  console.log(grist)
+  grist.view.setSelectedRows(index)
 }
 
 /**
@@ -549,7 +551,7 @@ async function setupNavigationListeners(currentTableId) {
     console.log(currentRecordIndex)
     if (currentRecordIndex > 0) {
       currentRecordIndex--;
-      loadRecord(currentRecordIndex);
+      loadRecord(allRecords['id'][currentRecordIndex]);
       updateNavigationButtons();
     }
   });
@@ -561,7 +563,7 @@ async function setupNavigationListeners(currentTableId) {
       
       currentRecordIndex++;
       console.log(currentRecordIndex)
-      loadRecord(currentRecordIndex);
+      loadRecord(allRecords['id'][currentRecordIndex]);
       updateNavigationButtons();
     }
   });
