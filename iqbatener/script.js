@@ -537,8 +537,6 @@ function updateNavigationButtons() {
   const prevBtn = document.getElementById('prev-btn');
   const nextBtn = document.getElementById('next-btn');
 
-  prevBtn.disabled = currentRecordIndex === 0;
-  nextBtn.disabled = currentRecordIndex >= allRecords.length - 1;
 }
 
 /**
@@ -546,8 +544,9 @@ function updateNavigationButtons() {
  */
 function setupNavigationListeners() {
   document.getElementById('prev-btn').addEventListener('click', () => {
+    console.log('Prev. button pressed')
+    console.log(currentRecordIndex)
     if (currentRecordIndex > 0) {
-      console.log('Prev. button pressed')
       currentRecordIndex--;
       loadRecord(currentRecordIndex);
       updateNavigationButtons();
@@ -555,8 +554,10 @@ function setupNavigationListeners() {
   });
 
   document.getElementById('next-btn').addEventListener('click', () => {
+    console.log('Next button pressed')
+    console.log(currentRecordIndex)
     if (currentRecordIndex < allRecords.length - 1) {
-      console.log('Next button pressed')
+      
       currentRecordIndex++;
       loadRecord(currentRecordIndex);
       updateNavigationButtons();
