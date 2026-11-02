@@ -468,14 +468,16 @@ function formatOptionWithIcon(option) {
 
 // Fonction pour charger tous les enregistrements
 async function fetchAllRecords(currentTableId) {
+  console.log("---Recuperation des données---")
   try {
     const data = await grist.docApi.fetchTable(currentTableId);
-    allRecords = data;
+      allRecords = data;
+    console.log({"DonneesCollectees":allRecords});
     if (allRecords.length > 0) {
       currentRecordIndex = 0;
       updateNavigationButtons();
       loadRecord(currentRecordIndex);
-      console.log(allRecords)
+      
     } else {
       console.warn("Aucun enregistrement trouvé dans la table.");
     }
@@ -495,6 +497,42 @@ const controller = new ObjectController(model, view);
 let currentRecordIndex = 0;
 let allRecords = [];
 let currentTableId = 'INFOENERGIE'; // À adapter selon votre configuration
+
+/**
+ * Met à jour l'état des boutons Précédent/Suivant.
+ */
+function updateNavigationButtons() {
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+}
+
+/**
+ * Configure les écouteurs d'événements pour les boutons de navigation.
+ */
+function setupNavigationListeners() {
+  console.log("---Setup des boutons---")
+  document.getElementById('prev-btn').addEventListener('click', () => {
+    console.log('Prev. button pressed')
+    console.log(currentRecordIndex)
+    if (currentRecordIndex > 0) {
+      currentRecordIndex--;
+      loadRecord(currentRecordIndex);
+      updateNavigationButtons();
+    }
+  });
+
+  document.getElementById('next-btn').addEventListener('click', () => {
+    console.log('Next button pressed')
+    console.log(currentRecordIndex)
+    if (currentRecordIndex < allRecords.length - 1) {
+      
+      currentRecordIndex++;
+      loadRecord(currentRecordIndex);
+      updateNavigationButtons();
+    }
+  });
+}
 
 // Initialisation de Grist
 grist.ready({
@@ -528,41 +566,6 @@ function loadRecord(index) {
 
   model.updateFromGrist(recordData);
   controller.render();
-}
-
-/**
- * Met à jour l'état des boutons Précédent/Suivant.
- */
-function updateNavigationButtons() {
-  const prevBtn = document.getElementById('prev-btn');
-  const nextBtn = document.getElementById('next-btn');
-
-}
-
-/**
- * Configure les écouteurs d'événements pour les boutons de navigation.
- */
-function setupNavigationListeners() {
-  document.getElementById('prev-btn').addEventListener('click', () => {
-    console.log('Prev. button pressed')
-    console.log(currentRecordIndex)
-    if (currentRecordIndex > 0) {
-      currentRecordIndex--;
-      loadRecord(currentRecordIndex);
-      updateNavigationButtons();
-    }
-  });
-
-  document.getElementById('next-btn').addEventListener('click', () => {
-    console.log('Next button pressed')
-    console.log(currentRecordIndex)
-    if (currentRecordIndex < allRecords.length - 1) {
-      
-      currentRecordIndex++;
-      loadRecord(currentRecordIndex);
-      updateNavigationButtons();
-    }
-  });
 }
 
 /**
