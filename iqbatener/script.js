@@ -89,10 +89,11 @@ const gristColumns = getGristColumns();
 grist.ready({
   columns: gristColumns,
   requiredAccess: 'full',
-}).then(() => {
-  fetchAllRecords();
-  setupNavigationListeners();
-});
+})
+
+// Appel direct après l'initialisation de Grist
+fetchAllRecords();
+setupNavigationListeners();
 
 /**
  * Ajoute des classes CSS spécifiques en fonction du type de champ.
