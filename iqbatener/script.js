@@ -152,7 +152,7 @@ function createFormField(name, elementId, type) {
     return `
       <label class="form-label"><strong>${name}</strong></label>
       <select class="form-select" id="${elementId}-input">
-        <option value="" selected>Sélectionnez un${name.toLowerCase()}</option>
+        <option value="" selected>Sélectionnez un ${name.toLowerCase()}</option>
       </select>
     `;
   }
@@ -305,7 +305,7 @@ class ObjectView {
       if (field.type == DATA_TYPES.BOOL){
         this.inputs[key].checked = data.fields[key];
       } else if (field.type == DATA_TYPES.REF){
-        this.inputs[key].value = data.fields[key].rowId;
+        this.inputs[key].value = data.fields[key]['Code'];
       } else {
         this.inputs[key].value = data.fields[key];
         // data.fields[this.inputs[key].value]
