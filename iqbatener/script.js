@@ -85,15 +85,7 @@ const defaultValues = getDefaultValues();
 const appSideMapping = getAppSideMapping();
 const gristColumns = getGristColumns();
 
-// Initialisation de Grist
-grist.ready({
-  columns: gristColumns,
-  requiredAccess: 'full',
-})
 
-// Appel direct après l'initialisation de Grist
-fetchAllRecords();
-setupNavigationListeners();
 
 /**
  * Ajoute des classes CSS spécifiques en fonction du type de champ.
@@ -474,22 +466,25 @@ function formatOptionWithIcon(option) {
   );
 }
 
-/**
- * Charge tous les enregistrements de la table Grist.
- */
+// Fonction pour charger tous les enregistrements
 async function fetchAllRecords(currentTableId) {
   try {
-    const data = await grist.docApi.fetchSelectedTable(currentTableId);
+    const data = await grist.docApi.fetchTable(currentTableId);
     allRecords = data;
     if (allRecords.length > 0) {
       currentRecordIndex = 0;
       updateNavigationButtons();
       loadRecord(currentRecordIndex);
+      console.log(allRecords)
+    } else {
+      console.warn("Aucun enregistrement trouvé dans la table.");
     }
   } catch (error) {
     console.error("Erreur lors de la récupération des enregistrements :", error);
   }
 }
+
+
 
 // ========== INITIALISATION ==========
 const model = new ObjectModel();
@@ -500,6 +495,18 @@ const controller = new ObjectController(model, view);
 let currentRecordIndex = 0;
 let allRecords = [];
 let currentTableId = 'INFOENERGIE'; // À adapter selon votre configuration
+
+// Initialisation de Grist
+grist.ready({
+  columns: gristColumns,
+  requiredAccess: 'full',
+})
+
+// Attendre que Grist soit prêt
+grist.on('ready', () => {
+  fetchAllRecords(currentTableId);
+  setupNavigationListeners();
+});
 
 /**
  * Charge un enregistrement spécifique dans le formulaire.
@@ -540,6 +547,7 @@ function updateNavigationButtons() {
 function setupNavigationListeners() {
   document.getElementById('prev-btn').addEventListener('click', () => {
     if (currentRecordIndex > 0) {
+      console.log('Prev. button pressed')
       currentRecordIndex--;
       loadRecord(currentRecordIndex);
       updateNavigationButtons();
@@ -548,6 +556,7 @@ function setupNavigationListeners() {
 
   document.getElementById('next-btn').addEventListener('click', () => {
     if (currentRecordIndex < allRecords.length - 1) {
+      console.log('Next button pressed')
       currentRecordIndex++;
       loadRecord(currentRecordIndex);
       updateNavigationButtons();
