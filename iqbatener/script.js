@@ -519,7 +519,31 @@ function updateNavigationButtons() {
 async function loadRecord(index) {
   console.log('Loading record index : ' + index)
   grist.viewApi.setSelectedRows(index)
-  console.log(grist.viewApi.fetchSelectedRecord(index))
+  let selected = await grist.viewApi.fetchSelectedRecord(index)
+  console.log(selected)
+
+  const mappedRecord = grist.mapColumnNames(selected);
+  
+  // Crée un mappage entre les clés du formulaire et Grist
+  const mappingToGrist = {};
+  for (const [key, gristColumn] of Object.entries(appSideMapping)) {
+    if (mappings[gristColumn]) {
+      mappingToGrist[key] = mappings[gristColumn];
+    }
+  }
+
+  model.updateMapping(mappingToGrist);
+
+  // Prépare les données pour le modèle
+  const recordData = { id: record.id };
+  for (const [key, gristColumn] of Object.entries(appSideMapping)) {
+    recordData[key] = mappedRecord[gristColumn] !== undefined
+      ? mappedRecord[gristColumn]
+      : defaultValues[key];
+  }
+
+  model.updateFromGrist(recordData);
+  controller.render();  
 }
 
 /**
