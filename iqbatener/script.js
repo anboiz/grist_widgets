@@ -89,6 +89,9 @@ const gristColumns = getGristColumns();
 grist.ready({
   columns: gristColumns,
   requiredAccess: 'full',
+}).then(() => {
+  fetchAllRecords();
+  setupNavigationListeners();
 });
 
 /**
@@ -470,72 +473,86 @@ function formatOptionWithIcon(option) {
   );
 }
 
-// // Récupère la liste des contrats
-// async function fetchContrats() {
-//   console.log("Retrieving contrats...")
-//   try {
-//     const contrats = await grist.docApi.fetchTable('Contrats');
-//     return contrats;
-//   } catch (error) {
-//     console.error('Erreur lors de la récupération des contrats :', error);
-//     return [];
-//   }
-// }
-
-// /**
-//  * Formate les données des contrats pour le champ de sélection.
-//  */
-// function formatContratsForSelect(contrats) {
-//   console.log("Retraitement des contrats...")
-
-//   contrats
-//   if (!contrats || !contrats.id || !contrats.id.length) {
-//     return [];
-//   }
-
-//   const contratsFormates = [];
-//   for (let i = 0; i < contrats.id.length; i++) {
-//     const contrat = {
-//       id: parseInt(contrats.id[i]),
-//       nom: contrats.Nom[i] || 'Non spécifié',
-//       titulaire: contrats.Titulaire[i] || 'Non spécifié',
-//       energie: contrats.Energie[i] || 'Non spécifiée',
-//       type: contrats.Type[i] || 'Non spécifié',
-//     };
-
-//     contratsFormates.push(contrat);
-//   }
-
-
-//   return contratsFormates;
-// }
-
-// /**
-//  * Remplit le champ de sélection des contrats.
-//  */
-// async function fillContratSelect() {
-//   const contratsData = await fetchContrats();
-//   const contratsFormates = formatContratsForSelect(contratsData);
-//   const selectElement = document.getElementById('objectauto-contrat-input');
-
-//   while (selectElement.options.length > 1) {
-//     selectElement.remove(1);
-//   }
-
-//   contratsFormates.forEach(contrat => {
-//     const option = document.createElement('option');
-//     option.value = contrat.id;
-//     option.textContent = `${contrat.nom} (${contrat.titulaire} - ${contrat.energie})`;
-//     selectElement.appendChild(option);
-//   });
-// }
+/**
+ * Charge tous les enregistrements de la table Grist.
+ */
+async function fetchAllRecords(currentTableId) {
+  try {
+    const data = await grist.docApi.fetchSelectedTable(currentTableId);
+    allRecords = data;
+    if (allRecords.length > 0) {
+      currentRecordIndex = 0;
+      updateNavigationButtons();
+      loadRecord(currentRecordIndex);
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération des enregistrements :", error);
+  }
+}
 
 // ========== INITIALISATION ==========
 const model = new ObjectModel();
 const view = new ObjectView();
 const controller = new ObjectController(model, view);
 
-// fillContratSelect()
+// Variables globales pour la navigation
+let currentRecordIndex = 0;
+let allRecords = [];
+let currentTableId = 'INFOENERGIE'; // À adapter selon votre configuration
+
+/**
+ * Charge un enregistrement spécifique dans le formulaire.
+ * @param {number} index - Index de l'enregistrement à charger.
+ */
+function loadRecord(index) {
+  if (index < 0 || index >= allRecords.length) return;
+
+  const record = allRecords[index];
+  const mappedRecord = grist.mapColumnNames(record);
+
+  // Prépare les données pour le modèle
+  const recordData = { id: record.id };
+  for (const [key, gristColumn] of Object.entries(appSideMapping)) {
+    recordData[key] = mappedRecord[gristColumn] !== undefined
+      ? mappedRecord[gristColumn]
+      : defaultValues[key];
+  }
+
+  model.updateFromGrist(recordData);
+  controller.render();
+}
+
+/**
+ * Met à jour l'état des boutons Précédent/Suivant.
+ */
+function updateNavigationButtons() {
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  prevBtn.disabled = currentRecordIndex === 0;
+  nextBtn.disabled = currentRecordIndex >= allRecords.length - 1;
+}
+
+/**
+ * Configure les écouteurs d'événements pour les boutons de navigation.
+ */
+function setupNavigationListeners() {
+  document.getElementById('prev-btn').addEventListener('click', () => {
+    if (currentRecordIndex > 0) {
+      currentRecordIndex--;
+      loadRecord(currentRecordIndex);
+      updateNavigationButtons();
+    }
+  });
+
+  document.getElementById('next-btn').addEventListener('click', () => {
+    if (currentRecordIndex < allRecords.length - 1) {
+      currentRecordIndex++;
+      loadRecord(currentRecordIndex);
+      updateNavigationButtons();
+    }
+  });
+}
 
 /**
  * Callback appelé par Grist lors de la sélection d'un enregistrement.
@@ -543,6 +560,13 @@ const controller = new ObjectController(model, view);
  * @param {Object} mappings - Mappage des colonnes.
  */
 grist.onRecord((record, mappings) => {
+  if (allRecords.length > 0) {
+    const recordId = record.id;
+    currentRecordIndex = allRecords.findIndex(r => r.id === recordId);
+    if (currentRecordIndex === -1) currentRecordIndex = 0;
+    updateNavigationButtons();
+  }
+
   const mappedRecord = grist.mapColumnNames(record);
   if (!mappedRecord) {
     console.error('Veuillez mapper toutes les colonnes requises.');
