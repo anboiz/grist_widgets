@@ -306,10 +306,10 @@ class ObjectView {
         this.inputs[key].checked = data.fields[key];
       } else if (field.type == DATA_TYPES.REF){
         console.log({"key":key})
-        console.log({"data.fields[key]":data.fields[key]})
+        console.log({"data.fields[key]":data.fields})
         console.log({"field":field})
-        this.inputs[key].value = data.fields[key];
-        console.log(this.inputs[key].getElementById(data.fields[key]))
+        // this.inputs[key].value = data.fields[key];
+        // console.log(this.inputs[key].getElementById(data.fields[key]))
       } else {
         this.inputs[key].value = data.fields[key];
         // data.fields[this.inputs[key].value]
