@@ -534,9 +534,10 @@ function loadRecord(index) {
 /**
  * Configure les écouteurs d'événements pour les boutons de navigation.
  */
-async function setupNavigationListeners(currentTableId) {
+function setupNavigationListeners(currentTableId) {
   console.log("---Setup des boutons---")
-  await allRecords = fetchAllRecords(currentTableId);
+  allRecords = fetchAllRecords(currentTableId);
+  console.log(allRecords)
   console.log(document.getElementById('prev-btn'))
   document.getElementById('prev-btn').addEventListener('click', () => {
     console.log('Prev. button pressed')
@@ -569,7 +570,7 @@ grist.ready({
 })
 
 console.log("I\'m ready !!!!!!")
-// allRecords = fetchAllRecords(currentTableId);
+// await allRecords = fetchAllRecords(currentTableId);
 setupNavigationListeners(currentTableId);
 
 
