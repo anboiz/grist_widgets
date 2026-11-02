@@ -534,7 +534,7 @@ async function loadRecord(index) {
   // model.updateFromGrist(recordData);
   // controller.render();
   console.log(grist)
-  grist.view.setSelectedRows(index)
+  grist.viewApi.setSelectedRows(index)
 }
 
 /**
