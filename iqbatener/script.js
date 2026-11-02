@@ -355,9 +355,9 @@ class ObjectController {
   }
 
   handleNext(offset) {
-    console.log(offset)
-    console.log(this.model.data.id)
-    console.log(this.model.data.id+offset)
+    console.log({"offset":offset})
+    console.log({"this.model.data.id":this.model.data.id})
+    console.log({"this.model.data.id+offset":this.model.data.id+offset})
     return this.model.data.id+offset
   }
 }
@@ -558,7 +558,7 @@ async function setupNavigationListeners(currentTableId) {
   console.log(document.getElementById('next-btn'))
   document.getElementById('next-btn').addEventListener('click', () => {
     console.log('Next button pressed')
-    console.log(currentRecordIndex)
+    console.log({"currentRecordIndex":currentRecordIndex})
     if (currentRecordIndex < allRecords['id'].length - 1) {
       
       console.log(controller.handleNext(+1))
