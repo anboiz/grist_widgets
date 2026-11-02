@@ -306,10 +306,12 @@ class ObjectView {
         this.inputs[key].checked = data.fields[key];
       } else if (field.type == DATA_TYPES.REF){
         console.log({"key":key})
-        console.log({"data.fields[key]":data.fields[key]})
+        console.log({"data.fields":data.fields})
+        console.log({"data.fields[bacs_statut]":data.fields["bacs_statut"]})
         console.log({"field":field})
         // this.inputs[key].value = data.fields[key];
         console.log(field["elementId"] + data.fields[key])
+        console.log(this.inputs[key])
         console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
       } else {
         this.inputs[key].value = data.fields[key];
@@ -473,6 +475,9 @@ async function fillRefSelect(elementId, fieldConfig) {
   // Ajoute les options formatées
   options.forEach(option => {
     const optionElement = document.createElement('option');
+    console.log(option.value)
+    console.log(elementId)
+    console.log(elementId + option.value)
     optionElement.id = elementId + option.value;
     optionElement.value = option.value;
     optionElement.textContent = option.label;
