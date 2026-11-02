@@ -477,11 +477,11 @@ async function fetchAllRecords(currentTableId) {
       "Longueur":allRecords.length
     });
     if (allRecords.length > 0) {
-
+      console.log("Qqch à renvoyer !")
       currentRecordIndex = 0;
       // updateNavigationButtons();
       // loadRecord(currentRecordIndex);
-      return allRecords
+      return allRecords;
       
     } else {
       console.warn("Aucun enregistrement trouvé dans la table.");
@@ -574,7 +574,7 @@ grist.ready({
 })
 
 console.log("I\'m ready !!!!!!")
-let allRecords = await fetchAllRecords(currentTableId);
+let allRecords = fetchAllRecords(currentTableId);
 setupNavigationListeners(currentTableId);
 
 
