@@ -541,7 +541,7 @@ grist.ready({
   requiredAccess: 'full',
 })
 
-console.log('I\'m ready !!!!!!")
+console.log("I\'m ready !!!!!!")
 fetchAllRecords(currentTableId);
 setupNavigationListeners();
 
