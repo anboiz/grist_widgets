@@ -574,7 +574,7 @@ grist.ready({
 })
 
 console.log("I\'m ready !!!!!!")
-// await allRecords = fetchAllRecords(currentTableId);
+let allRecords = await fetchAllRecords(currentTableId);
 setupNavigationListeners(currentTableId);
 
 
