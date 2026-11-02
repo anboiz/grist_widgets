@@ -548,12 +548,12 @@ async function setupNavigationListeners(currentTableId) {
 
   document.getElementById('prev-btn').addEventListener('click', () => {
     console.log('Prev. button pressed')
-    loadRecord(allRecords['id'][controller.handleNext(-1)]);
+    loadRecord(controller.handleNext(-1));
   });
 
   document.getElementById('next-btn').addEventListener('click', () => {
     console.log('Next button pressed')
-    loadRecord(allRecords['id'][controller.handleNext(+1)]);
+    loadRecord(controller.handleNext(+1));
   });
 }
 
