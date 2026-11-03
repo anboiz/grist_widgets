@@ -200,6 +200,11 @@ function createFormField(name, elementId, type) {
       <label class="form-label"><strong>${name}</strong></label>
       <textarea rows="4" class="form-control" id="${elementId}-input">
     `;
+  } else if (type === DATA_TYPES.FLOAT) {
+    return `
+      <label class="form-label"><strong>${name}</strong></label>
+      <input type="number" class="form-control" id="${elementId}-input">
+    `;
   } else if (type === DATA_TYPES.BOOL) {
     return `
       <label class="form-label"><strong>${name}</strong></label>
