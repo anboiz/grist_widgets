@@ -613,14 +613,16 @@ async function fillRefSelect(elementId, fieldConfig) {
     const optionElement = document.createElement('option');
     optionElement.id = elementId + "_" + option.value;
     optionElement.value = option.value;
-    optionElement.textContent = option.label;
+
     if (Object.hasOwn(option,'color')){
       console.log(option.color)
-      const child = document.createElement('div');
+      const child = document.createElement('span');
       child.textContent = option.label;
       child.setAttribute("style", `background-color: ${option.color}`);
       optionElement.appendChild(child);
-    } 
+    } else {
+      optionElement.textContent = option.label;
+    }
     // if (option.icon) {
     //   optionElement.dataset.icon = option.icon; // Stocke l'icône dans un dataset
     // }
