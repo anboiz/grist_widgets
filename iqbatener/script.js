@@ -352,7 +352,9 @@ class ObjectView {
         div = document.createElement('div');
         div.id = field.elementId;
         div.classList.add('mb-3');
+        console.log({field:field})
         if (Object.hasOwn(field, 'isChildOf')) {
+          console.log(field.isChildOf)
           parent_div = document.getElementById(field.isChildOf);
           console.log({"parent_div":parent_div});
           parent_div.appendChild(div)
