@@ -261,6 +261,7 @@ class ObjectView {
    * Crée le formulaire dynamiquement.
    */
   createForm() {
+    const refPromises = [];
     console.log('Formulaire...')
     for (const [key, field] of Object.entries(formFields)) {
       console.log({key, field})
