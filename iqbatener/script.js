@@ -90,7 +90,7 @@ const formFields = {
     link: 'bacs_comm',
     name: 'Commentaire de l\'auditeur sur le système GTB existant',
     elementId: 'objectauto-bacs_comm',    
-  }
+  },
   dpe_energie_etiquette: {
     type: DATA_TYPES.REF,
     link: 'dpe_energie_etiquette',
