@@ -311,8 +311,9 @@ class ObjectView {
         console.log({"field":field})
         // this.inputs[key].value = data.fields[key];
         console.log(field["elementId"] + "_" + data.fields[key])
-        console.log(this.inputs[key]["children"])
-        this.inputs[key]["children"][field["elementId"] + "_" + data.fields[key]].selected = true; 
+        console.log({"this.inputs[key]["children"]":this.inputs[key]["children"]})
+        console.log({"this.inputs[key]["children"][field["elementId"] + "_" + data.fields[key]]":this.inputs[key]["children"][field["elementId"] + "_" + data.fields[key]]})
+        // this.inputs[key]["children"][field["elementId"] + "_" + data.fields[key]].selected = true; 
         // console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
       } else {
         this.inputs[key].value = data.fields[key];
