@@ -211,7 +211,7 @@ function createFormField(name, elementId, type) {
     `;
   } else if (type === DATA_TYPES.ROW) {
     return `
-      <div class="row" id="${elementId}"></div>
+      <div class="row" id="${elementId}-row"></div>
     `;
   } else if (type === DATA_TYPES.LGSTR) {
     return `
@@ -351,12 +351,20 @@ class ObjectView {
       if (!div) {
         div = document.createElement('div');
         div.id = field.elementId;
-        div.classList.add('mb-3');
+
         console.log({field:field})
+
+        if (Object.hasOwn(field, 'format')) {
+          console.log({format:field.format})
+          div.classList.add(field.format);
+        } else {
+          div.classList.add('mb-3');
+        }
+        
         if (Object.hasOwn(field, 'isChildOf')) {
           console.log(field.isChildOf)
 
-          let parent_div = this.rootElement.querySelector(`#${field.isChildOf}`);
+          let parent_div = this.rootElement.querySelector(`#${field.isChildOf}-row`);
 
           console.log({"parent_div":parent_div});
 
