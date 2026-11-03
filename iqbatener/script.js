@@ -243,7 +243,7 @@ function createFormField(name, elementId, type) {
   } else if (type === DATA_TYPES.REF) {
     return `
       <label class="form-label"><strong>${name}</strong></label>
-      <select class="selectpicker form-select" id="${elementId}-input" data-style="btn-default">
+      <select class="selectpicker form-control" id="${elementId}-input" data-style="btn-default">
         <option value="" selected>Sélectionnez un ${name.toLowerCase()}</option>
       </select>
     `;
@@ -612,9 +612,6 @@ async function fillRefSelect(elementId, fieldConfig) {
   // Ajoute les options formatées
   options.forEach(option => {
     const optionElement = document.createElement('option');
-    console.log(option.value)
-    console.log(elementId)
-    console.log(elementId + option.value)
     optionElement.id = elementId + "_" + option.value;
     optionElement.value = option.value;
     optionElement.textContent = option.label;
@@ -628,16 +625,6 @@ async function fillRefSelect(elementId, fieldConfig) {
     selectElement.appendChild(optionElement);
   });
 
-
-
-  // // Initialise Select2 si disponible
-  // if (typeof $.fn.select2 === 'function') {
-  //   $(`#${elementId}-input`).select2({
-  //     theme: 'bootstrap5',
-  //     templateResult: formatOptionWithIcon,
-  //     templateSelection: formatOptionWithIcon,
-  //   });
-  // }
 }
 
 /**
@@ -662,10 +649,6 @@ async function fetchAllRecords(currentTableId) {
   try {
     const data = await grist.docApi.fetchTable(currentTableId);
       allRecords = data;
-    console.log({
-      "DonneesCollectees":allRecords,
-      "Longueur":allRecords.length
-    });
     if (allRecords['id'].length > 0) {
       console.log("Qqch à renvoyer !")
       currentRecordIndex = 0;
