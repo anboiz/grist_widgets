@@ -11,6 +11,7 @@
 const DATA_TYPES = {
   INT: 'int',
   STR: 'str',
+  LGSTR: 'str',
   BOOL: 'bool',
   FLOAT: 'float',
   REF: 'ref',
@@ -85,7 +86,7 @@ const formFields = {
     },
   },
   bacs_comm:{
-    type: DATA_TYPES.STR,
+    type: DATA_TYPES.LGSTR,
     link: 'bacs_comm',
     name: 'Commentaire de l\'auditeur sur le système GTB existant',
     elementId: 'objectauto-bacs_comm',    
@@ -159,6 +160,11 @@ function createFormField(name, elementId, type) {
     return `
       <label class="form-label"><strong>${name}</strong></label>
       <input type="text" class="form-control" id="${elementId}-input">
+    `;
+  if (type === DATA_TYPES.LGSTR) {
+    return `
+      <label class="form-label"><strong>${name}</strong></label>
+      <textarea rows="4" class="form-control" id="${elementId}-input">
     `;
   } else if (type === DATA_TYPES.BOOL) {
     return `
