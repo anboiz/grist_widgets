@@ -99,7 +99,7 @@ const formFields = {
     type: DATA_TYPES.LGSTR,
     link: 'bacs_comm',
     isChildOf: 'objectauto-bacs',
-    format: 'col-sm',
+    format: 'col-6',
     name: 'Commentaire de l\'auditeur sur le système GTB existant',
     elementId: 'objectauto-bacs_comm',    
   },
