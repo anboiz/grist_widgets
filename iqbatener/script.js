@@ -15,6 +15,7 @@ const DATA_TYPES = {
   BOOL: 'bool',
   FLOAT: 'float',
   REF: 'ref',
+  ROW: 'row'
 };
 
 /**
@@ -91,11 +92,18 @@ const formFields = {
     name: 'Commentaire de l\'auditeur sur le système GTB existant',
     elementId: 'objectauto-bacs_comm',    
   },
+  dpe:{
+    type: DATA_TYPES.ROW,
+    name: 'Performance énergétique',
+    elementId: 'objectauto-dpe',
+  },
   dpe_energie_etiquette: {
     type: DATA_TYPES.REF,
     link: 'dpe_energie_etiquette',
     name: 'Etiquette énergie',
     elementId: 'objectauto-dpe_energie_etiquette',
+    isChildOf: 'objectauto-dpe',
+    format: 'col-sm',
     refConfig: {
       table: 'DPE_ENERGIE_OPT',
       displayField: 'lettre',
@@ -106,6 +114,8 @@ const formFields = {
     type: DATA_TYPES.FLOAT,
     link: 'dpe_energie_ratio',
     name: 'Consommation par m²',
+    isChildOf: 'objectauto-dpe',
+    format: 'col-sm',
     elementId: 'objectauto-dpe_energie_ratio',
   },
   dpe_climat_etiquette: {
@@ -113,6 +123,8 @@ const formFields = {
     link: 'dpe_climat_etiquette',
     name: 'Etiquette climat',
     elementId: 'objectauto-dpe_climat_etiquette',
+    isChildOf: 'objectauto-dpe',
+    format: 'col-sm',
     refConfig: {
       table: 'DPE_CLIMAT_OPT',
       displayField: 'lettre',
@@ -124,6 +136,8 @@ const formFields = {
     link: 'dpe_climat_ratio',
     name: 'Emissions de GES par m²',
     elementId: 'objectauto-dpe_climat_ratio',
+    isChildOf: 'objectauto-dpe',
+    format: 'col-sm',
   },
 };
 
@@ -194,6 +208,10 @@ function createFormField(name, elementId, type) {
     return `
       <label class="form-label"><strong>${name}</strong></label>
       <input type="text" class="form-control" id="${elementId}-input">
+    `;
+  } else if (type === DATA_TYPES.ROW) {
+    return `
+      <div class="row" id="${elementId}"></div>
     `;
   } else if (type === DATA_TYPES.LGSTR) {
     return `
@@ -334,7 +352,13 @@ class ObjectView {
         div = document.createElement('div');
         div.id = field.elementId;
         div.classList.add('mb-3');
-        this.rootElement.appendChild(div);
+        if (Object.hasOwn(field, 'isChildOf')) {
+          parent_div = document.getElementById(field.isChildOf);
+          console.log({"parent_div":parent_div});
+          parent_div.appendChild(div)
+        } else {
+          this.rootElement.appendChild(div);
+        }
       }
 
       let input = document.getElementById(`${field.elementId}-input`);
