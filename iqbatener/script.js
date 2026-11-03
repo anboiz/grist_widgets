@@ -11,7 +11,7 @@
 const DATA_TYPES = {
   INT: 'int',
   STR: 'str',
-  LGSTR: 'str',
+  LGSTR: 'lgstr',
   BOOL: 'bool',
   FLOAT: 'float',
   REF: 'ref',
@@ -91,6 +91,40 @@ const formFields = {
     name: 'Commentaire de l\'auditeur sur le système GTB existant',
     elementId: 'objectauto-bacs_comm',    
   }
+  dpe_energie_etiquette: {
+    type: DATA_TYPES.REF,
+    link: 'dpe_energie_etiquette',
+    name: 'Etiquette énergie',
+    elementId: 'objectauto-dpe_energie_etiquette',
+    refConfig: {
+      table: 'DPE_ENERGIE_OPT',
+      displayField: 'lettre',
+      valueField: 'lettre',
+    },
+  },
+  dpe_energie_ratio: {
+    type: DATA_TYPES.FLOAT,
+    link: 'dpe_energie_ratio',
+    name: 'Consommation par m²',
+    elementId: 'objectauto-dpe_energie_ratio',
+  },
+  dpe_climat_etiquette: {
+    type: DATA_TYPES.REF,
+    link: 'dpe_climat_etiquette',
+    name: 'Etiquette climat',
+    elementId: 'objectauto-dpe_climat_etiquette',
+    refConfig: {
+      table: 'DPE_CLIMAT_OPT',
+      displayField: 'lettre',
+      valueField: 'lettre',
+    },
+  },
+  dpe_climat_ratio: {
+    type: DATA_TYPES.FLOAT,
+    link: 'dpe_climat_ratio',
+    name: 'Emissions de GES par m²',
+    elementId: 'objectauto-dpe_climat_ratio',
+  },
 };
 
 /**
