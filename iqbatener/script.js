@@ -356,7 +356,7 @@ class ObjectView {
         if (Object.hasOwn(field, 'isChildOf')) {
           console.log(field.isChildOf)
 
-          parent_div = this.rootElement.querySelector(`#${field.isChildOf}`);
+          let parent_div = this.rootElement.querySelector(`#${field.isChildOf}`);
 
           console.log({"parent_div":parent_div});
 
