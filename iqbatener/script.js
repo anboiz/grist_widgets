@@ -406,7 +406,7 @@ class ObjectView {
 
       this.inputs[key] = input;
     }
-    resPromises =  Promise.all(refPromises);
+    let resPromises =  Promise.all(refPromises);
     $('.selectpicker').selectpicker();
     return resPromises
   }
