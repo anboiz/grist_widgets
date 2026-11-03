@@ -47,7 +47,7 @@ const formFields = {
     elementId: 'objectauto-gesimmo',
   },
   source: {
-    type: DATA_TYPES.STR,
+    type: DATA_TYPES.LGSTR,
     link: 'source',
     name: 'Fichier source',
     elementId: 'objectauto-source',
@@ -59,7 +59,7 @@ const formFields = {
     elementId: 'objectauto-batiment_comm',
   },
   deet_comm: {
-    type: DATA_TYPES.STR,
+    type: DATA_TYPES.LGSTR,
     link: 'deet_comm',
     name: 'Commentaire de l\'auditeur sur le statut au regard du dispositif écoénergie tertiaire',
     elementId: 'objectauto-deet_comm',
@@ -119,6 +119,7 @@ const formFields = {
       table: 'DPE_ENERGIE_OPT',
       displayField: 'lettre',
       valueField: 'lettre',
+      color: 'couleur',
     },
   },
   dpe_energie_ratio: {
@@ -421,6 +422,11 @@ class ObjectView {
         const option = this.inputs[key].querySelector(`#${optionId}`);
         if (option) {
           option.selected = true;
+        }
+        if (Object.hasOwn(field.refConfig, 'color')){
+          console.log("----------------Couleur !----------------")
+          console.log(this.inputs[key])
+          console.log(data.fields[key])
         }
         // console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
       } else if (field.type == DATA_TYPES.FLOAT){
