@@ -64,11 +64,17 @@ const formFields = {
     name: 'Commentaire de l\'auditeur sur le statut au regard du dispositif écoénergie tertiaire',
     elementId: 'objectauto-deet_comm',
   },
+  bacs:{
+    type: DATA_TYPES.ROW,
+    name: 'Gestion technique du bâtiment',
+    elementId: 'objectauto-bacs',
+  },
   bacs_statut: {
     type: DATA_TYPES.REF,
     link: 'bacs_statut',
     name: 'Statut au regard du décret BACS',
     elementId: 'objectauto-bacs_statut',
+    isChildOf: 'objectauto-bacs',
     refConfig: {
       table: 'BACS_STATUT_OPT',
       displayField: 'Valeur',
@@ -80,6 +86,7 @@ const formFields = {
     link: 'bacs_performance',
     name: 'Performance du système existant',
     elementId: 'objectauto-bacs_performance',
+    isChildOf: 'objectauto-bacs',
     refConfig: {
       table: 'BACS_PERFORMANCE',
       displayField: 'Affichage',
@@ -89,6 +96,7 @@ const formFields = {
   bacs_comm:{
     type: DATA_TYPES.LGSTR,
     link: 'bacs_comm',
+    isChildOf: 'objectauto-bacs',
     name: 'Commentaire de l\'auditeur sur le système GTB existant',
     elementId: 'objectauto-bacs_comm',    
   },
