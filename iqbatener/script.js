@@ -616,7 +616,10 @@ async function fillRefSelect(elementId, fieldConfig) {
     optionElement.textContent = option.label;
     if (Object.hasOwn(option,'color')){
       console.log(option.color)
-      
+      const child = document.createElement('div');
+      child.textContent = option.label;
+      child.setAttribute("style", `background-color: ${option.color}`);
+      optionElement.appendChild(child);
     } 
     // if (option.icon) {
     //   optionElement.dataset.icon = option.icon; // Stocke l'icône dans un dataset
