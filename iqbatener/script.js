@@ -561,7 +561,18 @@ function formatRefOptions(refData, fieldConfig) {
     return [];
   }
 
-  const { displayField, valueField = 'id', iconField } = fieldConfig.refConfig;
+  const displayField = fieldConfig.refConfig["displayField"];
+  const valueField = fieldConfig.refConfig["valueField"] ?? 'id';
+  const iconField = fieldConfig.refConfig["iconField"] ?? null;
+  const color = fieldConfig.refConfig["color"] ?? null;
+
+  console.log({
+    displayField:displayField,
+    valueField:valueField,
+    iconField:iconField,
+    color:color
+  });
+
   return refData.id.map((_, index) => {
     const option = {
       value: refData[valueField][index],
@@ -572,7 +583,11 @@ function formatRefOptions(refData, fieldConfig) {
       option.icon = refData[iconField][index];
     }
 
-    console.log({option})
+    if (color && refData[color]) {
+      option.color = refData[color][index];
+    }
+
+    console.log({option:option})
 
     return option;
   });
