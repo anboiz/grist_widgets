@@ -621,7 +621,7 @@ async function fillRefSelect(elementId, fieldConfig) {
     optionElement.value = option.value;
     optionElement.textContent = option.label;
     if (Object.hasOwn(option,'color')){
-      optionElement.style=`background-color: ${option.color}`
+      optionElement.data-content=`<span style='background-color: ${option.color};'>${option.value}</span>`
       console.log(optionElement.style)
     }
     // if (option.icon) {
