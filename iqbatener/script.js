@@ -73,6 +73,23 @@ const formFields = {
       valueField: 'Code',
     },
   },
+  bacs_performance: {
+    type: DATA_TYPES.REF,
+    link: 'bacs_performance',
+    name: 'Performance du système existant',
+    elementId: 'objectauto-bacs_performance',
+    refConfig: {
+      table: 'BACS_PERFORMANCE',
+      displayField: 'Affichage',
+      valueField: 'classe',
+    },
+  },
+  bacs_comm:{
+    type: DATA_TYPES.STR,
+    link: 'bacs_comm',
+    name: 'Commentaire de l\'auditeur sur le système GTB existant',
+    elementId: 'objectauto-bacs_comm',    
+  }
 };
 
 /**
