@@ -286,13 +286,14 @@ class ObjectView {
 
        // Si c'est un champ de référence, remplissez-le
       if (field.type === DATA_TYPES.REF) {
-        console.log('Retrieving options...')
-        console.log(fillRefSelect(field.elementId, field))
-        fillRefSelect(field.elementId, field).catch(console.error);
-      }     
+        console.log("---------Retrieving options---------")
+        const promise = fillRefSelect(field.elementId, field).catch(console.error);
+        refPromises.push(promise);
+      }    
 
       this.inputs[key] = input;
     }
+    return Promise.all(refPromises);
   }
 
   /**
@@ -312,8 +313,13 @@ class ObjectView {
         // this.inputs[key].value = data.fields[key];
         console.log(field["elementId"] + "_" + data.fields[key])
         console.log({'this.inputs[key]["children"]':this.inputs[key]["children"]})
-        console.log({'this.inputs[key]["children"][field["elementId"] + "_" + data.fields[key]]':this.inputs[key]["children"][field["elementId"] + "_" + data.fields[key]]})
-        // this.inputs[key]["children"][field["elementId"] + "_" + data.fields[key]].selected = true; 
+        
+        const optionId = `${field.elementId}_${data.fields[key]}`;
+        console.log({'optionId':optionId})
+        const option = this.inputs[key].querySelector(`#${optionId}`);
+        if (option) {
+          option.selected = true;
+        }
         // console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
       } else {
         this.inputs[key].value = data.fields[key];
@@ -364,8 +370,11 @@ class ObjectController {
   constructor(model, view) {
     this.model = model;
     this.view = view;
-    this.view.render(this.model.getData());
-    this.view.bindSave(() => this.handleSave());
+    // Attendre que le formulaire soit prêt avant de rendre
+    view.createForm().then(() => {
+      this.view.render(this.model.getData());
+      this.view.bindSave(() => this.handleSave());
+    });
   }
 
   /**
