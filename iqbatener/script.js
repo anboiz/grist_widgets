@@ -621,8 +621,8 @@ async function fillRefSelect(elementId, fieldConfig) {
     optionElement.value = option.value;
     optionElement.textContent = option.label;
     if (Object.hasOwn(option,'color')){
-      optionElement.data-content=`<span style='background-color: ${option.color};'>${option.value}</span>`
-      console.log(optionElement.style)
+      optionElement['data-content']=`<span style='background-color: ${option.color};'>${option.value}</span>`
+
     }
     // if (option.icon) {
     //   optionElement.dataset.icon = option.icon; // Stocke l'icône dans un dataset
