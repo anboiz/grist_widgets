@@ -355,8 +355,11 @@ class ObjectView {
         console.log({field:field})
         if (Object.hasOwn(field, 'isChildOf')) {
           console.log(field.isChildOf)
-          parent_div = document.getElementById(field.isChildOf);
+
+          parent_div = this.rootElement.querySelector(`#${field.isChildOf}`);
+
           console.log({"parent_div":parent_div});
+
           parent_div.appendChild(div)
         } else {
           this.rootElement.appendChild(div);
