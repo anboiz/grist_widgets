@@ -243,7 +243,7 @@ function createFormField(name, elementId, type) {
   } else if (type === DATA_TYPES.REF) {
     return `
       <label class="form-label"><strong>${name}</strong></label>
-      <select class="form-select" id="${elementId}-input">
+      <select class="selectpicker form-select" id="${elementId}-input" data-style="btn-default">
         <option value="" selected>Sélectionnez un ${name.toLowerCase()}</option>
       </select>
     `;
@@ -400,12 +400,15 @@ class ObjectView {
       if (field.type === DATA_TYPES.REF) {
         console.log("---------Retrieving options---------")
         const promise = fillRefSelect(field.elementId, field).catch(console.error);
+        
         refPromises.push(promise);
       }    
 
       this.inputs[key] = input;
     }
-    return Promise.all(refPromises);
+    resPromises =  Promise.all(refPromises);
+    $('.selectpicker').selectpicker();
+    return resPromises
   }
 
   /**
@@ -422,11 +425,6 @@ class ObjectView {
         const option = this.inputs[key].querySelector(`#${optionId}`);
         if (option) {
           option.selected = true;
-        }
-        if (Object.hasOwn(field.refConfig, 'color')){
-          console.log("----------------Couleur !----------------")
-          console.log(this.inputs[key])
-          console.log(data.fields[key])
         }
         // console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
       } else if (field.type == DATA_TYPES.FLOAT){
@@ -622,13 +620,15 @@ async function fillRefSelect(elementId, fieldConfig) {
     optionElement.textContent = option.label;
     if (Object.hasOwn(option,'color')){
       optionElement['data-content']=`<span style='background-color: ${option.color};'>${option.value}</span>`
-
+      console.log(optionElement)
     }
     // if (option.icon) {
     //   optionElement.dataset.icon = option.icon; // Stocke l'icône dans un dataset
     // }
     selectElement.appendChild(optionElement);
   });
+
+
 
   // // Initialise Select2 si disponible
   // if (typeof $.fn.select2 === 'function') {
