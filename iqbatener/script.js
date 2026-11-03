@@ -75,6 +75,7 @@ const formFields = {
     name: 'Statut au regard du décret BACS',
     elementId: 'objectauto-bacs_statut',
     isChildOf: 'objectauto-bacs',
+    format: 'col-sm',
     refConfig: {
       table: 'BACS_STATUT_OPT',
       displayField: 'Valeur',
@@ -87,6 +88,7 @@ const formFields = {
     name: 'Performance du système existant',
     elementId: 'objectauto-bacs_performance',
     isChildOf: 'objectauto-bacs',
+    format: 'col-sm',
     refConfig: {
       table: 'BACS_PERFORMANCE',
       displayField: 'Affichage',
@@ -97,6 +99,7 @@ const formFields = {
     type: DATA_TYPES.LGSTR,
     link: 'bacs_comm',
     isChildOf: 'objectauto-bacs',
+    format: 'col-sm',
     name: 'Commentaire de l\'auditeur sur le système GTB existant',
     elementId: 'objectauto-bacs_comm',    
   },
