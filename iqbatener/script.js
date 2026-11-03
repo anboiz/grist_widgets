@@ -243,7 +243,7 @@ function createFormField(name, elementId, type) {
   } else if (type === DATA_TYPES.REF) {
     return `
       <label class="form-label"><strong>${name}</strong></label>
-      <select class="selectpicker form-control" id="${elementId}-input" data-style="btn-default">
+      <select class="selectpicker form-select" id="${elementId}-input" data-style="btn-default">
         <option value="" selected>Sélectionnez un ${name.toLowerCase()}</option>
       </select>
     `;
@@ -407,7 +407,6 @@ class ObjectView {
       this.inputs[key] = input;
     }
     let resPromises =  Promise.all(refPromises);
-    $('.selectpicker').selectpicker();
     return resPromises
   }
 
@@ -616,17 +615,9 @@ async function fillRefSelect(elementId, fieldConfig) {
     optionElement.value = option.value;
     optionElement.textContent = option.label;
     if (Object.hasOwn(option,'color')){
-      optionElement.setAttribute(
-        "data-content",
-        `"<span style='background-color: ${option.color}; padding: 5px;'>${option.value}</span>"`
-      )
+      console.log(option.color)
       
-    } else {
-      optionElement.setAttribute(
-        "data-content",
-        `"<span style='padding: 5px;'>${option.value}</span>"`
-      )
-    }
+    } 
     // if (option.icon) {
     //   optionElement.dataset.icon = option.icon; // Stocke l'icône dans un dataset
     // }
