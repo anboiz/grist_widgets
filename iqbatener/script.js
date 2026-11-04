@@ -243,7 +243,7 @@ function createFormField(name, elementId, type) {
   } else if (type === DATA_TYPES.REF) {
     return `
       <label class="form-label"><strong>${name}</strong></label>
-      <select class="selectpicker form-select" id="${elementId}-input" data-style="btn-default">
+      <select class="form-select" id="${elementId}-input">
         <option value="" selected>Sélectionnez un ${name.toLowerCase()}</option>
       </select>
     `;
