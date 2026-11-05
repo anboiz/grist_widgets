@@ -251,12 +251,12 @@ function createFormField(name, elementId, type) {
   return '';
 }
 
-function generateColorChanger(colorMapping,default="#606060") {
+function generateColorChanger(colorMapping,defaultColor="#606060") {
   return function(select) {
     console.log('Color changer in action')
     console.log({'select':select})
     console.log({'select.value':select.value})
-    const color=colorMapping[select.value] ?? default
+    const color=colorMapping[select.value] ?? defaultColor
     console.log({'color':color})
     return select.style.backgroundColor = color;
   }
