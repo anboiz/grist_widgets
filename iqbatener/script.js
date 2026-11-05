@@ -438,13 +438,12 @@ class ObjectView {
           option.selected = true;
         }
         // console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
-        console.log(option)
-        console.log(option.parentElement)
-        if (option.parentElement.onchange) {
-          option.parentElement.onchange()
+        if (option.parentElement){
+          option.parentElement.dispatchEvent(new Event('change', { bubbles: true }));
         } else {
-          console.log('Pas de "OnChange"')
+          console.log(option)
         }
+
       } else if (field.type == DATA_TYPES.FLOAT){
         // console.log({"float":data.fields[key]})
         this.inputs[key].value = data.fields[key];
