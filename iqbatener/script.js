@@ -439,8 +439,8 @@ class ObjectView {
         }
         // console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
         console.log(option)
-        console.log(option.parent)
-        option.parent.onchange()
+        console.log(option.parentElement)
+        option.parentElement.onchange()
       } else if (field.type == DATA_TYPES.FLOAT){
         // console.log({"float":data.fields[key]})
         this.inputs[key].value = data.fields[key];
