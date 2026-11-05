@@ -141,6 +141,7 @@ const formFields = {
       table: 'DPE_CLIMAT_OPT',
       displayField: 'lettre',
       valueField: 'lettre',
+      color: 'couleur',
     },
   },
   dpe_climat_ratio: {
@@ -214,7 +215,7 @@ function adjustFormStyle(type) {
  * @returns {string} HTML du champ.
  */
 function createFormField(name, elementId, type) {
-  console.log('Creating field : ', name, ', Type :', type)
+  // console.log('Creating field : ', name, ', Type :', type)
 
   if (type === DATA_TYPES.STR) {
     return `
@@ -253,11 +254,11 @@ function createFormField(name, elementId, type) {
 
 function generateColorChanger(colorMapping,defaultColor="#606060") {
   return function(select) {
-    console.log('Color changer in action')
-    console.log({'select':select})
-    console.log({'select.value':select.value})
+    // console.log('Color changer in action')
+    // console.log({'select':select})
+    // console.log({'select.value':select.value})
     const color=colorMapping[select.value] ?? defaultColor
-    console.log({'color':color})
+    // console.log({'color':color})
     return select.style.backgroundColor = color;
   }
 }
@@ -365,9 +366,9 @@ class ObjectView {
    */
   createForm() {
     const refPromises = [];
-    console.log('Formulaire...')
+    // console.log('Formulaire...')
     for (const [key, field] of Object.entries(formFields)) {
-      console.log({key, field})
+      // console.log({key, field})
       if (field.hidden) continue;
 
       let div = document.getElementById(field.elementId);
@@ -375,21 +376,21 @@ class ObjectView {
         div = document.createElement('div');
         div.id = field.elementId;
 
-        console.log({field:field})
+        // console.log({field:field})
 
         if (Object.hasOwn(field, 'format')) {
-          console.log({format:field.format})
+          // console.log({format:field.format})
           div.classList.add(field.format);
         } else {
           div.classList.add('mb-3');
         }
         
         if (Object.hasOwn(field, 'isChildOf')) {
-          console.log(field.isChildOf)
+          // console.log(field.isChildOf)
 
           let parent_div = this.rootElement.querySelector(`#${field.isChildOf}-row`);
 
-          console.log({"parent_div":parent_div});
+          // console.log({"parent_div":parent_div});
 
           parent_div.appendChild(div)
         } else {
@@ -409,7 +410,7 @@ class ObjectView {
 
        // Si c'est un champ de référence, remplissez-le
       if (field.type === DATA_TYPES.REF) {
-        console.log("---------Retrieving options---------")
+        // console.log("---------Retrieving options---------")
         const promise = fillRefSelect(field.elementId, field).catch(console.error);
         
         refPromises.push(promise);
@@ -438,7 +439,7 @@ class ObjectView {
         }
         // console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
       } else if (field.type == DATA_TYPES.FLOAT){
-        console.log({"float":data.fields[key]})
+        // console.log({"float":data.fields[key]})
         this.inputs[key].value = data.fields[key];
         // console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
       } else {
@@ -564,7 +565,7 @@ async function fetchRefData(tableName) {
  * @returns {Array} Liste des options formatées.
  */
 function formatRefOptions(refData, fieldConfig) {
-  console.log([refData, fieldConfig])
+  // console.log([refData, fieldConfig])
   if (!refData || !refData.id || !refData.id.length) {
     return [];
   }
@@ -574,12 +575,12 @@ function formatRefOptions(refData, fieldConfig) {
   const iconField = fieldConfig.refConfig["iconField"] ?? null;
   const color = fieldConfig.refConfig["color"] ?? null;
 
-  console.log({
-    displayField:displayField,
-    valueField:valueField,
-    iconField:iconField,
-    color:color
-  });
+  // console.log({
+  //   displayField:displayField,
+  //   valueField:valueField,
+  //   iconField:iconField,
+  //   color:color
+  // });
 
   return refData.id.map((_, index) => {
     const option = {
@@ -595,7 +596,7 @@ function formatRefOptions(refData, fieldConfig) {
       option.color = refData[color][index];
     }
 
-    console.log({option:option})
+    // console.log({option:option})
 
     return option;
   });
@@ -607,7 +608,7 @@ function formatRefOptions(refData, fieldConfig) {
  * @param {FormFieldConfig} fieldConfig - Configuration du champ.
  */
 async function fillRefSelect(elementId, fieldConfig) {
-  console.log([elementId, fieldConfig])
+  // console.log([elementId, fieldConfig])
   const selectElement = document.getElementById(`${elementId}-input`);
   if (!selectElement) return;
 
@@ -630,23 +631,23 @@ async function fillRefSelect(elementId, fieldConfig) {
     optionElement.textContent = option.label;
 
     if (Object.hasOwn(option,'color')){
-      console.log(option.color)
+      // console.log(option.color)
       colorMapping[option.value] = option.color
       colorOption = true 
     } 
     // if (option.icon) {
     //   optionElement.dataset.icon = option.icon; // Stocke l'icône dans un dataset
     // }
-    console.log(optionElement)
+    // console.log(optionElement)
     selectElement.appendChild(optionElement);
 
     if (colorOption) {
-      console.log(colorMapping)
+      // console.log(colorMapping)
       const colorChanger = generateColorChanger(colorMapping)
       selectElement.addEventListener('change', (e) => {
-        console.log('Listener Change in action !');
-        console.log(e.currentTarget)
-        console.log(e.value);
+        // console.log('Listener Change in action !');
+        // console.log(e.currentTarget)
+        // console.log(e.value);
         colorChanger(e.currentTarget)
       });
     }
@@ -673,12 +674,12 @@ function formatOptionWithIcon(option) {
 
 // Fonction pour charger tous les enregistrements
 async function fetchAllRecords(currentTableId) {
-  console.log("---Recuperation des données---")
+  // console.log("---Recuperation des données---")
   try {
     const data = await grist.docApi.fetchTable(currentTableId);
       allRecords = data;
     if (allRecords['id'].length > 0) {
-      console.log("Qqch à renvoyer !")
+      // console.log("Qqch à renvoyer !")
       currentRecordIndex = 0;
       // updateNavigationButtons();
       // loadRecord(currentRecordIndex);
@@ -709,14 +710,14 @@ let currentTableId = 'INFOENERGIE'; // À adapter selon votre configuration
  * @param {number} index - Index de l'enregistrement à charger.
  */
 async function loadRecord(index) {
-  console.log('Loading record index : ' + index)
+  // console.log('Loading record index : ' + index)
   grist.viewApi.setSelectedRows(index)
   let selectedRecord = await grist.viewApi.fetchSelectedRecord(index)
-  console.log(selectedRecord)
+  // console.log(selectedRecord)
 
   const mappedRecord = grist.mapColumnNames(selectedRecord);
 
-  console.log(mappedRecord)
+  // console.log(mappedRecord)
 
   // Prépare les données pour le modèle
   const recordData = { id: selectedRecord.id };
@@ -726,7 +727,7 @@ async function loadRecord(index) {
       : defaultValues[key];
   }
 
-  console.log(recordData)
+  // console.log(recordData)
 
   model.updateFromGrist(recordData);
   controller.render();  
@@ -736,17 +737,17 @@ async function loadRecord(index) {
  * Configure les écouteurs d'événements pour les boutons de navigation.
  */
 async function setupNavigationListeners(currentTableId) {
-  console.log("---Setup des boutons---")
+  // console.log("---Setup des boutons---")
   // console.log({"Table":currentTableId})
   // const allRecords = await fetchAllRecords(currentTableId);
 
   document.getElementById('prev-btn').addEventListener('click', () => {
-    console.log('Prev. button pressed')
+    // console.log('Prev. button pressed')
     loadRecord(controller.handleNext(-1));
   });
 
   document.getElementById('next-btn').addEventListener('click', () => {
-    console.log('Next button pressed')
+    // console.log('Next button pressed')
     loadRecord(controller.handleNext(+1));
   });
 }
@@ -757,7 +758,7 @@ grist.ready({
   requiredAccess: 'full',
 })
 
-console.log("I\'m ready !!!!!!")
+// console.log("I\'m ready !!!!!!")
 let allRecords = fetchAllRecords(currentTableId);
 setupNavigationListeners(currentTableId);
 
