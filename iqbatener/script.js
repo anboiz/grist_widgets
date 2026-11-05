@@ -645,8 +645,9 @@ async function fillRefSelect(elementId, fieldConfig) {
       const colorChanger = generateColorChanger(colorMapping)
       selectElement.addEventListener('change', (e) => {
         console.log('Listener Change in action !');
+        console.log(e.currentTarget)
         console.log(e.value);
-        colorChanger(e)
+        colorChanger(e.currentTarget)
       });
     }
     
