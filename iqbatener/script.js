@@ -15,7 +15,8 @@ const DATA_TYPES = {
   BOOL: 'bool',
   FLOAT: 'float',
   REF: 'ref',
-  ROW: 'row'
+  ROW: 'row',
+  CARD_COLLECTION: 'card_collection'
 };
 
 /**
@@ -152,6 +153,15 @@ const formFields = {
     isChildOf: 'objectauto-dpe',
     format: 'col-sm',
   },
+  observations: {
+    type: DATA_TYPES.CARD_COLLECTION,
+    link: 'OBSERVATION_liaison',
+    elementId: 'objectauto-observations',
+    refConfig: {
+      table: 'OBSERVATION',
+      group_by: 'categorie'
+    },
+  }
 };
 
 /**
@@ -215,7 +225,6 @@ function adjustFormStyle(type) {
  * @returns {string} HTML du champ.
  */
 function createFormField(name, elementId, type) {
-  // console.log('Creating field : ', name, ', Type :', type)
 
   if (type === DATA_TYPES.STR) {
     return `
@@ -247,6 +256,11 @@ function createFormField(name, elementId, type) {
       <select class="form-select" id="${elementId}-input">
         <option value="" selected>Sélectionnez un ${name.toLowerCase()}</option>
       </select>
+    `;
+  } else if (type === DATA_TYPES.CARD_COLLECTION) {
+    return `
+      <h4><strong>${name}</strong></h4>
+      <div id="${elementId}-input"></div>
     `;
   }
   return '';
@@ -290,6 +304,7 @@ class ObjectModel {
   updateFromGrist(gristData) {
     if (gristData) {
       this.data = gristData;
+      console.log();
     } else {
       this.data.id = this.generateUUID();
     }
@@ -623,7 +638,6 @@ async function fillRefSelect(elementId, fieldConfig) {
 
   const colorMapping={}
 
-  // Efface les options existantes (sauf la première)
   while (selectElement.options.length > 1) {
     selectElement.remove(1);
   }
@@ -648,12 +662,10 @@ async function fillRefSelect(elementId, fieldConfig) {
     selectElement.appendChild(optionElement);
 
     if (colorOption) {
-      // console.log(colorMapping)
+
       const colorChanger = generateColorChanger(colorMapping)
       selectElement.addEventListener('change', (e) => {
-        // console.log('Listener Change in action !');
-        // console.log(e.currentTarget)
-        // console.log(e.value);
+
         colorChanger(e.currentTarget)
       });
     }
