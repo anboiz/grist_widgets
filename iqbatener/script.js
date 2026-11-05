@@ -251,6 +251,17 @@ function createFormField(name, elementId, type) {
   return '';
 }
 
+function generateColorChanger(colorMapping,default="#606060") {
+  return function(select) {
+    console.log('Color changer in action')
+    console.log({'select':select})
+    console.log({'select.value':select.value})
+    const color=colorMapping[select.value] ?? default
+    console.log({'color':color})
+    return select.style.backgroundColor = color;
+  }
+}
+
 
 
 // ========== MODÈLE ==========
@@ -603,6 +614,8 @@ async function fillRefSelect(elementId, fieldConfig) {
   const refData = await fetchRefData(fieldConfig.refConfig.table);
   const options = formatRefOptions(refData, fieldConfig);
 
+  const colorMapping={}
+
   // Efface les options existantes (sauf la première)
   while (selectElement.options.length > 1) {
     selectElement.remove(1);
@@ -611,23 +624,32 @@ async function fillRefSelect(elementId, fieldConfig) {
   // Ajoute les options formatées
   options.forEach(option => {
     const optionElement = document.createElement('option');
+    let colorOption = false
     optionElement.id = elementId + "_" + option.value;
     optionElement.value = option.value;
+    optionElement.textContent = option.label;
 
     if (Object.hasOwn(option,'color')){
       console.log(option.color)
-      const child = document.createElement('span');
-      child.textContent = option.label;
-      child.setAttribute("style", `background-color: ${option.color}`);
-      optionElement.appendChild(child);
-    } else {
-      optionElement.textContent = option.label;
-    }
+      colorMapping[option.value] = option.color
+      colorOption = true 
+    } 
     // if (option.icon) {
     //   optionElement.dataset.icon = option.icon; // Stocke l'icône dans un dataset
     // }
     console.log(optionElement)
     selectElement.appendChild(optionElement);
+
+    if (colorOption) {
+      console.log(colorMapping)
+      const colorChanger = generateColorChanger(colorMapping)
+      selectElement.addEventListener('change', (e) => {
+        console.log('Listener Change in action !');
+        console.log(e.value);
+        colorChanger(e)
+      });
+    }
+    
   });
 
 }
