@@ -304,7 +304,7 @@ class ObjectModel {
   updateFromGrist(gristData) {
     if (gristData) {
       this.data = gristData;
-      console.log();
+      console.log(gristData);
     } else {
       this.data.id = this.generateUUID();
     }
@@ -453,7 +453,7 @@ class ObjectView {
           option.selected = true;
         }
         // console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
-        if (option.parentElement){
+        if (Object.hasOwn(option,'parentElement')){
           option.parentElement.dispatchEvent(new Event('change', { bubbles: true }));
         } else {
           console.log(option)
