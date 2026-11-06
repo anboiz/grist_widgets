@@ -302,7 +302,7 @@ class ObjectModel {
    * Met à jour les données depuis Grist.
    * @param {Object} gristData - Données provenant de Grist.
    */
-  updateFromGrist(gristData) {
+  async updateFromGrist(gristData) {
     if (gristData) {
       this.data = gristData;
       console.log(gristData);
@@ -311,9 +311,14 @@ class ObjectModel {
         console.log(value)
         if(value.type === DATA_TYPES.COLLECTION) {
           console.log(value.refConfig)
+          console.log(gristData[this.data ])
+          const result = await getRowsByIds(value.refConfig.table, gristData[key])
+          console.log(result)
+          this.data[key+"-res"] = result
         }
 
       }
+    console.log(this.data)
     } else {
       this.data.id = this.generateUUID();
     }
