@@ -490,7 +490,13 @@ class ObjectView {
         console.log("Render Collection")
         console.log(field)
         console.log(key)
-        console.log(data)
+        console.log(data.fields[key])
+        for (e in data.fields[key]){
+          console.log(e)
+          const div = document.createElement('div');
+          div.class = field.elementId;
+          this.inputs[key].appendChild(div)
+        }
 
       } else {
         this.inputs[key].value = data.fields[key];
