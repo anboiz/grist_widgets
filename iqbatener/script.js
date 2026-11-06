@@ -487,7 +487,10 @@ class ObjectView {
         this.inputs[key].value = data.fields[key];
         // console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
       } else if (field.type == DATA_TYPES.COLLECTION){
-        console.log(data.fields[key])
+        console.log("Render Collection")
+        console.log(field)
+        console.log(key)
+        console.log(data)
 
       } else {
         this.inputs[key].value = data.fields[key];
