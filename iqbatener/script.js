@@ -160,7 +160,19 @@ const formFields = {
     elementId: 'objectauto-observations',
     refConfig: {
       table: 'OBSERVATION',
-      group_by: 'categorie'
+      group_by: 'gristHelper_Display',
+      infos:{
+        cle_technique:{
+          type: DATA_TYPES.STR,
+          name: 'Clé technique',
+          elementId: 'objectauto-cle_technique',          
+        },
+        liaison_valeur:{
+          type: DATA_TYPES.FLOAT,
+          name: 'Commentaire pour identifier le bâtiment',
+          elementId: 'objectauto-liaison_valeur',          
+        },        
+      }
     },
   }
 };
@@ -314,7 +326,7 @@ class ObjectModel {
           console.log(gristData[this.data ])
           const result = await getRowsByIds(value.refConfig.table, gristData[key])
           console.log(result)
-          this.data[key+"-res"] = result
+          this.data[key] = result
         }
 
       }
@@ -474,6 +486,9 @@ class ObjectView {
         // console.log({"float":data.fields[key]})
         this.inputs[key].value = data.fields[key];
         // console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
+      } else if (field.type == DATA_TYPES.COLLECTION){
+        console.log(data.fields[key])
+
       } else {
         this.inputs[key].value = data.fields[key];
         // data.fields[this.inputs[key].value]
