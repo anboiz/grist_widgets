@@ -16,7 +16,7 @@ const DATA_TYPES = {
   FLOAT: 'float',
   REF: 'ref',
   ROW: 'row',
-  CARD_COLLECTION: 'card_collection'
+  COLLECTION: 'collection'
 };
 
 /**
@@ -154,8 +154,9 @@ const formFields = {
     format: 'col-sm',
   },
   observations: {
-    type: DATA_TYPES.CARD_COLLECTION,
+    type: DATA_TYPES.COLLECTION,
     link: 'OBSERVATION_liaison',
+    name: 'Observation sur les constituants du bâtiment',
     elementId: 'objectauto-observations',
     refConfig: {
       table: 'OBSERVATION',
@@ -257,7 +258,7 @@ function createFormField(name, elementId, type) {
         <option value="" selected>Sélectionnez un ${name.toLowerCase()}</option>
       </select>
     `;
-  } else if (type === DATA_TYPES.CARD_COLLECTION) {
+  } else if (type === DATA_TYPES.COLLECTION) {
     return `
       <h4><strong>${name}</strong></h4>
       <div id="${elementId}-input"></div>
@@ -305,6 +306,11 @@ class ObjectModel {
     if (gristData) {
       this.data = gristData;
       console.log(gristData);
+      for (const [key, value] of Object.entries(formData)){
+        console.log(key)
+        console.log(value)
+
+      }
     } else {
       this.data.id = this.generateUUID();
     }
@@ -708,6 +714,22 @@ async function fetchAllRecords(currentTableId) {
   }
 }
 
+async function getRowsByIds(tableId, ids) {
+  const { token, baseUrl } = await grist.docApi.getAccessToken({ readOnly: true });
+  const placeholders = ids.map(() => '?').join(',');
+
+  const resp = await fetch(`${baseUrl}/sql?auth=${token}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      sql: `SELECT * FROM "${tableId}" WHERE id IN (${placeholders})`,
+      args: ids,
+    }),
+  });
+  if (!resp.ok) throw new Error(`Erreur SQL ${resp.status}`);
+  const { records } = await resp.json();
+  return records.map(r => r.fields);
+}
 
 
 // ========== INITIALISATION ==========
