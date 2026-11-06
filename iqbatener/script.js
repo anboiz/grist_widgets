@@ -318,18 +318,25 @@ class ObjectModel {
     if (gristData) {
       this.data = gristData;
       console.log(gristData);
+      const promises = [];
       for (const [key, value] of Object.entries(formFields)){
         console.log(key)
         console.log(value)
         if(value.type === DATA_TYPES.COLLECTION) {
           console.log(value.refConfig)
           console.log(gristData[this.data ])
-          const result = await getRowsByIds(value.refConfig.table, gristData[key])
-          console.log(result)
-          this.data[key] = result
+          const promise = getRowsByIds(value.refConfig.table, gristData[key])
+            .then(result => {
+              console.log(result);
+              this.data[key] = result;
+            });
+          promises.push(promise);
         }
 
       }
+    // Attendre que toutes les promesses soient résolues
+    await Promise.all(promises);
+    
     console.log(this.data)
     } else {
       this.data.id = this.generateUUID();
