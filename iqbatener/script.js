@@ -798,7 +798,8 @@ async function loadRecord(index) {
 
   // console.log(recordData)
 
-  model.updateFromGrist(recordData);
+  const promise = model.updateFromGrist(recordData);
+  Promise.all([promise])
   controller.render();  
 }
 
