@@ -875,6 +875,7 @@ grist.onRecord((record, mappings) => {
   }
 
   const promise = model.updateFromGrist(recordData);
-  Promise.all([promise])
-  controller.render();
+  Promise.all([promise]).then(() => {
+    controller.render();
+  });
 });
