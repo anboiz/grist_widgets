@@ -306,9 +306,12 @@ class ObjectModel {
     if (gristData) {
       this.data = gristData;
       console.log(gristData);
-      for (const [key, value] of Object.entries(formData)){
+      for (const [key, value] of Object.entries(formFields)){
         console.log(key)
         console.log(value)
+        if(value.type === DATA_TYPES.COLLECTION) {
+          console.log(value.refConfig)
+        }
 
       }
     } else {
