@@ -451,9 +451,6 @@ class ObjectView {
         const option = this.inputs[key].querySelector(`#${optionId}`);
         if (option) {
           option.selected = true;
-        }
-        // console.log(this.inputs[key].getElementById(field["elementId"] + data.fields[key]))
-        if (Object.hasOwn(option,'parentElement')){
           option.parentElement.dispatchEvent(new Event('change', { bubbles: true }));
         } else {
           console.log(option)
