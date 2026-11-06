@@ -491,7 +491,7 @@ class ObjectView {
         console.log(field)
         console.log(key)
         console.log(data.fields[key])
-        for (e in data.fields[key]){
+        for (const e in data.fields[key]){
           console.log(e)
           const div = document.createElement('div');
           div.class = field.elementId;
@@ -865,6 +865,7 @@ grist.onRecord((record, mappings) => {
       : defaultValues[key];
   }
 
-  model.updateFromGrist(recordData);
+  const promise = model.updateFromGrist(recordData);
+  Promise.all([promise])
   controller.render();
 });
