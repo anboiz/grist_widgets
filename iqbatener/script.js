@@ -336,7 +336,7 @@ class ObjectModel {
       }
     // Attendre que toutes les promesses soient résolues
     await Promise.all(promises);
-    
+
     console.log(this.data)
     } else {
       this.data.id = this.generateUUID();
@@ -557,7 +557,7 @@ class ObjectController {
     this.view = view;
     // Attendre que le formulaire soit prêt avant de rendre
     view.createForm().then(() => {
-      this.view.render(this.model.getData());
+      // this.view.render(this.model.getData());
       this.view.bindSave(() => this.handleSave());
     });
   }
