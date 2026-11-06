@@ -334,6 +334,7 @@ class ObjectModel {
     } else {
       this.data.id = this.generateUUID();
     }
+    return this.data
   }
 
   /**
