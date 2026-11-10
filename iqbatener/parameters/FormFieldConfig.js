@@ -8,7 +8,7 @@
  * @readonly
  * @enum {string}
  */
-const DATA_TYPES = {
+export const DATA_TYPES = {
   INT: 'int',
   STR: 'str',
   LGSTR: 'lgstr',
@@ -39,7 +39,7 @@ const DATA_TYPES = {
  * Configuration des champs du formulaire.
  * @type {Object.<string, FormFieldConfig>}
  */
-const formFields = {
+export const formFields = {
   id: { type: DATA_TYPES.INT, link: 'id', hidden: true },
   id_gesimmo: {
     type: DATA_TYPES.STR,
