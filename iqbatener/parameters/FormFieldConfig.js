@@ -20,20 +20,27 @@ export const DATA_TYPES = {
 };
 
 /**
- * Structure des données du formulaire.
+ * @typedef {Object} RefConfig
+ * @property {string} table - Nom de la table de référence dans Grist.
+ * @property {string} displayField - Champ à afficher dans les options du SELECT.
+ * @property {string} [valueField='id'] - Champ utilisé comme valeur.
+ * @property {string} [iconField] - Champ optionnel pour une icône.
+ * @property {string} [color] - Champ optionnel pour la couleur de fond.
+ */
+
+/**
  * @typedef {Object} FormFieldConfig
- * @property {string} type - Type de la variable (DATA_TYPES.INT, DATA_TYPES.STR, DATA_TYPES.BOOL).
+ * @property {DATA_TYPES} type - Type du champ.
  * @property {string} link - Nom de la colonne dans Grist.
  * @property {string} [name] - Nom affiché dans l'interface.
- * @property {string} [elementId] - ID de l'élément de saisie dans le formulaire.
+ * @property {string} [elementId] - ID de l'élément de saisie.
  * @property {*} [default] - Valeur par défaut.
- * @property {boolean} [hidden=false] - Indique si l'élément doit être masqué dans le formulaire.
- * @property {Object} [refConfig] - Configuration spécifique aux références (pour type REF).
- * @property {string} [refConfig.table] - Nom de la table de référence.
- * @property {string} [refConfig.displayField] - Champ à afficher dans les options.
- * @property {string} [refConfig.valueField='id'] - Champ à utiliser comme valeur.
- * @property {string} [refConfig.iconField] - Champ optionnel pour une icône (ex: FontAwesome).
- * /
+ * @property {boolean} [hidden=false] - Si vrai, le champ est masqué.
+ * @property {string} [isChildOf] - ID du parent si le champ est imbriqué.
+ * @property {string} [format] - Classe CSS pour le conteneur.
+ * @property {RefConfig} [refConfig] - Configuration pour les champs REF.
+ * @property {Object.<string, FormFieldConfig>} [infos] - Configuration pour les COLLECTION.
+ */
 
 /**
  * Configuration des champs du formulaire.
@@ -176,3 +183,47 @@ export const formFields = {
     },
   }
 };
+
+/**
+ * Utilitaires pour la configuration des champs.
+ */
+export class FormFieldUtils {
+  /**
+   * Extrait les noms des colonnes Grist à partir de la configuration.
+   * @returns {string[]} Liste des noms de colonnes (sans 'id').
+   */
+  static getGristColumns() {
+    return Object.values(formFields)
+      .map((field) => field.link)
+      .filter((link) => link !== undefined && link !== 'id');
+  }
+
+  /**
+   * Génère un dictionnaire des valeurs par défaut pour tous les champs.
+   * @returns {Object.<string, *>} Dictionnaire { cléDuChamp: valeurParDéfaut }.
+   */
+  static getDefaultValues() {
+    return Object.entries(formFields).reduce((acc, [key, field]) => {
+      acc[key] = field.default !== undefined ? field.default : '';
+      return acc;
+    }, {});
+  }
+
+  /**
+   * Crée un mappage entre les clés du formulaire et les colonnes Grist.
+   * @returns {Object.<string, string>} Mappage { cléDuChamp: colonneGrist }.
+   */
+  static getAppSideMapping() {
+    return Object.entries(formFields).reduce((acc, [key, field]) => {
+      if (field.link && field.link !== 'id') {
+        acc[key] = field.link;
+      }
+      return acc;
+    }, {});
+  }
+}
+
+// Initialisation des constantes globales (si nécessaire)
+export const defaultValues = FormFieldUtils.getDefaultValues();
+export const appSideMapping = FormFieldUtils.getAppSideMapping();
+export const gristColumns = FormFieldUtils.getGristColumns();

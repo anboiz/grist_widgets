@@ -1,44 +1,4 @@
-import { DATA_TYPES, formFields } from './parameters/FormFieldConfig.js';
-
-/**
- * Extrait les noms des colonnes Grist à partir de la configuration.
- * @returns {string[]} Liste des noms de colonnes.
- */
-function getGristColumns() {
-  return Object.values(formFields)
-    .map((field) => field.link)
-    .filter((link) => link !== undefined && link !== 'id');
-}
-
-/**
- * Génère un dictionnaire des valeurs par défaut.
- * @returns {Object.<string, *>} Dictionnaire des valeurs par défaut.
- */
-function getDefaultValues() {
-  return Object.entries(formFields).reduce((acc, [key, field]) => {
-    acc[key] = field.default !== undefined ? field.default : '';
-    return acc;
-  }, {});
-}
-
-/**
- * Crée un mappage entre les clés du formulaire et les colonnes Grist.
- * @returns {Object.<string, string>} Mappage des clés.
- */
-function getAppSideMapping() {
-  return Object.entries(formFields).reduce((acc, [key, field]) => {
-    if (field.link !== 'id') {
-      acc[key] = field.link;
-    }
-    return acc;
-  }, {});
-}
-
-// Initialisation des données par défaut et du mappage
-const defaultValues = getDefaultValues();
-const appSideMapping = getAppSideMapping();
-const gristColumns = getGristColumns();
-
+import { DATA_TYPES, formFields, defaultValues, appSideMapping, gristColumns } from './parameters/FormFieldConfig.js';
 
 
 /**
