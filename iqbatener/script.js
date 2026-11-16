@@ -1,5 +1,5 @@
 import { DATA_TYPES, formFields, defaultValues, appSideMapping, gristColumns } from './models/FormFieldConfig.js';
-import {FormRenderer} from './views/FormRenderer.js'
+import {FieldCreator} from './views/FieldCreator.js'
 
 /**
  * Ajoute des classes CSS spécifiques en fonction du type de champ.
@@ -13,54 +13,54 @@ function adjustFormStyle(type) {
   return [];
 }
 
-/**
- * Génère le HTML pour un champ de formulaire.
- * @param {string} name - Nom affiché du champ.
- * @param {string} elementId - ID de l'élément.
- * @param {string} type - Type de champ (DATA_TYPES).
- * @returns {string} HTML du champ.
- */
-function createFormField(name, elementId, type) {
+// /**
+//  * Génère le HTML pour un champ de formulaire.
+//  * @param {string} name - Nom affiché du champ.
+//  * @param {string} elementId - ID de l'élément.
+//  * @param {string} type - Type de champ (DATA_TYPES).
+//  * @returns {string} HTML du champ.
+//  */
+// function createFormField(name, elementId, type) {
 
-  if (type === DATA_TYPES.STR) {
-    return `
-      <label class="form-label"><strong>${name}</strong></label>
-      <input type="text" class="form-control" id="${elementId}-input">
-    `;
-  } else if (type === DATA_TYPES.ROW) {
-    return `
-      <div class="row" id="${elementId}-row"></div>
-    `;
-  } else if (type === DATA_TYPES.LGSTR) {
-    return `
-      <label class="form-label"><strong>${name}</strong></label>
-      <textarea rows="4" class="form-control" id="${elementId}-input">
-    `;
-  } else if (type === DATA_TYPES.FLOAT) {
-    return `
-      <label class="form-label"><strong>${name}</strong></label>
-      <input type="number" class="form-control" id="${elementId}-input">
-    `;
-  } else if (type === DATA_TYPES.BOOL) {
-    return `
-      <label class="form-label"><strong>${name}</strong></label>
-      <input type="checkbox" class="form-check-input" id="${elementId}-input">
-    `;
-  } else if (type === DATA_TYPES.REF) {
-    return `
-      <label class="form-label"><strong>${name}</strong></label>
-      <select class="form-select" id="${elementId}-input">
-        <option value="" selected>Sélectionnez un ${name.toLowerCase()}</option>
-      </select>
-    `;
-  } else if (type === DATA_TYPES.COLLECTION) {
-    return `
-      <h4><strong>${name}</strong></h4>
-      <div id="${elementId}-input"></div>
-    `;
-  }
-  return '';
-}
+//   if (type === DATA_TYPES.STR) {
+//     return `
+//       <label class="form-label"><strong>${name}</strong></label>
+//       <input type="text" class="form-control" id="${elementId}-input">
+//     `;
+//   } else if (type === DATA_TYPES.ROW) {
+//     return `
+//       <div class="row" id="${elementId}-row"></div>
+//     `;
+//   } else if (type === DATA_TYPES.LGSTR) {
+//     return `
+//       <label class="form-label"><strong>${name}</strong></label>
+//       <textarea rows="4" class="form-control" id="${elementId}-input">
+//     `;
+//   } else if (type === DATA_TYPES.FLOAT) {
+//     return `
+//       <label class="form-label"><strong>${name}</strong></label>
+//       <input type="number" class="form-control" id="${elementId}-input">
+//     `;
+//   } else if (type === DATA_TYPES.BOOL) {
+//     return `
+//       <label class="form-label"><strong>${name}</strong></label>
+//       <input type="checkbox" class="form-check-input" id="${elementId}-input">
+//     `;
+//   } else if (type === DATA_TYPES.REF) {
+//     return `
+//       <label class="form-label"><strong>${name}</strong></label>
+//       <select class="form-select" id="${elementId}-input">
+//         <option value="" selected>Sélectionnez un ${name.toLowerCase()}</option>
+//       </select>
+//     `;
+//   } else if (type === DATA_TYPES.COLLECTION) {
+//     return `
+//       <h4><strong>${name}</strong></h4>
+//       <div id="${elementId}-input"></div>
+//     `;
+//   }
+//   return '';
+// }
 
 function generateColorChanger(colorMapping,defaultColor="#606060") {
   return function(select) {
@@ -180,10 +180,12 @@ class ObjectModel {
 class ObjectView {
   /**
    * Vue du formulaire.
+   * @param {FieldCreator} fieldCreator - service de génération de champs.
    */
-  constructor() {
+  constructor(fieldCreator) {
     this.rootElement = document.getElementById('object-form');
     this.inputs = {};
+    this.fieldCreator = fieldCreator
     this.saveButton = document.getElementById('save-button');
     this.createForm()
     // initRefFields().catch(console.error); // Initialisation des champs de référence
@@ -225,7 +227,7 @@ class ObjectView {
         if (styles.length > 0) {
           div.classList.add(...styles);
         }
-        div.innerHTML = createFormField(field.name, field.elementId, field.type);
+        div.innerHTML = this.fieldCreator.createInput(field.name, field.elementId, field.type);
         input = document.getElementById(`${field.elementId}-input`);
       }
 
@@ -528,7 +530,7 @@ async function getRowsByIds(tableId, ids) {
 
 // ========== INITIALISATION ==========
 const model = new ObjectModel();
-const view = new ObjectView();
+const view = new ObjectView(FieldCreator());
 const controller = new ObjectController(model, view);
 
 // Variables globales pour la navigation

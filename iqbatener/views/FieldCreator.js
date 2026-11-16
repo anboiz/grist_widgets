@@ -8,7 +8,7 @@ import { DATA_TYPES } from '../models/FormFieldConfig.js';
 /**
  * Service pour générer les champs du formulaire.
  */
-export class FormRenderer {
+export class FieldCreator {
   /**
    * @param {Object.<string, import('../models/FormFieldConfig.js').FormFieldConfig>} formFields - Configuration des champs.
    */
@@ -34,6 +34,7 @@ export class FormRenderer {
    * @returns {HTMLElement} Élément DOM du champ.
    */
   createInput(field) {
+    console.log(field)
     const { type, name, elementId } = field;
     let element;
 
