@@ -1,5 +1,5 @@
-import { DATA_TYPES, formFields, defaultValues, appSideMapping, gristColumns } from './parameters/FormFieldConfig.js';
-
+import { DATA_TYPES, formFields, defaultValues, appSideMapping, gristColumns } from './models/FormFieldConfig.js';
+import {FormRenderer} from './views/FormRenderer.js'
 
 /**
  * Ajoute des classes CSS spécifiques en fonction du type de champ.
