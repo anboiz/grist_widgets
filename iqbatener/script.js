@@ -227,7 +227,7 @@ class ObjectView {
         if (styles.length > 0) {
           div.classList.add(...styles);
         }
-        div.innerHTML = this.fieldCreator.createInput(field.name, field.elementId, field.type);
+        div.innerHTML = this.fieldCreator.createInput(field.type, field.name, field.elementId);
         input = document.getElementById(`${field.elementId}-input`);
       }
 
@@ -529,8 +529,9 @@ async function getRowsByIds(tableId, ids) {
 
 
 // ========== INITIALISATION ==========
+const fieldCreator = new FieldCreator();
 const model = new ObjectModel();
-const view = new ObjectView(FieldCreator());
+const view = new ObjectView(fieldCreator);
 const controller = new ObjectController(model, view);
 
 // Variables globales pour la navigation
