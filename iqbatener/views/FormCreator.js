@@ -27,7 +27,7 @@ export class FormCreator {
     /**
     * @param {str} elementId - Configuration des champs.
     */  
-    static getFieldPlaceHolderIfExists(elementId) {
+    getFieldPlaceHolderIfExists(elementId) {
         return this.document.getElementById(elementId);
     }
 
@@ -71,7 +71,7 @@ export class FormCreator {
         return inputs
     }
 
-    static createPlaceHolder(field) {
+    createPlaceHolder(field) {
         let div = this.document.createElement('div');
         div.id = field.elementId;
         if (Object.hasOwn(field, 'format')) {
@@ -82,7 +82,7 @@ export class FormCreator {
         return div
     }
 
-    static attachPlaceHolderToTheRightParent(field,div) {
+    attachPlaceHolderToTheRightParent(field,div) {
         if (Object.hasOwn(field, 'isChildOf')) {
           let parent_div = this.rootElement.querySelector(`#${field.isChildOf}-row`);
           parent_div.appendChild(div);
@@ -91,11 +91,11 @@ export class FormCreator {
         }
     }
 
-    static getFieldInputIfExists(elementId) {
+    getFieldInputIfExists(elementId) {
         return this.document.getElementById(`${elementId}-input`);        
     }
 
-    static applyCustomStyle(div, field) {
+    applyCustomStyle(div, field) {
         const styles = [];
         if (field.type === DATA_TYPES.BOOL) {
             styles.add(getStyleForTypeBool())
@@ -105,7 +105,7 @@ export class FormCreator {
         }
     }
 
-    static getStyleForTypeBool() {
+    getStyleForTypeBool() {
         return ['form-check', 'form-switch'];
     }
 }  
