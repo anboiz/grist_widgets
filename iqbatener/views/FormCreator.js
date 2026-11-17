@@ -40,7 +40,7 @@ export class FormCreator {
         for (const [key, field] of Object.entries(formFields)) {
             if (field.hidden) continue;
             
-            let div = this.getFieldPlaceHolderIfExists(elementId);
+            let div = this.getFieldPlaceHolderIfExists(field.elementId);
             
             if (!div) {
                 div = this.createPlaceHolder(field)
