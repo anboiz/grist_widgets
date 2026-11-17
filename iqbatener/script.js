@@ -136,60 +136,60 @@ class ObjectView {
     // initRefFields().catch(console.error); // Initialisation des champs de référence
   }
 
-  /**
-   * Crée le formulaire dynamiquement.
-   */
-  createForm() {
-    const refPromises = [];
-    for (const [key, field] of Object.entries(formFields)) {
-      if (field.hidden) continue;
+  // /**
+  //  * Crée le formulaire dynamiquement.
+  //  */
+  // createForm() {
+  //   const refPromises = [];
+  //   for (const [key, field] of Object.entries(formFields)) {
+  //     if (field.hidden) continue;
 
-      let div = document.getElementById(field.elementId);
-      if (!div) {
-        div = document.createElement('div');
-        div.id = field.elementId;
+  //     let div = document.getElementById(field.elementId);
+  //     if (!div) {
+  //       div = document.createElement('div');
+  //       div.id = field.elementId;
 
-        if (Object.hasOwn(field, 'format')) {
+  //       if (Object.hasOwn(field, 'format')) {
 
-          div.classList.add(field.format);
-        } else {
-          div.classList.add('mb-3');
-        }
+  //         div.classList.add(field.format);
+  //       } else {
+  //         div.classList.add('mb-3');
+  //       }
         
-        if (Object.hasOwn(field, 'isChildOf')) {
+  //       if (Object.hasOwn(field, 'isChildOf')) {
 
-          let parent_div = this.rootElement.querySelector(`#${field.isChildOf}-row`);
+  //         let parent_div = this.rootElement.querySelector(`#${field.isChildOf}-row`);
 
-          parent_div.appendChild(div)
-        } else {
-          this.rootElement.appendChild(div);
-        }
-      }
+  //         parent_div.appendChild(div)
+  //       } else {
+  //         this.rootElement.appendChild(div);
+  //       }
+  //     }
 
-      let input = document.getElementById(`${field.elementId}-input`);
-      if (!input) {
-        const styles = adjustFormStyle(field.type);
-        if (styles.length > 0) {
-          div.classList.add(...styles);
-        }
-        div.innerHTML = this.fieldCreator.createInput(field);
+  //     let input = document.getElementById(`${field.elementId}-input`);
+  //     if (!input) {
+  //       const styles = adjustFormStyle(field.type);
+  //       if (styles.length > 0) {
+  //         div.classList.add(...styles);
+  //       }
+  //       div.innerHTML = this.fieldCreator.createInput(field);
 
-        input = document.getElementById(`${field.elementId}-input`);
-      }
+  //       input = document.getElementById(`${field.elementId}-input`);
+  //     }
 
-       // Si c'est un champ de référence, remplissez-le
-      if (field.type === DATA_TYPES.REF) {
+  //      // Si c'est un champ de référence, remplissez-le
+  //     if (field.type === DATA_TYPES.REF) {
 
-        const promise = fillRefSelect(field.elementId, field).catch(console.error);
+  //       const promise = fillRefSelect(field.elementId, field).catch(console.error);
         
-        refPromises.push(promise);
-      }    
+  //       refPromises.push(promise);
+  //     }    
 
-      this.inputs[key] = input;
-    }
-    let resPromises =  Promise.all(refPromises);
-    return resPromises
-  }
+  //     this.inputs[key] = input;
+  //   }
+  //   let resPromises =  Promise.all(refPromises);
+  //   return resPromises
+  // }
 
   /**
    * Affiche les données dans le formulaire.
@@ -275,7 +275,7 @@ class ObjectController {
     this.model = model;
     this.view = view;
     // Attendre que le formulaire soit prêt avant de rendre
-    view.createForm().then(() => {
+    view.formCreator.createForm().then(() => {
       // this.view.render(this.model.getData());
       this.view.bindSave(() => this.handleSave());
     });
