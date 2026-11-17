@@ -106,7 +106,7 @@ export class FieldCreator {
    * @param {string} elementId - ID de l'élément.
    * @returns {HTMLInputElement} Input de type number.
    */
-  createNumberInput(name, elementId) {
+  createNumberInput(div, name, elementId) {
     const label = this.createLabel(name, elementId);
     const input = document.createElement('input');
     input.type = 'number';
@@ -124,7 +124,7 @@ export class FieldCreator {
    * @param {string} elementId - ID de l'élément.
    * @returns {HTMLDivElement} Conteneur avec label et checkbox.
    */
-  createCheckbox(name, elementId) {
+  createCheckbox(div, name, elementId) {
     div.classList.add(...this.adjustFormStyle(DATA_TYPES.BOOL));
 
     const label = document.createElement('label');
