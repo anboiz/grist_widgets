@@ -25,6 +25,13 @@ export class FormCreator {
     }
 
     /**
+    * @param {str} elementId - Configuration des champs.
+    */  
+    static getFieldPlaceHolderIfExists(elementId) {
+        return this.document.getElementById(elementId);
+    }
+
+    /**
      * @param {Object.<string, import('../models/FormFieldConfig.js').FormFieldConfig>} formFields - Configuration des champs.
      */
     createForm(formFields) {
@@ -57,21 +64,14 @@ export class FormCreator {
             //     refPromises.push(promise);
             // }    
 
-        inputs[key] = input;
-    }
-        
-    // let _resPromises =  Promise.all(refPromises);
-    return inputs
-    }
-
-    /**
-    * @param {str} elementId - Configuration des champs.
-    */  
-    getFieldPlaceHolderIfExists(elementId) {
-        return this.document.getElementById(elementId);
+            inputs[key] = input;
+        }
+            
+        // let _resPromises =  Promise.all(refPromises);
+        return inputs
     }
 
-    createPlaceHolder(field) {
+    static createPlaceHolder(field) {
         let div = this.document.createElement('div');
         div.id = field.elementId;
         if (Object.hasOwn(field, 'format')) {
@@ -82,7 +82,7 @@ export class FormCreator {
         return div
     }
 
-    attachPlaceHolderToTheRightParent(field,div) {
+    static attachPlaceHolderToTheRightParent(field,div) {
         if (Object.hasOwn(field, 'isChildOf')) {
           let parent_div = this.rootElement.querySelector(`#${field.isChildOf}-row`);
           parent_div.appendChild(div);
@@ -91,11 +91,11 @@ export class FormCreator {
         }
     }
 
-    getFieldInputIfExists(elementId) {
+    static getFieldInputIfExists(elementId) {
         return this.document.getElementById(`${elementId}-input`);        
     }
 
-    applyCustomStyle(div, field) {
+    static applyCustomStyle(div, field) {
         const styles = [];
         if (field.type === DATA_TYPES.BOOL) {
             styles.add(getStyleForTypeBool())
@@ -105,7 +105,7 @@ export class FormCreator {
         }
     }
 
-    getStyleForTypeBool() {
+    static getStyleForTypeBool() {
         return ['form-check', 'form-switch'];
     }
 }  
