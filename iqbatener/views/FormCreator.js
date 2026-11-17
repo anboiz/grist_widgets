@@ -39,11 +39,13 @@ export class FormCreator {
         const inputs ={};
         for (const [key, field] of Object.entries(formFields)) {
             if (field.hidden) continue;
-            
+            console.log(key)
             let div = this.getFieldPlaceHolderIfExists(field.elementId);
+            console.log(div)
             
             if (!div) {
                 div = this.createPlaceHolder(field)
+                console.log(div)
                 this.attachPlaceHolderToTheRightParent(field,div)
             }
 
