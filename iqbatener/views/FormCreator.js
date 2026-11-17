@@ -40,17 +40,17 @@ export class FormCreator {
         for (const [key, field] of Object.entries(formFields)) {
             if (field.hidden) continue;
             
-            let div = getFieldPlaceHolderIfExists(elementId);
+            let div = this.getFieldPlaceHolderIfExists(elementId);
             
             if (!div) {
-                div = createPlaceHolder(field)
-                attachPlaceHolderToTheRightParent(field,div)
+                div = this.createPlaceHolder(field)
+                this.attachPlaceHolderToTheRightParent(field,div)
             }
 
-            let input = getFieldInputIfExists(field.elementId)
+            let input = this.getFieldInputIfExists(field.elementId)
 
             if (!input) {
-                applyCustomStyle(div, field)
+                this.applyCustomStyle(div, field)
 
                 div.innerHTML = this.fieldCreator.createInput(field);
                 
