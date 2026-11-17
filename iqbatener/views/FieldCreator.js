@@ -9,12 +9,6 @@ import { DATA_TYPES } from '../models/FormFieldConfig.js';
  * Service pour générer les champs du formulaire.
  */
 export class FieldCreator {
-  // /**
-  //  * @param {Object.<string, import('../models/FormFieldConfig.js').FormFieldConfig>} formFields - Configuration des champs.
-  //  */
-  // constructor(formFields) {
-  //   this.formFields = formFields;
-  // }
 
   /**
    * Ajoute des classes CSS spécifiques en fonction du type de champ.
@@ -33,37 +27,39 @@ export class FieldCreator {
    * @param {import('../models/FormFieldConfig.js').FormFieldConfig} field - Configuration du champ.
    * @returns {HTMLElement} Élément DOM du champ.
    */
-  createInput(field) {
+  createInput(div, field) {
     console.log(field)
     const { type, name, elementId } = field;
     let element;
 
     switch (type) {
       case DATA_TYPES.STR:
-        element = this.createTextInput(name, elementId);
+        element = this.createTextInput(div, name, elementId);
         break;
       case DATA_TYPES.LGSTR:
-        element = this.createTextArea(name, elementId);
+        element = this.createTextArea(div, name, elementId);
         break;
       case DATA_TYPES.FLOAT:
-        element = this.createNumberInput(name, elementId);
+        element = this.createNumberInput(div, name, elementId);
         break;
       case DATA_TYPES.BOOL:
-        element = this.createCheckbox(name, elementId);
+        element = this.createCheckbox(div, name, elementId);
         break;
       case DATA_TYPES.REF:
-        element = this.createSelect(name, elementId);
+        element = this.createSelect(div, name, elementId);
         break;
       case DATA_TYPES.ROW:
-        element = this.createRowContainer(elementId);
+        element = this.createRowContainer(div, elementId);
         break;
       case DATA_TYPES.COLLECTION:
-        element = this.createCollectionContainer(name, elementId);
+        element = this.createCollectionContainer(div, name, elementId);
         break;
       default:
         element = document.createElement('div');
         console.warn(`Type de champ non géré: ${type}`);
     }
+
+    console.log(element)
 
     return element;
   }
@@ -74,17 +70,16 @@ export class FieldCreator {
    * @param {string} elementId - ID de l'élément.
    * @returns {HTMLInputElement} Input de type texte.
    */
-  createTextInput(name, elementId) {
+  createTextInput(div, name, elementId) {
     const label = this.createLabel(name, elementId);
     const input = document.createElement('input');
     input.type = 'text';
     input.classList.add('form-control');
     input.id = `${elementId}-input`;
 
-    const container = document.createElement('div');
-    container.appendChild(label);
-    container.appendChild(input);
-    return container;
+    div.appendChild(label);
+    div.appendChild(input);
+    return div;
   }
 
   /**
@@ -100,10 +95,9 @@ export class FieldCreator {
     textarea.classList.add('form-control');
     textarea.id = `${elementId}-input`;
 
-    const container = document.createElement('div');
-    container.appendChild(label);
-    container.appendChild(textarea);
-    return container;
+    div.appendChild(label);
+    div.appendChild(textarea);
+    return div;
   }
 
   /**
@@ -119,10 +113,9 @@ export class FieldCreator {
     input.classList.add('form-control');
     input.id = `${elementId}-input`;
 
-    const container = document.createElement('div');
-    container.appendChild(label);
-    container.appendChild(input);
-    return container;
+    div.appendChild(label);
+    div.appendChild(input);
+    return div;
   }
 
   /**
@@ -132,8 +125,7 @@ export class FieldCreator {
    * @returns {HTMLDivElement} Conteneur avec label et checkbox.
    */
   createCheckbox(name, elementId) {
-    const container = document.createElement('div');
-    container.classList.add(...this.adjustFormStyle(DATA_TYPES.BOOL));
+    div.classList.add(...this.adjustFormStyle(DATA_TYPES.BOOL));
 
     const label = document.createElement('label');
     label.classList.add('form-label');
@@ -167,10 +159,9 @@ export class FieldCreator {
     defaultOption.textContent = `Sélectionnez un ${name.toLowerCase()}`;
     select.appendChild(defaultOption);
 
-    const container = document.createElement('div');
-    container.appendChild(label);
-    container.appendChild(select);
-    return container;
+    div.appendChild(label);
+    div.appendChild(select);
+    return div;
   }
 
   /**
@@ -178,8 +169,7 @@ export class FieldCreator {
    * @param {string} elementId - ID de l'élément.
    * @returns {HTMLDivElement} Conteneur ROW.
    */
-  createRowContainer(elementId) {
-    const div = document.createElement('div');
+  createRowContainer(div, elementId) {
     div.classList.add('row');
     div.id = `${elementId}-row`;
     return div;
@@ -191,17 +181,16 @@ export class FieldCreator {
    * @param {string} elementId - ID de l'élément.
    * @returns {HTMLDivElement} Conteneur avec titre et espace pour les éléments.
    */
-  createCollectionContainer(name, elementId) {
+  createCollectionContainer(div, name, elementId) {
     const title = document.createElement('h4');
     title.innerHTML = `<strong>${name}</strong>`;
 
     const container = document.createElement('div');
     container.id = `${elementId}-input`;
 
-    const root = document.createElement('div');
-    root.appendChild(title);
-    root.appendChild(container);
-    return root;
+    div.appendChild(title);
+    div.appendChild(container);
+    return div;
   }
 
   /**

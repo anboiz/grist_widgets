@@ -52,7 +52,7 @@ export class FormCreator {
             if (!input) {
                 this.applyCustomStyle(div, field)
 
-                div.innerHTML = this.fieldCreator.createInput(field);
+                this.fieldCreator.createInput(div, field);
                 
                 input = document.getElementById(`${field.elementId}-input`);
             }
