@@ -124,13 +124,14 @@ class ObjectView {
    * Vue du formulaire.
    * @param {FieldCreator} fieldCreator - service de génération de champs.
    */
-  constructor(formCreator) {
+  constructor(formCreator,formFields) {
     this.rootElement = document.getElementById('object-form');
+    this.formFields = formFields
     this.formCreator = formCreator
     this.formCreator.setDocument(document)
     this.formCreator.setRootElement(this.rootElement)
     this.saveButton = document.getElementById('save-button');
-    this.inputs = this.createForm()
+    this.inputs = formCreator.createForm(formFields)
     console.log(this.inputs)
     // initRefFields().catch(console.error); // Initialisation des champs de référence
   }
@@ -477,7 +478,7 @@ async function getRowsByIds(tableId, ids) {
 const fieldCreator = new FieldCreator();
 const formCreator = new FormCreator(fieldCreator);
 const model = new ObjectModel();
-const view = new ObjectView(formCreator);
+const view = new ObjectView(formCreator,formFields);
 const controller = new ObjectController(model, view);
 
 // Variables globales pour la navigation
