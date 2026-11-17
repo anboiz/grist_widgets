@@ -88,7 +88,7 @@ export class FieldCreator {
    * @param {string} elementId - ID de l'élément.
    * @returns {HTMLTextAreaElement} Textarea.
    */
-  createTextArea(name, elementId) {
+  createTextArea(div, name, elementId) {
     const label = this.createLabel(name, elementId);
     const textarea = document.createElement('textarea');
     textarea.rows = 4;
