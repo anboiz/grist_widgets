@@ -1,5 +1,6 @@
 import { DATA_TYPES, formFields, defaultValues, appSideMapping, gristColumns } from './models/FormFieldConfig.js';
 import {FieldCreator} from './views/FieldCreator.js'
+import {FormCreator} from './views/FormCreator.js'
 
 
 
@@ -474,8 +475,9 @@ async function getRowsByIds(tableId, ids) {
 
 // ========== INITIALISATION ==========
 const fieldCreator = new FieldCreator();
+const formCreator = new FormCreator(fieldCreator);
 const model = new ObjectModel();
-const view = new ObjectView(fieldCreator);
+const view = new ObjectView(formCreator);
 const controller = new ObjectController(model, view);
 
 // Variables globales pour la navigation

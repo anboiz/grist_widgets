@@ -9,12 +9,12 @@ import { DATA_TYPES } from '../models/FormFieldConfig.js';
  * Service pour générer les champs du formulaire.
  */
 export class FieldCreator {
-  /**
-   * @param {Object.<string, import('../models/FormFieldConfig.js').FormFieldConfig>} formFields - Configuration des champs.
-   */
-  constructor(formFields) {
-    this.formFields = formFields;
-  }
+  // /**
+  //  * @param {Object.<string, import('../models/FormFieldConfig.js').FormFieldConfig>} formFields - Configuration des champs.
+  //  */
+  // constructor(formFields) {
+  //   this.formFields = formFields;
+  // }
 
   /**
    * Ajoute des classes CSS spécifiques en fonction du type de champ.
