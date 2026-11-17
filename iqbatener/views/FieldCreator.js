@@ -147,7 +147,7 @@ export class FieldCreator {
    * @param {string} elementId - ID de l'élément.
    * @returns {HTMLSelectElement} SELECT avec option par défaut.
    */
-  createSelect(name, elementId) {
+  createSelect(div, name, elementId) {
     const label = this.createLabel(name, elementId);
     const select = document.createElement('select');
     select.classList.add('form-select');
