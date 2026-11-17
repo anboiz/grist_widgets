@@ -275,7 +275,8 @@ class ObjectController {
     this.model = model;
     this.view = view;
     // Attendre que le formulaire soit prêt avant de rendre
-    view.formCreator.createForm().then(() => {
+    // Attention recrée une deuxiéme fois le formulaire TODO ne faire le formulaire qu'une seule fois
+    view.formCreator.createForm(view.formFields).then(() => {
       // this.view.render(this.model.getData());
       this.view.bindSave(() => this.handleSave());
     });
