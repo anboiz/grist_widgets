@@ -34,7 +34,7 @@ export class FormCreator {
     /**
      * @param {Object.<string, import('../models/FormFieldConfig.js').FormFieldConfig>} formFields - Configuration des champs.
      */
-    createForm(formFields) {
+    async createForm(formFields) {
         const refPromises = [];
         const inputs ={};
         for (const [key, field] of Object.entries(formFields)) {
