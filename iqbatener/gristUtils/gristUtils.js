@@ -45,7 +45,7 @@ export class GristUtils {
         console.log({allRecords:allRecords})
         if (allRecords['id'].length > 0) {
     
-          currentRecordIndex = 0;
+        //   let currentRecordIndex = 0;
     
           return allRecords;
           
