@@ -41,7 +41,8 @@ export class GristUtils {
     
       try {
         const data = await grist.docApi.fetchTable(currentTableId);
-          allRecords = data;
+        let allRecords = data;
+        console.log({allRecords:allRecords})
         if (allRecords['id'].length > 0) {
     
           currentRecordIndex = 0;
