@@ -36,6 +36,8 @@ export class GristUtils {
         if (!currentTableId) {
             currentTableId= this.currentTableId
         }
+
+        console.log({currentTableId:currentTableId})
     
       try {
         const data = await grist.docApi.fetchTable(currentTableId);

@@ -19,9 +19,10 @@ class ObjectModel {
   /**
    * Modèle de données pour le widget.
    */
-  constructor() {
+  constructor(gristUtils) {
     this.data = defaultValues;
     this.mapping = {};
+    this.gristConnector = gristUtils;
   }
 
   /**
@@ -47,7 +48,7 @@ class ObjectModel {
         if(value.type === DATA_TYPES.COLLECTION) {
           console.log(value.refConfig)
           console.log(gristData[this.data ])
-          const promise = getRowsByIds(value.refConfig.table, gristData[key])
+          const promise = gristUtils.getRowsByIds(value.refConfig.table, gristData[key])
             .then(result => {
               console.log(result);
               this.data[key] = result;
@@ -386,17 +387,19 @@ function formatOptionWithIcon(option) {
 
 
 // ========== INITIALISATION ==========
+let currentTableId = 'INFOENERGIE'; // À adapter selon votre configuration
+const gristUtils = new GristUtils(currentTableId)
+
 const fieldCreator = new FieldCreator();
 const formCreator = new FormCreator(fieldCreator);
-const model = new ObjectModel();
+const model = new ObjectModel(gristUtils);
 const view = new ObjectView(formCreator,formFields);
 const controller = new ObjectController(model, view);
 
 // Variables globales pour la navigation
 let currentRecordIndex = 0;
 // let allRecords = [];
-let currentTableId = 'INFOENERGIE'; // À adapter selon votre configuration
-const gristUtils = new GristUtils(currentTableId)
+
 
 // /**
 //  * Charge un enregistrement spécifique dans le formulaire.
