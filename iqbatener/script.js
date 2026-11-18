@@ -1,6 +1,7 @@
 import { DATA_TYPES, formFields, defaultValues, appSideMapping, gristColumns } from './models/FormFieldConfig.js';
 import {FieldCreator} from './views/FieldCreator.js'
 import {FormCreator} from './views/FormCreator.js'
+import { GristUtils } from './gristUtils/gristUtils.js';
 
 
 
@@ -135,61 +136,6 @@ class ObjectView {
     console.log(this.inputs)
     // initRefFields().catch(console.error); // Initialisation des champs de référence
   }
-
-  // /**
-  //  * Crée le formulaire dynamiquement.
-  //  */
-  // createForm() {
-  //   const refPromises = [];
-  //   for (const [key, field] of Object.entries(formFields)) {
-  //     if (field.hidden) continue;
-
-  //     let div = document.getElementById(field.elementId);
-  //     if (!div) {
-  //       div = document.createElement('div');
-  //       div.id = field.elementId;
-
-  //       if (Object.hasOwn(field, 'format')) {
-
-  //         div.classList.add(field.format);
-  //       } else {
-  //         div.classList.add('mb-3');
-  //       }
-        
-  //       if (Object.hasOwn(field, 'isChildOf')) {
-
-  //         let parent_div = this.rootElement.querySelector(`#${field.isChildOf}-row`);
-
-  //         parent_div.appendChild(div)
-  //       } else {
-  //         this.rootElement.appendChild(div);
-  //       }
-  //     }
-
-  //     let input = document.getElementById(`${field.elementId}-input`);
-  //     if (!input) {
-  //       const styles = adjustFormStyle(field.type);
-  //       if (styles.length > 0) {
-  //         div.classList.add(...styles);
-  //       }
-  //       div.innerHTML = this.fieldCreator.createInput(field);
-
-  //       input = document.getElementById(`${field.elementId}-input`);
-  //     }
-
-  //      // Si c'est un champ de référence, remplissez-le
-  //     if (field.type === DATA_TYPES.REF) {
-
-  //       const promise = fillRefSelect(field.elementId, field).catch(console.error);
-        
-  //       refPromises.push(promise);
-  //     }    
-
-  //     this.inputs[key] = input;
-  //   }
-  //   let resPromises =  Promise.all(refPromises);
-  //   return resPromises
-  // }
 
   /**
    * Affiche les données dans le formulaire.
@@ -437,42 +383,6 @@ function formatOptionWithIcon(option) {
   );
 }
 
-// Fonction pour charger tous les enregistrements
-async function fetchAllRecords(currentTableId) {
-
-  try {
-    const data = await grist.docApi.fetchTable(currentTableId);
-      allRecords = data;
-    if (allRecords['id'].length > 0) {
-
-      currentRecordIndex = 0;
-
-      return allRecords;
-      
-    } else {
-      console.warn("Aucun enregistrement trouvé dans la table.");
-    }
-  } catch (error) {
-    console.error("Erreur lors de la récupération des enregistrements :", error);
-  }
-}
-
-async function getRowsByIds(tableId, ids) {
-  const { token, baseUrl } = await grist.docApi.getAccessToken({ readOnly: true });
-  const placeholders = ids.map(() => '?').join(',');
-
-  const resp = await fetch(`${baseUrl}/sql?auth=${token}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      sql: `SELECT * FROM "${tableId}" WHERE id IN (${placeholders})`,
-      args: ids,
-    }),
-  });
-  if (!resp.ok) throw new Error(`Erreur SQL ${resp.status}`);
-  const { records } = await resp.json();
-  return records.map(r => r.fields);
-}
 
 
 // ========== INITIALISATION ==========
@@ -486,31 +396,32 @@ const controller = new ObjectController(model, view);
 let currentRecordIndex = 0;
 // let allRecords = [];
 let currentTableId = 'INFOENERGIE'; // À adapter selon votre configuration
+gristUtils = new GristUtils(currentTableId)
 
-/**
- * Charge un enregistrement spécifique dans le formulaire.
- * @param {number} index - Index de l'enregistrement à charger.
- */
-async function loadRecord(index) {
+// /**
+//  * Charge un enregistrement spécifique dans le formulaire.
+//  * @param {number} index - Index de l'enregistrement à charger.
+//  */
+// async function loadRecord(index) {
 
-  grist.viewApi.setSelectedRows(index)
-  let selectedRecord = await grist.viewApi.fetchSelectedRecord(index)
+//   grist.viewApi.setSelectedRows(index)
+//   let selectedRecord = await grist.viewApi.fetchSelectedRecord(index)
 
-  const mappedRecord = grist.mapColumnNames(selectedRecord);
+//   const mappedRecord = grist.mapColumnNames(selectedRecord);
 
 
-  // Prépare les données pour le modèle
-  const recordData = { id: selectedRecord.id };
-  for (const [key, gristColumn] of Object.entries(appSideMapping)) {
-    recordData[key] = mappedRecord[gristColumn] !== undefined
-      ? mappedRecord[gristColumn]
-      : defaultValues[key];
-  }
+//   // Prépare les données pour le modèle
+//   const recordData = { id: selectedRecord.id };
+//   for (const [key, gristColumn] of Object.entries(appSideMapping)) {
+//     recordData[key] = mappedRecord[gristColumn] !== undefined
+//       ? mappedRecord[gristColumn]
+//       : defaultValues[key];
+//   }
 
-  const promise = model.updateFromGrist(recordData);
-  Promise.all([promise])
-  controller.render();  
-}
+//   const promise = model.updateFromGrist(recordData);
+//   Promise.all([promise])
+//   controller.render();  
+// }
 
 /**
  * Configure les écouteurs d'événements pour les boutons de navigation.
@@ -532,7 +443,8 @@ grist.ready({
   requiredAccess: 'full',
 })
 
-let allRecords = fetchAllRecords(currentTableId);
+let allRecords = gristUtils.fetchAllRecords(currentTableId);
+console.log({allRecords: allRecords})
 setupNavigationListeners(currentTableId);
 
 
