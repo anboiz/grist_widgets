@@ -69,7 +69,7 @@ export class FormCreator {
             inputs[key] = input;
         }
             
-        // let _resPromises =  Promise.all(refPromises);
+        let _ =  Promise.all(refPromises);
         return inputs
     }
 
