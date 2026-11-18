@@ -396,7 +396,7 @@ const controller = new ObjectController(model, view);
 let currentRecordIndex = 0;
 // let allRecords = [];
 let currentTableId = 'INFOENERGIE'; // À adapter selon votre configuration
-gristUtils = new GristUtils(currentTableId)
+const gristUtils = new GristUtils(currentTableId)
 
 // /**
 //  * Charge un enregistrement spécifique dans le formulaire.
