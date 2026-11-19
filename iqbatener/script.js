@@ -128,10 +128,16 @@ class ObjectView {
     this.formCreator.setDocument(document)
     this.formCreator.setRootElement(this.rootElement)
     this.saveButton = document.getElementById('save-button');
-    this.inputs = formCreator.createForm( formFields)
-    console.log(this.inputs)
+    
     // initRefFields().catch(console.error); // Initialisation des champs de référence
   }
+
+  async generateForm() {
+    this.inputs = await this.formCreator.createForm(this.formFields)
+    console.log(this.inputs)
+  }
+
+
 
   /**
    * Affiche les données dans le formulaire.
@@ -218,8 +224,8 @@ class ObjectController {
     this.view = view;
     // Attendre que le formulaire soit prêt avant de rendre
     // Attention recrée une deuxiéme fois le formulaire TODO ne faire le formulaire qu'une seule fois
-    view.formCreator.createForm(view.formFields).then(() => {
-      // this.view.render(this.model.getData());
+    view.generateForm().then(() => {
+      this.view.render(this.model.getData());
       this.view.bindSave(() => this.handleSave());
     });
   }
@@ -290,33 +296,7 @@ const controller = new ObjectController(model, view);
 
 // Variables globales pour la navigation
 let currentRecordIndex = 0;
-// let allRecords = [];
 
-
-// /**
-//  * Charge un enregistrement spécifique dans le formulaire.
-//  * @param {number} index - Index de l'enregistrement à charger.
-//  */
-// async function loadRecord(index) {
-
-//   grist.viewApi.setSelectedRows(index)
-//   let selectedRecord = await grist.viewApi.fetchSelectedRecord(index)
-
-//   const mappedRecord = grist.mapColumnNames(selectedRecord);
-
-
-//   // Prépare les données pour le modèle
-//   const recordData = { id: selectedRecord.id };
-//   for (const [key, gristColumn] of Object.entries(appSideMapping)) {
-//     recordData[key] = mappedRecord[gristColumn] !== undefined
-//       ? mappedRecord[gristColumn]
-//       : defaultValues[key];
-//   }
-
-//   const promise = model.updateFromGrist(recordData);
-//   Promise.all([promise])
-//   controller.render();  
-// }
 
 /**
  * Configure les écouteurs d'événements pour les boutons de navigation.
