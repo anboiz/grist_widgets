@@ -63,7 +63,7 @@ export class FormCreator {
 
             if (field.type === DATA_TYPES.REF) {
 
-                const promise = this.gristUtils.fillRefSelect(field.elementId, field).catch(console.error);
+                const promise = this.fillRefSelect(field.elementId, field).catch(console.error);
                 
                 refPromises.push(promise);
             }    
