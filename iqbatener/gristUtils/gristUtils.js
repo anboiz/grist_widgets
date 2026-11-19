@@ -4,6 +4,7 @@ export class GristUtils {
    */
   constructor(currentTableId) {
     this.currentTableId = currentTableId;
+    this.refDataCache = {};
   }
 
   /**
@@ -72,5 +73,28 @@ export class GristUtils {
       if (!resp.ok) throw new Error(`Erreur SQL ${resp.status}`);
       const { records } = await resp.json();
       return records.map(r => r.fields);
+    }
+
+
+    /**
+     * Récupère les données de référence depuis Grist.
+     * @param {string} tableName - Nom de la table de référence.
+     * @returns {Promise<Array>} Liste des enregistrements de référence.
+     */
+    async fetchRefData(tableName) {
+        // Vérifie si les données sont déjà en cache
+        if (this.refDataCache[tableName]) {
+            return refDataCache[tableName];
+        }
+
+        try {
+            const data = await grist.docApi.fetchTable(tableName);
+            refDataCache[tableName] = data;
+            return data;
+        } catch (error) {
+            console.error(`Erreur lors de la récupération des données de référence (${tableName}):`, error);
+            return { id: [], [data.displayField]: [] };
+        }
+
     }
 }

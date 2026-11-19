@@ -254,32 +254,7 @@ class ObjectController {
   }
 }
 
-/**
- * Cache pour stocker les données de référence déjà récupérées.
- * @type {Object.<string, Array>}
- */
-const refDataCache = {};
 
-/**
- * Récupère les données de référence depuis Grist.
- * @param {string} tableName - Nom de la table de référence.
- * @returns {Promise<Array>} Liste des enregistrements de référence.
- */
-async function fetchRefData(tableName) {
-  // Vérifie si les données sont déjà en cache
-  if (refDataCache[tableName]) {
-    return refDataCache[tableName];
-  }
-
-  try {
-    const data = await grist.docApi.fetchTable(tableName);
-    refDataCache[tableName] = data;
-    return data;
-  } catch (error) {
-    console.error(`Erreur lors de la récupération des données de référence (${tableName}):`, error);
-    return { id: [], [data.displayField]: [] };
-  }
-}
 
 /**
  * Formate les données de référence pour un champ SELECT.
