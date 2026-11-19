@@ -84,12 +84,12 @@ export class GristUtils {
     async fetchRefData(tableName) {
         // Vérifie si les données sont déjà en cache
         if (this.refDataCache[tableName]) {
-            return refDataCache[tableName];
+            return this.refDataCache[tableName];
         }
 
         try {
             const data = await grist.docApi.fetchTable(tableName);
-            refDataCache[tableName] = data;
+            this.refDataCache[tableName] = data;
             return data;
         } catch (error) {
             console.error(`Erreur lors de la récupération des données de référence (${tableName}):`, error);
