@@ -71,7 +71,8 @@ export class FormCreator {
             inputs[key] = input;
         }
             
-        let _ =  Promise.all(refPromises);
+        let bleu =  Promise.all(refPromises);
+        console.log(bleu)
         return inputs
     }
 
@@ -117,6 +118,7 @@ export class FormCreator {
     return function(select) {
         const color=colorMapping[select.value] ?? defaultColor
         return select.style.backgroundColor = color;
+        }
     }
 
     /**
@@ -124,12 +126,13 @@ export class FormCreator {
      * @param {string} elementId - ID de l'élément SELECT.
      * @param {FormFieldConfig} fieldConfig - Configuration du champ.
      */
-    async function fillRefSelect(elementId, fieldConfig) {
-    
+    async fillRefSelect(elementId, fieldConfig) {
+
+        console.log(elementId)
       const selectElement = document.getElementById(`${elementId}-input`);
       if (!selectElement) return;
     
-      const refData = await fetchRefData(fieldConfig.refConfig.table);
+      const refData = await this.gristUtils.fetchRefData(fieldConfig.refConfig.table);
       const options = formatRefOptions(refData, fieldConfig);
     
       const colorMapping={}
