@@ -1,3 +1,4 @@
+
 /**
  * @file Service de rendu des champs de formulaire.
  * @description Ce module gère la création des éléments HTML pour chaque type de champ.
@@ -12,7 +13,8 @@ export class FormCreator {
   /**
    * @param {Object.<string, import('../models/FormFieldConfig.js').FormFieldConfig>} formFields - Configuration des champs.
    */
-  constructor(fieldCreator) {
+  constructor(gristUtils,fieldCreator) {
+    this.gristUtils = gristUtils
     this.fieldCreator = fieldCreator;
   }
 
@@ -59,12 +61,12 @@ export class FormCreator {
                 input = document.getElementById(`${field.elementId}-input`);
             }
 
-            // if (field.type === DATA_TYPES.REF) {
+            if (field.type === DATA_TYPES.REF) {
 
-            //     const promise = fillRefSelect(field.elementId, field).catch(console.error);
+                const promise = this.gristUtils.fillRefSelect(field.elementId, field).catch(console.error);
                 
-            //     refPromises.push(promise);
-            // }    
+                refPromises.push(promise);
+            }    
 
             inputs[key] = input;
         }
@@ -110,4 +112,59 @@ export class FormCreator {
     getStyleForTypeBool() {
         return ['form-check', 'form-switch'];
     }
+
+    generateColorChanger(colorMapping,defaultColor="#606060") {
+    return function(select) {
+        const color=colorMapping[select.value] ?? defaultColor
+        return select.style.backgroundColor = color;
+    }
+
+    /**
+     * Remplit un champ SELECT avec les options de référence.
+     * @param {string} elementId - ID de l'élément SELECT.
+     * @param {FormFieldConfig} fieldConfig - Configuration du champ.
+     */
+    async function fillRefSelect(elementId, fieldConfig) {
+    
+      const selectElement = document.getElementById(`${elementId}-input`);
+      if (!selectElement) return;
+    
+      const refData = await fetchRefData(fieldConfig.refConfig.table);
+      const options = formatRefOptions(refData, fieldConfig);
+    
+      const colorMapping={}
+    
+      while (selectElement.options.length > 1) {
+        selectElement.remove(1);
+      }
+    
+      // Ajoute les options formatées
+      options.forEach(option => {
+        const optionElement = document.createElement('option');
+        let colorOption = false
+        optionElement.id = elementId + "_" + option.value;
+        optionElement.value = option.value;
+        optionElement.textContent = option.label;
+    
+        if (Object.hasOwn(option,'color')){
+    
+          colorMapping[option.value] = option.color
+          colorOption = true 
+        } 
+    
+        selectElement.appendChild(optionElement);
+    
+        if (colorOption) {
+    
+          const colorChanger = this.generateColorChanger(colorMapping)
+          selectElement.addEventListener('change', (e) => {
+    
+            colorChanger(e.currentTarget)
+          });
+        }
+        
+      });
+    
+    }
+}
 }  

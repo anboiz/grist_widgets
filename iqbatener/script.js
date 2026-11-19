@@ -5,12 +5,7 @@ import { GristUtils } from './gristUtils/gristUtils.js';
 
 
 
-function generateColorChanger(colorMapping,defaultColor="#606060") {
-  return function(select) {
-    const color=colorMapping[select.value] ?? defaultColor
-    return select.style.backgroundColor = color;
-  }
-}
+
 
 
 
@@ -126,14 +121,14 @@ class ObjectView {
    * Vue du formulaire.
    * @param {FieldCreator} fieldCreator - service de génération de champs.
    */
-  constructor(formCreator,formFields) {
+  constructor(gristUtils, formCreator,formFields) {
     this.rootElement = document.getElementById('object-form');
     this.formFields = formFields
     this.formCreator = formCreator
     this.formCreator.setDocument(document)
     this.formCreator.setRootElement(this.rootElement)
     this.saveButton = document.getElementById('save-button');
-    this.inputs = formCreator.createForm(formFields)
+    this.inputs = formCreator.createForm(gristUtils, formFields)
     console.log(this.inputs)
     // initRefFields().catch(console.error); // Initialisation des champs de référence
   }
@@ -320,53 +315,7 @@ function formatRefOptions(refData, fieldConfig) {
   });
 }
 
-/**
- * Remplit un champ SELECT avec les options de référence.
- * @param {string} elementId - ID de l'élément SELECT.
- * @param {FormFieldConfig} fieldConfig - Configuration du champ.
- */
-async function fillRefSelect(elementId, fieldConfig) {
 
-  const selectElement = document.getElementById(`${elementId}-input`);
-  if (!selectElement) return;
-
-  const refData = await fetchRefData(fieldConfig.refConfig.table);
-  const options = formatRefOptions(refData, fieldConfig);
-
-  const colorMapping={}
-
-  while (selectElement.options.length > 1) {
-    selectElement.remove(1);
-  }
-
-  // Ajoute les options formatées
-  options.forEach(option => {
-    const optionElement = document.createElement('option');
-    let colorOption = false
-    optionElement.id = elementId + "_" + option.value;
-    optionElement.value = option.value;
-    optionElement.textContent = option.label;
-
-    if (Object.hasOwn(option,'color')){
-
-      colorMapping[option.value] = option.color
-      colorOption = true 
-    } 
-
-    selectElement.appendChild(optionElement);
-
-    if (colorOption) {
-
-      const colorChanger = generateColorChanger(colorMapping)
-      selectElement.addEventListener('change', (e) => {
-
-        colorChanger(e.currentTarget)
-      });
-    }
-    
-  });
-
-}
 
 /**
  * Formate une option avec une icône (pour Select2).
@@ -393,7 +342,7 @@ const gristUtils = new GristUtils(currentTableId)
 const fieldCreator = new FieldCreator();
 const formCreator = new FormCreator(fieldCreator);
 const model = new ObjectModel(gristUtils);
-const view = new ObjectView(formCreator,formFields);
+const view = new ObjectView(gristUtils, formCreator,formFields);
 const controller = new ObjectController(model, view);
 
 // Variables globales pour la navigation
