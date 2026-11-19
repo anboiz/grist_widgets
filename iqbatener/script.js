@@ -304,11 +304,11 @@ let currentRecordIndex = 0;
 async function setupNavigationListeners(currentTableId) {
 
   document.getElementById('prev-btn').addEventListener('click', () => {
-    loadRecord(controller.handleNext(-1));
+    gristUtils.loadRecord(controller.handleNext(-1));
   });
 
   document.getElementById('next-btn').addEventListener('click', () => {
-    loadRecord(controller.handleNext(+1));
+    gristUtils.loadRecord(controller.handleNext(+1));
   });
 }
 
