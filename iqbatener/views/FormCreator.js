@@ -133,7 +133,7 @@ export class FormCreator {
       if (!selectElement) return;
     
       const refData = await this.gristUtils.fetchRefData(fieldConfig.refConfig.table);
-      const options = formatRefOptions(refData, fieldConfig);
+      const options = this.formatRefOptions(refData, fieldConfig);
     
       const colorMapping={}
     
@@ -168,5 +168,39 @@ export class FormCreator {
         
       });
     
+    }
+
+    /**
+     * Formate les données de référence pour un champ SELECT.
+     * @param {Array} refData - Données de référence brutes.
+     * @param {FormFieldConfig} fieldConfig - Configuration du champ.
+     * @returns {Array} Liste des options formatées.
+     */
+    formatRefOptions(refData, fieldConfig) {
+      if (!refData || !refData.id || !refData.id.length) {
+        return [];
+      }
+    
+      const displayField = fieldConfig.refConfig["displayField"];
+      const valueField = fieldConfig.refConfig["valueField"] ?? 'id';
+      const iconField = fieldConfig.refConfig["iconField"] ?? null;
+      const color = fieldConfig.refConfig["color"] ?? null;
+    
+      return refData.id.map((_, index) => {
+        const option = {
+          value: refData[valueField][index],
+          label: refData[displayField][index] || 'Non spécifié',
+        };
+    
+        if (iconField && refData[iconField]) {
+          option.icon = refData[iconField][index];
+        }
+    
+        if (color && refData[color]) {
+          option.color = refData[color][index];
+        }
+    
+        return option;
+      });
     }
 }
