@@ -306,6 +306,7 @@ class CollectionContainerStrategy extends BaseFieldStrategy {
     const { name, link, elementId, refConfig } = formFieldConfig;
     const label = this._createLabel(formFieldConfig);
     const container = document.createElement('div')
+    container.id = `${elementId}-input`;
 
     console.log({ name, link, elementId, refConfig })
 
