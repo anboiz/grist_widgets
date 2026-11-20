@@ -147,7 +147,11 @@ class ObjectView {
     console.log('Render')
     console.log({data})
     for (const [key, field] of Object.entries(formFields)) {
-      if (!this.inputs[key]) continue;
+      console.log(key)
+      if (!this.inputs[key]) {
+        console.log('Skipped')
+        continue;
+      }
       if (field.type == DATA_TYPES.BOOL){
         this.inputs[key].checked = data.fields[key];
       } else if (field.type == DATA_TYPES.REF){
@@ -165,6 +169,7 @@ class ObjectView {
         this.inputs[key].value = data.fields[key];
       } else if (field.type == DATA_TYPES.COLLECTION){
         console.log("Render Collection")
+        console.log(data.fields[key])
         // console.log(field)
         // console.log(key)
         // console.log(data.fields[key])
