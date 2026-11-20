@@ -175,8 +175,12 @@ class TextAreaStrategy extends BaseFieldStrategy {
    */
   create(parentElement, name, elementId) {
     const label = this._createLabel(name, elementId);
-    const input = this._createBaseInput('textarea', elementId);
+    const input = document.createElement('textarea')
+
+    input.classList.add('form-control');
+    input.id = `${elementId}-input`;
     input.rows = 4;
+    
     parentElement.appendChild(label);
     parentElement.appendChild(input);
     return parentElement;
