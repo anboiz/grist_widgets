@@ -166,12 +166,20 @@ class ObjectView {
         // console.log(field)
         // console.log(key)
         // console.log(data.fields[key])
-        for (const e in data.fields[key]){
-          // console.log(e)
-          const div = document.createElement('div');
-          div.class = field.elementId;
-          this.inputs[key].appendChild(div)
-        }
+        const collectionId = fieldConfig.elementId;
+        const templateCard = form.querySelector(`#${collectionId}-template-card`);
+        const cardsContainer = form.querySelector(`#${collectionId}-cards-container`);
+        console.log({cardsContainer:cardsContainer})
+        console.log({field:field})
+
+        if (!templateCard || !cardsContainer) return;
+
+        // 2. Vider le conteneur des cartes
+        cardsContainer.innerHTML = '';
+
+        // 3. Récupérer les données de la collection depuis formData
+        const collectionData = formData[field.link] || [];
+
 
       } else {
         this.inputs[key].value = data.fields[key];

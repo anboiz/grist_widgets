@@ -181,7 +181,7 @@ export const formFields = {
           elementId: 'objectauto-liaison_performance',          
         },
         commentaire:{
-          type: DATA_TYPES.STR,
+          type: DATA_TYPES.LGSTR,
           name: 'Commentaire',
           elementId: 'objectauto-commentaire',          
         },
