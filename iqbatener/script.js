@@ -35,17 +35,17 @@ class ObjectModel {
   async updateFromGrist(gristData) {
     if (gristData) {
       this.data = gristData;
-      console.log(gristData);
+      // console.log(gristData);
       const promises = [];
       for (const [key, value] of Object.entries(formFields)){
-        console.log(key)
-        console.log(value)
+        // console.log(key)
+        // console.log(value)
         if(value.type === DATA_TYPES.COLLECTION) {
-          console.log(value.refConfig)
-          console.log(gristData[this.data ])
+          // console.log(value.refConfig)
+          // console.log(gristData[this.data ])
           const promise = gristUtils.getRowsByIds(value.refConfig.table, gristData[key])
             .then(result => {
-              console.log(result);
+              // console.log(result);
               this.data[key] = result;
             });
           promises.push(promise);
@@ -55,7 +55,7 @@ class ObjectModel {
     // Attendre que toutes les promesses soient résolues
     await Promise.all(promises);
 
-    console.log(this.data)
+    // console.log(this.data)
     } else {
       this.data.id = this.generateUUID();
     }
@@ -155,19 +155,19 @@ class ObjectView {
           option.selected = true;
           option.parentElement.dispatchEvent(new Event('change', { bubbles: true }));
         } else {
-          console.log(option)
+          // console.log(option)
         }
 
       } else if (field.type == DATA_TYPES.FLOAT){
 
         this.inputs[key].value = data.fields[key];
       } else if (field.type == DATA_TYPES.COLLECTION){
-        console.log("Render Collection")
-        console.log(field)
-        console.log(key)
-        console.log(data.fields[key])
+        // console.log("Render Collection")
+        // console.log(field)
+        // console.log(key)
+        // console.log(data.fields[key])
         for (const e in data.fields[key]){
-          console.log(e)
+          // console.log(e)
           const div = document.createElement('div');
           div.class = field.elementId;
           this.inputs[key].appendChild(div)

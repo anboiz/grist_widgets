@@ -17,9 +17,9 @@ export class GristUtils {
     
         grist.viewApi.setSelectedRows(index)
         let selectedRecord = await grist.viewApi.fetchSelectedRecord(index)
-        console.log({selectedRecord:selectedRecord})
+        // console.log({selectedRecord:selectedRecord})
         const mappedRecord = await grist.mapColumnNames(selectedRecord);
-        console.log({mappedRecord:mappedRecord})
+        // console.log({mappedRecord:mappedRecord})
         // Attention violation du SRP
         // Prépare les données pour le modèle
         const recordData = { id: selectedRecord.id };
@@ -40,12 +40,12 @@ export class GristUtils {
             currentTableId= this.currentTableId
         }
 
-        console.log({currentTableId:currentTableId})
+        // console.log({currentTableId:currentTableId})
     
       try {
         const data = await grist.docApi.fetchTable(currentTableId);
         let allRecords = data;
-        console.log({allRecords:allRecords})
+        // console.log({allRecords:allRecords})
         if (allRecords['id'].length > 0) {
     
         //   let currentRecordIndex = 0;

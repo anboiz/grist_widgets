@@ -296,25 +296,35 @@ class CollectionContainerStrategy extends BaseFieldStrategy {
    * @returns {HTMLDivElement} Conteneur ROW.
    */
   create(parentElement, formFieldConfig) {
+    console.log(`Create collection`)
+    console.log({formFieldConfig:formFieldConfig})
     if (this._isHidden(formFieldConfig)) {
       return parentElement;
     }
+
 
     const { name, link, elementId, infos } = formFieldConfig;
     const label = this._createLabel(formFieldConfig);
     const container = document.createElement('div')
 
+    console.log({ name, link, elementId, infos })
+
+    console.log({container:container})
+
     // 2. Créer le conteneur des cartes
     const cardsContainer = document.createElement('div');
     cardsContainer.id = `${elementId}-cards-container`;
     cardsContainer.classList.add('collection-cards-container', 'd-flex', 'flex-wrap', 'gap-3');
-    parentElement.appendChild(cardsContainer);
+    container.appendChild(cardsContainer);
+
+    console.log({cardsContainer:cardsContainer})
 
     // 3. Créer une carte vierge type (template) en utilisant les `infos`
     const templateCard = this.#createEmptyCard(elementId, infos);
     templateCard.id = `${elementId}-template-card`;
-    templateCard.style.display = 'none';
-    parentElement.appendChild(templateCard);
+    // templateCard.style.display = 'none';
+    cardsContainer.appendChild(templateCard);
+    console.log({templateCard:templateCard})
 
     parentElement.appendChild(label);
     parentElement.appendChild(container);

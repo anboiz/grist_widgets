@@ -41,13 +41,13 @@ export class FormCreator {
         const inputs ={};
         for (const [key, field] of Object.entries(formFields)) {
             if (field.hidden) continue;
-            console.log(key)
+            // console.log(key)
             let div = this.getFieldPlaceHolderIfExists(field.elementId);
-            console.log(div)
+            // console.log(div)
             
             if (!div) {
                 div = this.createPlaceHolder(field)
-                console.log(div)
+                // console.log(div)
                 this.attachPlaceHolderToTheRightParent(field,div)
             }
 
@@ -72,7 +72,7 @@ export class FormCreator {
         }
             
         let bleu =  Promise.all(refPromises);
-        console.log(bleu)
+        // console.log(bleu)
         return inputs
     }
 
@@ -128,7 +128,7 @@ export class FormCreator {
      */
     async fillRefSelect(elementId, fieldConfig) {
 
-        console.log(elementId)
+        // console.log(elementId)
       const selectElement = document.getElementById(`${elementId}-input`);
       if (!selectElement) return;
     
