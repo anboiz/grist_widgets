@@ -376,6 +376,42 @@ class TextInputStrategy extends BaseFieldStrategy {
   }
 }
 
+class TextAreaStrategy extends BaseFieldStrategy {
+  /**
+   * Crée un input de type texte.
+   * @param {HTMLDivElement} parentElement - Élément parent.
+   * @param {string} name - Nom du champ.
+   * @param {string} elementId - ID de l'élément.
+   * @returns {HTMLDivElement} Conteneur avec label et input.
+   */
+  create(parentElement, name, elementId) {
+    const label = this._createLabel(name, elementId);
+    const input = this._createBaseInput('textarea', elementId);
+    input.rows = 4;
+    parentElement.appendChild(label);
+    parentElement.appendChild(input);
+    return parentElement;
+  }
+}
+
+class NumberInputStrategy extends BaseFieldStrategy {
+  /**
+   * Crée un input de type texte.
+   * @param {HTMLDivElement} parentElement - Élément parent.
+   * @param {string} name - Nom du champ.
+   * @param {string} elementId - ID de l'élément.
+   * @returns {HTMLDivElement} Conteneur avec label et input.
+   */
+  create(parentElement, name, elementId) {
+    const label = this._createLabel(name, elementId);
+    const input = this._createBaseInput('input', elementId);
+    input.type = 'number';
+    parentElement.appendChild(label);
+    parentElement.appendChild(input);
+    return parentElement;
+  }
+}
+
 class CheckboxStrategy extends BaseFieldStrategy {
   /**
    * Crée une checkbox.
@@ -437,3 +473,33 @@ class RowContainerStrategy extends BaseFieldStrategy {
     return parentElement;
   }
 }
+class CollectionContainerStrategy extends BaseFieldStrategy {
+  /**
+   * Crée un conteneur pour un champ de type ROW.
+   * @param {HTMLDivElement} parentElement - Élément parent.
+   * @param {string} _name - Non utilisé ici (présent pour respecter l'interface).
+   * @param {string} elementId - ID de l'élément.
+   * @returns {HTMLDivElement} Conteneur ROW.
+   */
+  create(parentElement, name, elementId) {
+    const label = this._createLabel(name, elementId);
+    const input = this._createBaseInput('input', elementId);
+
+    input.classList.add('row');
+    input.id = `${elementId}-input`;
+
+    parentElement.appendChild(label);
+    parentElement.appendChild(input);
+    
+    return parentElement;
+  }
+}
+//     const title = document.createElement('h4');
+//     title.innerHTML = `<strong>${name}</strong>`;
+
+//     const container = document.createElement('div');
+//     container.id = `${elementId}-input`;
+
+//     div.appendChild(title);
+//     div.appendChild(container);
+//     return div;
