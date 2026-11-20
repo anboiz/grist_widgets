@@ -162,7 +162,7 @@ class ObjectView {
 
         this.inputs[key].value = data.fields[key];
       } else if (field.type == DATA_TYPES.COLLECTION){
-        // console.log("Render Collection")
+        console.log("Render Collection")
         // console.log(field)
         // console.log(key)
         // console.log(data.fields[key])
@@ -171,6 +171,7 @@ class ObjectView {
         const cardsContainer = form.querySelector(`#${collectionId}-cards-container`);
         console.log({cardsContainer:cardsContainer})
         console.log({field:field})
+        console.log({data:data})
 
         if (!templateCard || !cardsContainer) return;
 
