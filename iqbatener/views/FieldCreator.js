@@ -4,38 +4,32 @@
  */
 
 import { DATA_TYPES } from '../models/FormFieldConfig.js';
-import { FieldStyleManager } from './FieldStyleManager.js';
+import { FieldStyleManager,FormFieldConfig } from './FieldStyleManager.js';
 
 // --- Classe principale FieldCreator ---
 /**
  * Service pour générer les champs du formulaire en utilisant le pattern Strategy.
  */
 export class FieldCreator {
-  /**
-   * Factory pour les stratégies de création de champs.
-   * @type {FieldStrategyFactory}
-   */
   #strategyFactory;
+  styleManager;
 
-  /**
-   * Constructeur du FieldCreator.
-   * @param {FieldStyleManager} [styleManager] - Gestionnaire des styles (optionnel).
-   */
   constructor(styleManager = new FieldStyleManager()) {
+    this.styleManager = styleManager;
     this.#strategyFactory = new FieldStrategyFactory(styleManager);
   }
 
   /**
    * Crée un élément DOM pour un champ de formulaire.
    * @param {HTMLDivElement} parentElement - Élément parent où le champ sera inséré.
-   * @param {import('../models/FormFieldConfig.js').FormFieldConfig} fieldConfig - Configuration du champ.
+   * @param {import('../models/FormFieldConfig.js').FormFieldConfig} formFieldConfig - Configuration du champ.
    * @returns {HTMLElement} Élément DOM du champ.
    * @throws {Error} Si le type de champ n'est pas géré.
    */
-  createInput(parentElement, fieldConfig) {
-    const { type, name, elementId } = fieldConfig;
+  createInput(parentElement, formFieldConfig) {
+    const type= formFieldConfig.type;
     const strategy = this.#strategyFactory.getStrategy(type);
-    return strategy.create(parentElement, name, elementId);
+    return strategy.create(parentElement, formFieldConfig);
   }
 }
 
@@ -106,59 +100,85 @@ class BaseFieldStrategy {
 
   /**
    * Crée un label pour un champ.
-   * @param {string} name - Nom du champ.
-   * @param {string} elementId - ID de l'élément.
+   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
    * @returns {HTMLLabelElement} Label configuré.
    * @protected
    */
-  _createLabel(name, elementId) {
+  _createLabel(formFieldConfig) {
+    const { name, elementId, link } = formFieldConfig;
     const label = document.createElement('label');
     label.classList.add('form-label');
-    label.innerHTML = `<strong>${name}</strong>`;
+    label.innerHTML = `<strong>${name || link}</strong>`; // Utilise `name` ou `link` comme fallback
     label.htmlFor = `${elementId}-input`;
     return label;
   }
-
   /**
    * Crée un input de base (texte, number, etc.).
-   * @param {string} type - Type de l'input (ex: 'text', 'number').
-   * @param {string} elementId - ID de l'élément.
+   * @param {string} type - Type de l'input, balise HTML (ex: 'text', 'number').
+   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
    * @returns {HTMLInputElement} Input configuré.
    * @protected
    */
-  _createBaseInput(type, elementId) {
+  _createBaseInput(type, formFieldConfig) {
+    const { elementId, default: defaultValue } = formFieldConfig;
     const input = document.createElement('input');
     input.type = type;
     input.classList.add('form-control');
     input.id = `${elementId}-input`;
+    if (defaultValue !== undefined) {
+      input.value = defaultValue;
+    }
     return input;
   }
 
   /**
    * Applique les styles spécifiques à un type de champ sur un élément parent.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {string} type - Type de champ (ex: DATA_TYPES.BOOL).
+   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
    * @protected
    */
-  _applyStyles(parentElement, type) {
-    const classes = this.#styleManager.getClassesForType(type);
-    if (classes.length > 0) {
-      parentElement.classList.add(...classes);
+  _applyStyles(parentElement, formFieldConfig) {
+    const { type, format } = formFieldConfig;
+    // Appliquer les styles par défaut pour le type
+    const typeClasses = this.#styleManager.getClassesForType(type);
+    if (typeClasses.length > 0) {
+      parentElement.classList.add(...typeClasses);
     }
+    // Appliquer les classes CSS personnalisées (si `format` est défini)
+    if (format) {
+      parentElement.classList.add(...format.split(' '));
+    }
+  }
+  
+  /**
+   * Vérifie si le champ doit être masqué.
+   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
+   * @returns {boolean} True si le champ est masqué.
+   * @protected
+   */
+  _isHidden(formFieldConfig) {
+    return formFieldConfig.hidden === true;
   }
 }
 
-class TextInputStrategy extends BaseFieldStrategy {
+/**
+ * Stratégie pour créer un input de type texte.
+ */
+export class TextInputStrategy extends BaseFieldStrategy {
   /**
    * Crée un input de type texte.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {string} name - Nom du champ.
-   * @param {string} elementId - ID de l'élément.
+   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
    * @returns {HTMLDivElement} Conteneur avec label et input.
    */
-  create(parentElement, name, elementId) {
-    const label = this._createLabel(name, elementId);
-    const input = this._createBaseInput('text', elementId);
+  create(parentElement, formFieldConfig) {
+    if (this._isHidden(formFieldConfig)) {
+      return parentElement; // Retourne le parent vide si masqué
+    }
+
+    const label = this._createLabel(formFieldConfig);
+    const input = this._createBaseInput('text', formFieldConfig);
+
     parentElement.appendChild(label);
     parentElement.appendChild(input);
     return parentElement;
@@ -169,18 +189,17 @@ class TextAreaStrategy extends BaseFieldStrategy {
   /**
    * Crée un input de type texte.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {string} name - Nom du champ.
-   * @param {string} elementId - ID de l'élément.
+   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
    * @returns {HTMLDivElement} Conteneur avec label et input.
    */
-  create(parentElement, name, elementId) {
-    const label = this._createLabel(name, elementId);
+  create(parentElement, formFieldConfig) {
+    const label = this._createLabel(formFieldConfig);
     const input = document.createElement('textarea')
 
     input.classList.add('form-control');
-    input.id = `${elementId}-input`;
+    input.id = `${formFieldConfig.elementId}-input`;
     input.rows = 4;
-    
+
     parentElement.appendChild(label);
     parentElement.appendChild(input);
     return parentElement;
@@ -189,15 +208,14 @@ class TextAreaStrategy extends BaseFieldStrategy {
 
 class NumberInputStrategy extends BaseFieldStrategy {
   /**
-   * Crée un input de type texte.
+   * Crée un SELECT pour les champs de référence.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {string} name - Nom du champ.
-   * @param {string} elementId - ID de l'élément.
-   * @returns {HTMLDivElement} Conteneur avec label et input.
+   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
+   * @returns {HTMLDivElement} Conteneur avec label et SELECT.
    */
-  create(parentElement, name, elementId) {
-    const label = this._createLabel(name, elementId);
-    const input = this._createBaseInput('input', elementId);
+  create(parentElement, formFieldConfig) {
+    const label = this._createLabel(formFieldConfig);
+    const input = this._createBaseInput('input', formFieldConfig);
     input.type = 'number';
     parentElement.appendChild(label);
     parentElement.appendChild(input);
@@ -207,20 +225,19 @@ class NumberInputStrategy extends BaseFieldStrategy {
 
 class CheckboxStrategy extends BaseFieldStrategy {
   /**
-   * Crée une checkbox.
+   * Crée un SELECT pour les champs de référence.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {string} name - Nom du champ.
-   * @param {string} elementId - ID de l'élément.
-   * @returns {HTMLDivElement} Conteneur avec label et checkbox.
+   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
+   * @returns {HTMLDivElement} Conteneur avec label et SELECT.
    */
-  create(parentElement, name, elementId) {
+  create(parentElement, formFieldConfig) {
     this._applyStyles(parentElement, DATA_TYPES.BOOL);
 
-    const label = this._createLabel(name, elementId);
-    const input = this._createBaseInput('input', elementId);
+    const label = this._createLabel(formFieldConfig);
+    const input = this._createBaseInput('input', formFieldConfig);
     input.type = 'checkbox';
     input.classList.add('form-check-input');
-    input.id = `${elementId}-input`;
+    input.id = `${formFieldConfig.elementId}-input`;
 
     parentElement.appendChild(label);
     parentElement.appendChild(input);
@@ -231,13 +248,16 @@ class SelectStrategy extends BaseFieldStrategy {
   /**
    * Crée un SELECT pour les champs de référence.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {string} name - Nom du champ.
-   * @param {string} elementId - ID de l'élément.
+   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
    * @returns {HTMLDivElement} Conteneur avec label et SELECT.
    */
-  create(parentElement, name, elementId) {
-    const label = this._createLabel(name, elementId);
-    // const select = document.createElement('select');
+  create(parentElement, formFieldConfig) {
+    if (this._isHidden(formFieldConfig)) {
+      return parentElement;
+    }    
+    const { refConfig, elementId, name, link } = formFieldConfig;
+    const label = this._createLabel(formFieldConfig);
+
     const select = document.createElement('select');
     select.classList.add('form-select');
     select.id = `${elementId}-input`;
@@ -257,13 +277,15 @@ class RowContainerStrategy extends BaseFieldStrategy {
   /**
    * Crée un conteneur pour un champ de type ROW.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {string} _name - Non utilisé ici (présent pour respecter l'interface).
-   * @param {string} elementId - ID de l'élément.
+  /**
+   * Crée un SELECT pour les champs de référence.
+   * @param {HTMLDivElement} parentElement - Élément parent.
+   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
    * @returns {HTMLDivElement} Conteneur ROW.
    */
-  create(parentElement, _name, elementId) {
+  create(parentElement, formFieldConfig) {
     parentElement.classList.add('row');
-    parentElement.id = `${elementId}-row`;
+    parentElement.id = `${formFieldConfig.elementId}-row`;
     return parentElement;
   }
 }
@@ -271,20 +293,81 @@ class CollectionContainerStrategy extends BaseFieldStrategy {
   /**
    * Crée un conteneur pour un champ de type ROW.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {string} _name - Non utilisé ici (présent pour respecter l'interface).
-   * @param {string} elementId - ID de l'élément.
+   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
    * @returns {HTMLDivElement} Conteneur ROW.
    */
-  create(parentElement, name, elementId) {
-    const label = this._createLabel(name, elementId);
-    const input = this._createBaseInput('input', elementId);
+  create(parentElement, formFieldConfig) {
+    if (this._isHidden(formFieldConfig)) {
+      return parentElement;
+    }
 
-    input.classList.add('row');
-    input.id = `${elementId}-input`;
+    const { name, link, elementId, infos } = formFieldConfig;
+    const label = this._createLabel(formFieldConfig);
+    const container = document.createElement('div')
+
+    // 2. Créer le conteneur des cartes
+    const cardsContainer = document.createElement('div');
+    cardsContainer.id = `${elementId}-cards-container`;
+    cardsContainer.classList.add('collection-cards-container', 'd-flex', 'flex-wrap', 'gap-3');
+    parentElement.appendChild(cardsContainer);
+
+    // 3. Créer une carte vierge type (template) en utilisant les `infos`
+    const templateCard = this.#createEmptyCard(elementId, infos);
+    templateCard.id = `${elementId}-template-card`;
+    templateCard.style.display = 'none';
+    parentElement.appendChild(templateCard);
 
     parentElement.appendChild(label);
-    parentElement.appendChild(input);
+    parentElement.appendChild(container);
 
     return parentElement;
+  }
+    /**
+   * Crée une carte vierge type (sans données) en utilisant les `infos` pour les champs.
+   * @param {string} elementId - ID de base pour la carte.
+   * @param {Object.<string, FormFieldConfig>} infos - Configuration des champs de la carte.
+   * @returns {HTMLDivElement} Carte vierge.
+   * @private
+   */
+  #createEmptyCard(elementId, infos) {
+    const card = document.createElement('div');
+    card.classList.add('card', 'collection-card', 'p-3', 'mb-2', 'shadow-sm');
+
+    // Ajouter un titre par défaut
+    const cardTitle = document.createElement('h5');
+    cardTitle.classList.add('card-title');
+    cardTitle.textContent = 'Nouvelle carte';
+    card.appendChild(cardTitle);
+
+    // Ajouter un conteneur pour les champs de la carte
+    const cardBody = document.createElement('div');
+    cardBody.classList.add('card-body');
+    cardBody.id = `${elementId}-card-body`;
+
+    // Créer les champs de la carte en utilisant `infos`
+    if (infos) {
+      Object.entries(infos).forEach(([fieldName, fieldConfig]) => {
+        // Créer un conteneur pour chaque champ
+        const fieldContainer = document.createElement('div');
+        fieldContainer.classList.add('mb-2');
+
+        // Utiliser FieldCreator pour créer le champ (délégation)
+        const fieldCreator = new FieldCreator(this.styleManager);
+        fieldCreator.createInput(fieldContainer, fieldConfig);
+
+        cardBody.appendChild(fieldContainer);
+      });
+    }
+
+    card.appendChild(cardBody);
+
+    // Ajouter un bouton de suppression
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'float-end');
+    deleteButton.innerHTML = '<i class="bi bi-trash"></i> Supprimer';
+    card.appendChild(deleteButton);
+
+    return card;
   }
 }
