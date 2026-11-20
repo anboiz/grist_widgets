@@ -342,6 +342,8 @@ class CollectionContainerStrategy extends BaseFieldStrategy {
     const card = document.createElement('div');
     card.classList.add('card', 'collection-card', 'p-3', 'mb-2', 'shadow-sm');
 
+    console.log({infos:infos})
+
     // Ajouter un titre par défaut
     const cardTitle = document.createElement('h5');
     cardTitle.classList.add('card-title');
@@ -370,12 +372,12 @@ class CollectionContainerStrategy extends BaseFieldStrategy {
 
     card.appendChild(cardBody);
 
-    // Ajouter un bouton de suppression
-    const deleteButton = document.createElement('button');
-    deleteButton.type = 'button';
-    deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'float-end');
-    deleteButton.innerHTML = '<i class="bi bi-trash"></i> Supprimer';
-    card.appendChild(deleteButton);
+    // // Ajouter un bouton de suppression
+    // const deleteButton = document.createElement('button');
+    // deleteButton.type = 'button';
+    // deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'float-end');
+    // deleteButton.innerHTML = '<i class="bi bi-trash"></i> Supprimer';
+    // card.appendChild(deleteButton);
 
     return card;
   }
