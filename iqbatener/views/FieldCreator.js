@@ -303,11 +303,11 @@ class CollectionContainerStrategy extends BaseFieldStrategy {
     }
 
 
-    const { name, link, elementId, infos } = formFieldConfig;
+    const { name, link, elementId, refConfig } = formFieldConfig;
     const label = this._createLabel(formFieldConfig);
     const container = document.createElement('div')
 
-    console.log({ name, link, elementId, infos })
+    console.log({ name, link, elementId, refConfig })
 
     console.log({container:container})
 
@@ -320,7 +320,7 @@ class CollectionContainerStrategy extends BaseFieldStrategy {
     console.log({cardsContainer:cardsContainer})
 
     // 3. Créer une carte vierge type (template) en utilisant les `infos`
-    const templateCard = this.#createEmptyCard(elementId, infos);
+    const templateCard = this.#createEmptyCard(elementId, refConfig.infos);
     templateCard.id = `${elementId}-template-card`;
     // templateCard.style.display = 'none';
     cardsContainer.appendChild(templateCard);
