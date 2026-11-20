@@ -3,8 +3,8 @@
  * @description Ce module gère la création des éléments HTML pour chaque type de champ.
  */
 
-import { DATA_TYPES } from '../models/FormFieldConfig.js';
-import { FieldStyleManager,FormFieldConfig } from './FieldStyleManager.js';
+import { DATA_TYPES, FormFieldConfig } from '../models/FormFieldConfig.js';
+import { FieldStyleManager} from './FieldStyleManager.js';
 
 // --- Classe principale FieldCreator ---
 /**
