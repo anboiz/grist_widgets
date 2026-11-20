@@ -173,11 +173,23 @@ export const formFields = {
           type: DATA_TYPES.STR,
           name: 'Clé technique',
           elementId: 'objectauto-cle_technique',          
+        }
+        ,
+        liaison_performance:{
+          type: DATA_TYPES.STR,
+          name: 'Performance',
+          elementId: 'objectauto-liaison_performance',          
+        },
+        commentaire:{
+          type: DATA_TYPES.STR,
+          name: 'Commentaire',
+          elementId: 'objectauto-commentaire',          
         },
         liaison_valeur:{
           type: DATA_TYPES.FLOAT,
-          name: 'Commentaire pour identifier le bâtiment',
-          elementId: 'objectauto-liaison_valeur',          
+          name: 'Note',
+          elementId: 'objectauto-liaison_valeur',
+          hidden: true,          
         },        
       }
     },
