@@ -213,7 +213,7 @@ class CheckboxStrategy extends BaseFieldStrategy {
     this._applyStyles(parentElement, DATA_TYPES.BOOL);
 
     const label = this._createLabel(name, elementId);
-    const input = document.createElement('input');
+    const input = this._createBaseInput('input', elementId);
     input.type = 'checkbox';
     input.classList.add('form-check-input');
     input.id = `${elementId}-input`;
@@ -233,7 +233,8 @@ class SelectStrategy extends BaseFieldStrategy {
    */
   create(parentElement, name, elementId) {
     const label = this._createLabel(name, elementId);
-    const select = document.createElement('select');
+    // const select = document.createElement('select');
+    const select = this._createBaseInput('select', elementId);
     select.classList.add('form-select');
     select.id = `${elementId}-input`;
 
