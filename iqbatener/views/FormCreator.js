@@ -73,6 +73,7 @@ export class FormCreator {
             
         let bleu =  Promise.all(refPromises);
         // console.log(bleu)
+        console.log({inputs})
         return inputs
     }
 

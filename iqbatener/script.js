@@ -134,7 +134,7 @@ class ObjectView {
 
   async generateForm() {
     this.inputs = await this.formCreator.createForm(this.formFields)
-    console.log(this.inputs)
+    console.log({form_inputs:this.inputs})
   }
 
 
