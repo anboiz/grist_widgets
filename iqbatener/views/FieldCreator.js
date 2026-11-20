@@ -234,7 +234,7 @@ class SelectStrategy extends BaseFieldStrategy {
   create(parentElement, name, elementId) {
     const label = this._createLabel(name, elementId);
     // const select = document.createElement('select');
-    const select = this._createBaseInput('select', elementId);
+    const select = document.createElement('select');
     select.classList.add('form-select');
     select.id = `${elementId}-input`;
 
