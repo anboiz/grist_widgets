@@ -144,6 +144,8 @@ class ObjectView {
    * @param {Object} data - Données à afficher.
    */
   render(data) {
+    console.log('Render')
+    console.log({data})
     for (const [key, field] of Object.entries(formFields)) {
       if (!this.inputs[key]) continue;
       if (field.type == DATA_TYPES.BOOL){
