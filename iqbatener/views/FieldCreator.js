@@ -3,7 +3,7 @@
  * @description Ce module gère la création des éléments HTML pour chaque type de champ.
  */
 
-import { DATA_TYPES, FormFieldConfig } from '../models/FormFieldConfig.js';
+import { DATA_TYPES } from '../models/FormFieldConfig.js';
 import { FieldStyleManager} from './FieldStyleManager.js';
 
 // --- Classe principale FieldCreator ---
@@ -89,18 +89,17 @@ class BaseFieldStrategy {
   /**
    * Méthode abstraite pour créer un champ.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {string} name - Nom du champ.
-   * @param {string} elementId - ID de l'élément.
+   * @param {import('../models/FormFieldConfig.js').FormFieldConfig}
    * @returns {HTMLElement} Élément DOM du champ.
    * @abstract
    */
-  create(parentElement, name, elementId) {
+  create(parentElement, FormFieldConfig) {
     throw new Error('La méthode "create" doit être implémentée par les classes filles.');
   }
 
   /**
    * Crée un label pour un champ.
-   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
+   * @param {@param {import('../models/FormFieldConfig.js').FormFieldConfig}} formFieldConfig - Configuration du champ.
    * @returns {HTMLLabelElement} Label configuré.
    * @protected
    */
@@ -115,7 +114,7 @@ class BaseFieldStrategy {
   /**
    * Crée un input de base (texte, number, etc.).
    * @param {string} type - Type de l'input, balise HTML (ex: 'text', 'number').
-   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
+   * @param {@param {import('../models/FormFieldConfig.js').FormFieldConfig}} formFieldConfig - Configuration du champ.
    * @returns {HTMLInputElement} Input configuré.
    * @protected
    */
@@ -134,7 +133,7 @@ class BaseFieldStrategy {
   /**
    * Applique les styles spécifiques à un type de champ sur un élément parent.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
+   * @param {@param {import('../models/FormFieldConfig.js').FormFieldConfig}} formFieldConfig - Configuration du champ.
    * @protected
    */
   _applyStyles(parentElement, formFieldConfig) {
@@ -152,7 +151,7 @@ class BaseFieldStrategy {
   
   /**
    * Vérifie si le champ doit être masqué.
-   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
+   * @param {@param {import('../models/FormFieldConfig.js').FormFieldConfig}} formFieldConfig - Configuration du champ.
    * @returns {boolean} True si le champ est masqué.
    * @protected
    */
@@ -168,7 +167,7 @@ export class TextInputStrategy extends BaseFieldStrategy {
   /**
    * Crée un input de type texte.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
+   * @param {@param {import('../models/FormFieldConfig.js').FormFieldConfig}} formFieldConfig - Configuration du champ.
    * @returns {HTMLDivElement} Conteneur avec label et input.
    */
   create(parentElement, formFieldConfig) {
@@ -189,7 +188,7 @@ class TextAreaStrategy extends BaseFieldStrategy {
   /**
    * Crée un input de type texte.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
+   * @param {@param {import('../models/FormFieldConfig.js').FormFieldConfig}} formFieldConfig - Configuration du champ.
    * @returns {HTMLDivElement} Conteneur avec label et input.
    */
   create(parentElement, formFieldConfig) {
@@ -210,7 +209,7 @@ class NumberInputStrategy extends BaseFieldStrategy {
   /**
    * Crée un SELECT pour les champs de référence.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
+   * @param {@param {import('../models/FormFieldConfig.js').FormFieldConfig}} formFieldConfig - Configuration du champ.
    * @returns {HTMLDivElement} Conteneur avec label et SELECT.
    */
   create(parentElement, formFieldConfig) {
@@ -227,7 +226,7 @@ class CheckboxStrategy extends BaseFieldStrategy {
   /**
    * Crée un SELECT pour les champs de référence.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
+   * @param {@param {import('../models/FormFieldConfig.js').FormFieldConfig}} formFieldConfig - Configuration du champ.
    * @returns {HTMLDivElement} Conteneur avec label et SELECT.
    */
   create(parentElement, formFieldConfig) {
@@ -248,7 +247,7 @@ class SelectStrategy extends BaseFieldStrategy {
   /**
    * Crée un SELECT pour les champs de référence.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
+   * @param {@param {import('../models/FormFieldConfig.js').FormFieldConfig}} formFieldConfig - Configuration du champ.
    * @returns {HTMLDivElement} Conteneur avec label et SELECT.
    */
   create(parentElement, formFieldConfig) {
@@ -280,7 +279,7 @@ class RowContainerStrategy extends BaseFieldStrategy {
   /**
    * Crée un SELECT pour les champs de référence.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
+   * @param {@param {import('../models/FormFieldConfig.js').FormFieldConfig}} formFieldConfig - Configuration du champ.
    * @returns {HTMLDivElement} Conteneur ROW.
    */
   create(parentElement, formFieldConfig) {
@@ -293,7 +292,7 @@ class CollectionContainerStrategy extends BaseFieldStrategy {
   /**
    * Crée un conteneur pour un champ de type ROW.
    * @param {HTMLDivElement} parentElement - Élément parent.
-   * @param {FormFieldConfig} formFieldConfig - Configuration du champ.
+   * @param {@param {import('../models/FormFieldConfig.js').FormFieldConfig}} formFieldConfig - Configuration du champ.
    * @returns {HTMLDivElement} Conteneur ROW.
    */
   create(parentElement, formFieldConfig) {
