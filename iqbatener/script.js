@@ -173,7 +173,7 @@ class ObjectView {
         // console.log(field)
         // console.log(key)
         // console.log(data.fields[key])
-        const collectionId = fieldConfig.elementId;
+        const collectionId = field.elementId;
         const templateCard = form.querySelector(`#${collectionId}-template-card`);
         const cardsContainer = form.querySelector(`#${collectionId}-cards-container`);
         console.log({cardsContainer:cardsContainer})
