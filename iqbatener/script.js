@@ -193,10 +193,11 @@ class ObjectView {
         const collectionData = data.fields[key] || [];
 
         console.log(collectionData)
-        for (var obs of collectionData){
+        for (const obs of collectionData){
           console.log({obs:obs})
-          var templateCardClone = templateCard.cloneNode(true);
+          const templateCardClone = templateCard.cloneNode(true);
           templateCardClone.id = `${templateCard.id}-${obs['id']}`;
+          templateCardClone.style.display = 'flex';
           cardsContainer.appendChild(templateCardClone);
         }
 

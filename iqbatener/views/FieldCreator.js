@@ -323,7 +323,7 @@ class CollectionContainerStrategy extends BaseFieldStrategy {
     // 3. Créer une carte vierge type (template) en utilisant les `infos`
     const templateCard = this.#createEmptyCard(elementId, refConfig.infos);
     templateCard.id = `${elementId}-template-card`;
-    // templateCard.style.display = 'none';
+    templateCard.style.display = 'none';// 
     cardsContainer.appendChild(templateCard);
     console.log({templateCard:templateCard})
 
