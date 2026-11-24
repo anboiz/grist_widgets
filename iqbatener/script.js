@@ -176,7 +176,11 @@ class ObjectView {
         const collectionId = field.elementId;
         const templateCard = form.querySelector(`#${collectionId}-template-card`);
         const cardsContainer = form.querySelector(`#${collectionId}-cards-container`);
+        
+        console.log({div_id:`#${collectionId}-template-card`})
         console.log({cardsContainer:cardsContainer})
+        console.log({templateCard:templateCard })
+
         console.log({field:field})
         console.log({data:data})
 
@@ -190,6 +194,7 @@ class ObjectView {
 
         console.log(collectionData)
         for (obs in collectionData){
+          console.log({obs:obs})
           var templateCardClone = templateCard.cloneNode(true);
           templateCardClone.id = `${templateCard.id}-${obs['id']}`;
           cardsContainer.appendChild(templateCardClone);
