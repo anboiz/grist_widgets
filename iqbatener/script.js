@@ -171,7 +171,7 @@ class ObjectView {
         console.log("Render Collection")
         console.log(data.fields[key])
         console.log(this.inputs[key])
-        form = this.inputs[key]
+        const form = this.inputs[key]
         // console.log(field)
         // console.log(key)
         // console.log(data.fields[key])
