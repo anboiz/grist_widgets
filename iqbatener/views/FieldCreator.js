@@ -124,6 +124,7 @@ class BaseFieldStrategy {
     input.type = type;
     input.classList.add('form-control');
     input.id = `${elementId}-input`;
+    input.style.fontSize = 'inherit';
     if (defaultValue !== undefined) {
       input.value = defaultValue;
     }
