@@ -191,14 +191,25 @@ class ObjectView {
 
         // 3. Récupérer les données de la collection depuis formData
         const collectionData = data.fields[key] || [];
+        const infos = field['refConfig']['infos']
 
         console.log(collectionData)
         for (const obs of collectionData){
-          console.log({obs:obs})
+          const index = obs['id'];
           const templateCardClone = templateCard.cloneNode(true);
-          templateCardClone.id = `${templateCard.id}-${obs['id']}`;
+          templateCardClone.id = `${templateCard.id}-${index}`;
           templateCardClone.style.display = 'flex';
           cardsContainer.appendChild(templateCardClone);
+
+          Object.entries(infos).forEach( entry => {
+            const [key, fieldsDesc] = entry;
+            const input = templateCardClone.querySelector(
+              `#objectauto-${key}-input`
+            );
+            console.log(input);
+            input.value = obs[key];
+          }
+          )
         }
 
 
