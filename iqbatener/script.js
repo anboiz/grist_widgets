@@ -172,9 +172,7 @@ class ObjectView {
         console.log(data.fields[key])
         console.log(this.inputs[key])
         const form = this.inputs[key]
-        // console.log(field)
-        // console.log(key)
-        // console.log(data.fields[key])
+
         const collectionId = field.elementId;
         const templateCard = form.querySelector(`#${collectionId}-template-card`);
         const cardsContainer = form.querySelector(`#${collectionId}-cards-container`);
@@ -188,7 +186,14 @@ class ObjectView {
         cardsContainer.innerHTML = '';
 
         // 3. Récupérer les données de la collection depuis formData
-        const collectionData = formData[field.link] || [];
+        const collectionData = data.fields[key] || [];
+
+        console.log(collectionData)
+        for (obs in collectionData){
+          var templateCardClone = templateCard.cloneNode(true);
+          templateCardClone.id = `${templateCard.id}-${obs['id']}`;
+          cardsContainer.appendChild(templateCardClone);
+        }
 
 
       } else {
