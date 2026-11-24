@@ -325,7 +325,6 @@ class CollectionContainerStrategy extends BaseFieldStrategy {
     templateCard.id = `${elementId}-template-card`;
     templateCard.style.display = 'none';// 
     cardsContainer.appendChild(templateCard);
-    console.log({templateCard:templateCard})
 
     parentElement.appendChild(label);
     parentElement.appendChild(container);
@@ -343,13 +342,12 @@ class CollectionContainerStrategy extends BaseFieldStrategy {
     const card = document.createElement('div');
     card.classList.add('card', 'collection-card', 'p-3', 'mb-2', 'shadow-sm');
 
-    console.log({infos:infos})
 
-    // Ajouter un titre par défaut
-    const cardTitle = document.createElement('h5');
-    cardTitle.classList.add('card-title');
-    cardTitle.textContent = 'Nouvelle carte';
-    card.appendChild(cardTitle);
+    // // Ajouter un titre par défaut
+    // const cardTitle = document.createElement('h5');
+    // cardTitle.classList.add('card-title');
+    // cardTitle.textContent = 'Nouvelle carte';
+    // card.appendChild(cardTitle);
 
     // Ajouter un conteneur pour les champs de la carte
     const cardBody = document.createElement('div');
@@ -366,6 +364,7 @@ class CollectionContainerStrategy extends BaseFieldStrategy {
         // Utiliser FieldCreator pour créer le champ (délégation)
         const fieldCreator = new FieldCreator(this.styleManager);
         fieldCreator.createInput(fieldContainer, fieldConfig);
+        fieldContainer.style.fontSize = "small"
 
         cardBody.appendChild(fieldContainer);
       });
