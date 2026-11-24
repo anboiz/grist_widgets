@@ -186,8 +186,8 @@ class ObjectView {
 
         if (!templateCard || !cardsContainer) return;
 
-        // 2. Vider le conteneur des cartes
-        cardsContainer.innerHTML = '';
+        // // 2. Vider le conteneur des cartes
+        // cardsContainer.innerHTML = '';
 
         // 3. Récupérer les données de la collection depuis formData
         const collectionData = data.fields[key] || [];
